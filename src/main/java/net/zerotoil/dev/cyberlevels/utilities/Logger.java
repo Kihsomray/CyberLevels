@@ -1,6 +1,7 @@
 package net.zerotoil.dev.cyberlevels.utilities;
 
 import net.zerotoil.dev.cyberlevels.CyberLevels;
+import net.zerotoil.dev.iridiumapi.IridiumAPI;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -15,18 +16,14 @@ public class Logger {
         this.main = main;
     }
 
-    private String chatColorize(String line) {
-        return ChatColor.translateAlternateColorCodes('&', line);
-    }
-
     private String parseColor(String line) {
         String isBukkit = main.serverFork().split(" ")[0];
         return (main.serverVersion() >= 12 && !isBukkit.matches("(?i)Spigot")) ?
-                chatColorize(line) : ChatColor.stripColor(line);
+                IridiumAPI.process(line) : IridiumAPI.stripAll(line);
     }
 
     public void playerLog(Player player, String... lines) {
-        Arrays.asList(lines).forEach(s -> player.sendMessage(chatColorize(s)));
+        Arrays.asList(lines).forEach(s -> player.sendMessage(IridiumAPI.process(s)));
     }
 
     public void rawLog(String... lines) {
