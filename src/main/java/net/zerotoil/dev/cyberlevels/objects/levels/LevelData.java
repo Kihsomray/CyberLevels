@@ -1,7 +1,8 @@
-package net.zerotoil.dev.cyberlevels.objects;
+package net.zerotoil.dev.cyberlevels.objects.levels;
 
 import net.objecthunter.exp4j.ExpressionBuilder;
 import net.zerotoil.dev.cyberlevels.CyberLevels;
+import net.zerotoil.dev.cyberlevels.objects.RewardObject;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;

@@ -1,9 +1,18 @@
 config:
 
+  # Should numbers be rounded?
   round-evaluation:
     enabled: true
+
+    # 2 digits: #.##, 4 digits: #.####
     digits: 2
 
+  # Should player data be auto-saved?
+  auto-save:
+    enabled: true
+
+    # How often (in seconds)?
+    interval: 300
 
   auto-update:
     config: true

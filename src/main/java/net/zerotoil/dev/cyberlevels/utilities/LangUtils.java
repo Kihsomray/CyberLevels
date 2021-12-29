@@ -6,6 +6,7 @@ import net.zerotoil.dev.cyberlevels.terminals.ActionBar;
 import net.zerotoil.dev.cyberlevels.terminals.Title;
 import net.zerotoil.dev.iridiumapi.IridiumAPI;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.entity.Player;
 
@@ -83,7 +84,8 @@ public class LangUtils {
     }
 
     public void sendMixed(Player player, String message) {
-        if (!message.startsWith("[C]")) player.sendMessage(parse(player, message));
+        if (player == null) Bukkit.getLogger().info(ChatColor.translateAlternateColorCodes('&', message));
+        else if (!message.startsWith("[C]")) player.sendMessage(parse(player, message));
         else sendCentered(player, message.replace("[C]", ""));
     }
 

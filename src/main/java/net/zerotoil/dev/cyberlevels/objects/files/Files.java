@@ -28,12 +28,14 @@ public class Files {
         addFile("levels");
         addFile("rewards");
 
+        if (getConfig("config").getBoolean("config.auto-update.config")) get("config").updateConfig();
+        if (getConfig("config").getBoolean("config.auto-update.lang")) get("lang").updateConfig();
+
         // back end
         File playerData = new File(main.getDataFolder(),"player_data");
         if (!playerData.exists()) playerData.mkdirs();
 
-        main.logger("" +
-                "&7Loaded &e" + counter + "&7 files in &a" +
+        main.logger("&7Loaded &e" + counter + "&7 files in &a" +
                 (System.currentTimeMillis() - startTime) + "ms&7.", ""
         );
     }
@@ -47,6 +49,6 @@ public class Files {
 
     public HashMap<String, YAMLFile> getFiles() { return this.files; }
     public YAMLFile get(String file){  return files.get(file); }
-    public Configuration getFile(String file) { return files.get(file).getConfig(); }
+    public Configuration getConfig(String file) { return files.get(file).getConfig(); }
 
 }

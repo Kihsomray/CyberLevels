@@ -26,7 +26,7 @@ public class CLVCommand implements CommandExecutor {
         }
 
         if (args[0].equalsIgnoreCase("setEXP")) {
-            main.levelCache().playerLevels().get((Player) sender).setExp(Double.parseDouble(args[1]));
+            main.levelCache().playerLevels().get((Player) sender).setExp(Double.parseDouble(args[1]), true);
         }
 
         if (args[0].equalsIgnoreCase("setLevel")) {

@@ -11,3 +11,5 @@ messages:
     bar: '▬▬▬▬▬▬▬▬▬▬▬▬▬'
     complete-color: '&d'
     incomplete-color: '&7'
+
+  auto-save: '&aSuccessfully auto-saved all player data (&7{ms}ms&a).'

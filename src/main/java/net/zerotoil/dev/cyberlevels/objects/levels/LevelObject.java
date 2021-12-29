@@ -1,7 +1,8 @@
-package net.zerotoil.dev.cyberlevels.objects;
+package net.zerotoil.dev.cyberlevels.objects.levels;
 
-import net.objecthunter.exp4j.ExpressionBuilder;
 import net.zerotoil.dev.cyberlevels.CyberLevels;
+import net.zerotoil.dev.cyberlevels.objects.RewardObject;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
@@ -42,23 +43,26 @@ public class LevelObject {
 
         // current exp + exp increase > required exp to next level
         while (exp + amount >= nextExpRequirement()) {
+            if (level.equals(main.levelCache().maxLevel())) return;
             amount = (amount - nextExpRequirement()) + exp;
             exp = 0.0;
             level++;
             sendLevelReward();
-            if (level.equals(main.levelCache().maxLevel())) return;
         }
         exp += amount;
 
     }
 
-    public void setExp(double amount) {
-        exp = 0.0;
-        addExp(amount);
+    public void setExp(double amount, boolean checkLevel) {
+
+        if (checkLevel) {
+            exp = 0.0;
+            addExp(amount);
+        } else exp = amount;
     }
 
     public void removeExp(double amount) {
-        amount = Math.max(amount, 0); // 60
+        amount = Math.max(amount, 0);
 
         if (amount > exp) {
 
@@ -91,7 +95,9 @@ public class LevelObject {
     }
 
     public String toString() {
-        return "level: " + level + ", exp: " + exp + ", progress: " + ChatColor.translateAlternateColorCodes('&', main.levelUtils().progressBar(exp, nextExpRequirement()));
+        return "level: " + level + ", exp: " + exp + ", progress: " +
+                ChatColor.translateAlternateColorCodes('&', main.levelUtils().progressBar(exp, nextExpRequirement())) +
+                " [" + (int) (100 * (exp / nextExpRequirement())) + "%]";
     }
 
     private void sendLevelReward() {
@@ -102,18 +108,6 @@ public class LevelObject {
         if (main.levelCache().levelData().get(level + 1) == null) return 0.0;
         return main.levelCache().levelData().get(level + 1).getRequiredExp(player);
     }
-
-    /*private double getExpRequired(Long level) {
-        String formula = main.levelsUtils().levelFormula(level);
-        if (formula == null) formula = main.levelsUtils().generalFormula();
-        formula = formula
-                .replace("{level}", level + "")
-                .replace("{playerEXP}", exp + "")
-                .replace("{maxLevel}", main.levelsUtils().maxLevel() + "")
-                .replace("{minLevel}", main.levelsUtils().startLevel() + "")
-                .replace("{minEXP}", main.levelsUtils().startEXP() + "");
-        return (new ExpressionBuilder(formula).build().evaluate());
-    }*/
 
     public Player getPlayer() {
         return player;
