@@ -1,0 +1,23 @@
+rewards:
+  name-of-reward:
+    commands:
+      - '[player] spawn'
+      - '[console] eco give {player} 500'
+    messages:
+      - '[player:message] this works i guess'
+      - '[player:actionbar] beans'
+      - '[player:title] ayo'
+      - '[player:subtitle] croa is no bueno'
+      - '[global:message] {player} is cool, he reached {level}'
+    sound: []
+    levels:
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+      - 7
+      - 8
+      - 9
+    economy: []

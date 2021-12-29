@@ -1,0 +1,10 @@
+config:
+
+  round-evaluation:
+    enabled: true
+    digits: 2
+
+
+  auto-update:
+    config: true
+    lang: true

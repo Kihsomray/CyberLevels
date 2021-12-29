@@ -1,0 +1,17 @@
+levels:
+
+  starting:
+    level: 1
+    experience: 0
+
+  maximum:
+    level: 25
+
+
+  # {level} {playerEXP} {maxLevel} {minLevel} {minEXP}
+  experience:
+    general-formula: '25 * {level}'
+    level:
+      1: 250
+      2: '{level} * 25'
+      3: 'sin({level}) + ({maxEXP} / {level} + {playerEXP})'

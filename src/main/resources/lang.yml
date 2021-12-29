@@ -1,0 +1,13 @@
+messages:
+  prefix: '&d&lCyber&f&lLevels &8»&r'
+  no-permission: '&cYou don''t have permission to do that!'
+  help-player:
+    - '&8&m―――――&8<&d&l Cyber&f&lLevels &8>&8&m―――――'
+    - '&8➼ &b/clv about &fAbout the plugin.'
+    - '&8➼ &b/clv help &fSee the help menu.'
+    - '&8&m――――――――――――――――――――――――――――――'
+
+  progress:
+    bar: '▬▬▬▬▬▬▬▬▬▬▬▬▬'
+    complete-color: '&d'
+    incomplete-color: '&7'
