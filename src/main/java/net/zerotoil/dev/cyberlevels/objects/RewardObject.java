@@ -63,9 +63,9 @@ public class RewardObject {
     public void sendMessage(Player player) {
 
         if (messages == null) return;
-        for (String message : commands) {
+        for (String message : messages) {
 
-            player.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+            player.sendMessage(main.levelUtils().getPlaceholders(ChatColor.translateAlternateColorCodes('&', message), player, true));
 
         }
 

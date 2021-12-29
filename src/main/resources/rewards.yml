@@ -20,4 +20,4 @@ rewards:
       - 7
       - 8
       - 9
-    economy: []
+    economy: '[remove] 500' # remove, add, set

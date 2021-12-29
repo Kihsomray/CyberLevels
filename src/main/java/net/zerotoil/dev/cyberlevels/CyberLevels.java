@@ -37,6 +37,7 @@ public final class CyberLevels extends JavaPlugin {
         levelCache = new LevelCache(this);
         levelCache.loadLevelData();
         levelCache.loadOnlinePlayers();
+        levelCache.loadRewards();
         playerUtils = new PlayerUtils(this);
         //testPlayer = new LevelObject(this);
         new CLVCommand(this);

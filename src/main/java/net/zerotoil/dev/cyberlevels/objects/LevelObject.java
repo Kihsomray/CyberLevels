@@ -45,6 +45,7 @@ public class LevelObject {
             amount = (amount - nextExpRequirement()) + exp;
             exp = 0.0;
             level++;
+            sendLevelReward();
             if (level.equals(main.levelCache().maxLevel())) return;
         }
         exp += amount;
@@ -91,6 +92,10 @@ public class LevelObject {
 
     public String toString() {
         return "level: " + level + ", exp: " + exp + ", progress: " + ChatColor.translateAlternateColorCodes('&', main.levelUtils().progressBar(exp, nextExpRequirement()));
+    }
+
+    private void sendLevelReward() {
+        for (RewardObject reward : main.levelCache().levelData().get(level).getRewards()) reward.giveReward(player);
     }
 
     private double nextExpRequirement() {

@@ -46,5 +46,7 @@ public class LevelData {
         return (new ExpressionBuilder(formula).build().evaluate());
     }
 
-
+    public List<RewardObject> getRewards() {
+        return rewards;
+    }
 }

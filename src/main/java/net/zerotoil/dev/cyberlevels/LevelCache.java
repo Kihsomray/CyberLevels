@@ -2,6 +2,7 @@ package net.zerotoil.dev.cyberlevels;
 
 import net.zerotoil.dev.cyberlevels.objects.LevelData;
 import net.zerotoil.dev.cyberlevels.objects.LevelObject;
+import net.zerotoil.dev.cyberlevels.objects.RewardObject;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -42,6 +43,18 @@ public class LevelCache {
             levels.remove(l + "");
             l++;
         }
+    }
+
+    public void loadRewards() {
+
+        if (main.files().getConfig("rewards").isConfigurationSection("rewards")) {
+
+            for (String s : main.files().getConfig("rewards").getConfigurationSection("rewards").getKeys(false)) {
+                new RewardObject(main, s);
+            }
+
+        }
+
     }
 
     public void clearLevelData() {
