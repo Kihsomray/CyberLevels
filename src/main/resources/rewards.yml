@@ -4,11 +4,10 @@ rewards:
       - '[player] spawn'
       - '[console] eco give {player} 500'
     messages:
-      - '[player:message] this works i guess'
-      - '[player:actionbar] beans'
-      - '[player:title] ayo'
-      - '[player:subtitle] croa is no bueno'
-      - '[global:message] {player} is cool, he reached {level}'
+      - '[player] this works i guess'
+      - '[player] [actionbar] beans'
+      - '[player] [title] ayo<n>croa is no bueno'
+      - '[C] {player} is cool, he reached {level}'
     sound: []
     levels:
       - 1

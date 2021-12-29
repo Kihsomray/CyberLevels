@@ -45,14 +45,8 @@ public class Files {
         main.logger("&7Loaded file &e" + file + ".yml&7.");
     }
 
-    public HashMap<String, YAMLFile> getFiles() {
-        return this.files;
-    }
-    public YAMLFile get(String file){
-        return files.get(file);
-    }
-    public Configuration getConfig(String file) {
-        return files.get(file).getConfig();
-    }
+    public HashMap<String, YAMLFile> getFiles() { return this.files; }
+    public YAMLFile get(String file){  return files.get(file); }
+    public Configuration getFile(String file) { return files.get(file).getConfig(); }
 
 }

@@ -1,6 +1,8 @@
 package net.zerotoil.dev.cyberlevels.utilities;
 
 import net.zerotoil.dev.cyberlevels.CyberLevels;
+import net.zerotoil.dev.cyberlevels.LevelCache;
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.entity.Player;
 
@@ -10,6 +12,7 @@ import java.text.DecimalFormat;
 public class LevelUtils {
 
     private final CyberLevels main;
+    private final LevelCache cache;
     private DecimalFormat decimalFormat;
 
     private String bar;
@@ -18,43 +21,45 @@ public class LevelUtils {
 
     public LevelUtils(CyberLevels main) {
         this.main = main;
-        if (main.files().getConfig("config").isConfigurationSection("config.round-evaluation") &&
-                main.files().getConfig("config").getBoolean("config.round-evaluation.enabled")) {
-            String decimalFormat = "#.";
-            for (int i = 0; i < main.files().getConfig("config").getLong("config.round-evaluation.digits"); i++) decimalFormat += "#";
+        this.cache = main.levelCache();
+        initUtils();
+    }
 
-            this.decimalFormat = new DecimalFormat(decimalFormat);
+    private Configuration Config() { return main.getFiles().getFile("config"); }
+    private Configuration Lang() { return main.getFiles().getFile("lang"); }
+    public Configuration Levels() { return main.getFiles().getFile("levels"); }
+
+    private void initUtils() {
+        if (Config().isConfigurationSection("config.round-evaluation") &&
+                Config().getBoolean("config.round-evaluation.enabled")) {
+            StringBuilder decimalFormat = new StringBuilder("#.");
+            for (int i = 0; i < Config().getLong("config.round-evaluation.digits"); i++) decimalFormat.append("#");
+
+            this.decimalFormat = new DecimalFormat(decimalFormat.toString());
             this.decimalFormat.setRoundingMode(RoundingMode.CEILING);
 
-        } else {
-            decimalFormat = null;
         }
-        bar = main.files().getConfig("lang").getString("messages.progress.bar");
-        barCompleteColor = main.files().getConfig("lang").getString("messages.progress.complete-color");
-        barIncompleteColor = main.files().getConfig("lang").getString("messages.progress.incomplete-color");
+        else decimalFormat = null;
+
+        bar = Lang().getString("messages.progress.bar");
+        barCompleteColor = Lang().getString("messages.progress.complete-color");
+        barIncompleteColor = Lang().getString("messages.progress.incomplete-color");
     }
 
-    public Configuration levelsYML() {
-        return main.files().getConfig("levels");
-    }
+    public long startLevel() { return Levels().getLong("levels.starting.level"); }
+    public double startEXP() { return Levels().getDouble("levels.starting.experience"); }
+    public long maxLevel() { return Levels().getLong("levels.maximum.level"); }
 
-    public long startLevel() {
-        return levelsYML().getLong("levels.starting.level");
-    }
-    public double startEXP() {
-        return levelsYML().getDouble("levels.starting.experience");
-    }
-    public long maxLevel() {
-        return levelsYML().getLong("levels.maximum.level");
-    }
     public String generalFormula() {
-        return levelsYML().getString("levels.experience.general-formula");
+        return Levels().getString("levels.experience.general-formula");
     }
+
     public String levelFormula(long level) {
-        if (levelsYML().isSet("levels.experience.level." + level))
-            return levelsYML().getString("levels.experience.level." + level);
+        if (Levels().isSet("levels.experience.level." + level))
+            return Levels().getString("levels.experience.level." + level);
         return null;
     }
+
     public double roundDecimal(double value) {
         if (decimalFormat == null) return value;
         return Double.parseDouble(decimalFormat.format(value));
@@ -66,18 +71,26 @@ public class LevelUtils {
         return barCompleteColor + bar.substring(0, completion) + barIncompleteColor + bar.substring(completion);
     }
 
-    public String getPlaceholders(String string, Player player, boolean playerPlaceholder) {
-        string = string
-                .replace("{level}", (main.levelCache().playerLevels().get(player).getLevel() - 1) + "")
-                .replace("{playerEXP}", main.levelCache().playerLevels().get(player).getExp() + "")
-                .replace("{nextLevel}", main.levelCache().playerLevels().get(player).getLevel() + "")
-                .replace("{maxLevel}", main.levelCache().maxLevel() + "")
-                .replace("{minLevel}", main.levelCache().startLevel() + "")
-                .replace("{minEXP}", main.levelCache().startExp() + "");
-        if (playerPlaceholder) string = string
-                .replace("{player}", player.getName())
-                .replace("{playerDisplayName}", player.getDisplayName())
-                .replace("{playerUUID}", player.getUniqueId().toString());
+    public String getPlaceholders(String string, Player player, boolean isPlayer) {
+        String[] keys = {"{level}", "{playerEXP}", "{nextLevel}",
+                "{maxLevel}", "{minLevel}", "{minEXP}"};
+        String[] values = {
+                cache.playerLevels().get(player).getLevel() - 1 + "",
+                cache.playerLevels().get(player).getExp() + "",
+                cache.playerLevels().get(player).getLevel() + "",
+                cache.maxLevel() + "", cache.startLevel() + "", cache.startExp() + ""
+        };
+        string = StringUtils.replaceEach(string, keys, values);
+
+        if (isPlayer) {
+            String[] keys1 = {"{player}", "{playerDisplayName}", "{playerUUID}"};
+            String[] values1 = {
+                    player.getName(), player.getDisplayName(),
+                    player.getUniqueId().toString()
+            };
+            string = StringUtils.replaceEach(string, keys1, values1);
+        }
+
         return string;
     }
 

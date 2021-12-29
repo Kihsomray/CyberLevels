@@ -25,24 +25,25 @@ public final class CyberLevels extends JavaPlugin {
 
     private LevelCache levelCache;
 
-
     //private Map<Player, LevelObject> playerLevels = new HashMap<>();
 
     @Override
     public void onEnable() {
         logger = new Logger(this);
         files = new Files(this);
+
         langUtils = new LangUtils(this);
         levelUtils = new LevelUtils(this);
         levelCache = new LevelCache(this);
+
         levelCache.loadLevelData();
         levelCache.loadOnlinePlayers();
         levelCache.loadRewards();
+
         playerUtils = new PlayerUtils(this);
         //testPlayer = new LevelObject(this);
         new CLVCommand(this);
         new OnJoin(this);
-
     }
 
     @Override
@@ -58,25 +59,11 @@ public final class CyberLevels extends JavaPlugin {
         return Integer.parseInt(Bukkit.getBukkitVersion().split("-")[0].split("\\.")[1]);
     }
 
-    public void logger(String... messages) {
-        logger.log(messages);
-    }
+    public void logger(String... messages) { logger.log(messages); }
 
-    public Files files() {
-        return files;
-    }
-    public LevelUtils levelUtils() {
-        return levelUtils;
-    }
-    public PlayerUtils playerUtils() {
-        return playerUtils;
-    }
-
-    public LevelCache levelCache() {
-        return levelCache;
-    }
-
-    public LangUtils langUtils() {
-        return langUtils;
-    }
+    public Files getFiles() { return files; }
+    public LevelUtils levelUtils() { return levelUtils; }
+    public LangUtils langUtils() { return langUtils; }
+    public PlayerUtils playerUtils() { return playerUtils; }
+    public LevelCache levelCache() { return levelCache; }
 }
