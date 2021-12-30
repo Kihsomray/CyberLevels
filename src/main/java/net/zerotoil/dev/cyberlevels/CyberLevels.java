@@ -48,6 +48,8 @@ public final class CyberLevels extends JavaPlugin {
         levelCache.clearLevelData();
         levelCache.cancelAutoSave();
         // stuff
+
+        if (levelCache.getMySQL() != null) levelCache.getMySQL().disconnect();
     }
 
     public String serverFork() { return Bukkit.getVersion().split("-")[1]; }

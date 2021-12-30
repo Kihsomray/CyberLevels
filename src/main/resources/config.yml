@@ -1,5 +1,16 @@
 config:
 
+  # Should data be stored in MySQL?
+  mysql:
+    enabled: false
+    host: 'localhost'
+    port: '3306'
+    database: 'cyberlevels'
+    username: 'username'
+    password: 'password'
+    table: 'levels'
+    ssl: true
+
   # Should numbers be rounded?
   round-evaluation:
     enabled: true

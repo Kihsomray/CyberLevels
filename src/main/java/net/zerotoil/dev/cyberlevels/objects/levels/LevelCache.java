@@ -1,6 +1,7 @@
 package net.zerotoil.dev.cyberlevels.objects.levels;
 
 import net.zerotoil.dev.cyberlevels.CyberLevels;
+import net.zerotoil.dev.cyberlevels.objects.MySQL;
 import net.zerotoil.dev.cyberlevels.objects.RewardObject;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.Configuration;
@@ -28,6 +29,8 @@ public class LevelCache {
     private Map<Player, LevelObject> playerLevels;
     private Map<Long, LevelData> levelData;
 
+    private MySQL mySQL;
+
     public LevelCache(CyberLevels main) {
         this.main = main;
         startLevel = main.levelUtils().levelsYML().getLong("levels.starting.level");
@@ -36,6 +39,18 @@ public class LevelCache {
         playerLevels = new HashMap<>();
         clearLevelData();
         startAutoSave();
+        Configuration config = main.files().getConfig("config");
+        if (config.getBoolean("config.mysql.enabled")) {
+            mySQL = new MySQL(main, new String[]{
+                    config.getString("config.mysql.host"),
+                    config.getString("config.mysql.port"),
+                    config.getString("config.mysql.database"),
+                    config.getString("config.mysql.username"),
+                    config.getString("config.mysql.password"),
+                    config.getString("config.mysql.table")
+            },
+                    config.getBoolean("config.mysql.ssl"));
+        }
     }
 
     public void loadLevelData() {
@@ -55,7 +70,7 @@ public class LevelCache {
             l++;
         }
 
-        main.logger("&aLoaded " + (l - startLevel - 1) + " levels in " + (System.currentTimeMillis() - startTime) + "ms.", "");
+        main.logger("&aLoaded " + (l - startLevel) + " levels in " + (System.currentTimeMillis() - startTime) + "ms.", "");
 
     }
 
@@ -93,28 +108,35 @@ public class LevelCache {
 
     public void loadPlayer(Player player) {
 
-        LevelObject levelObject = new LevelObject(main, player);
+        LevelObject levelObject;
         String uuid = player.getUniqueId().toString();
-        File playerFile = new File(main.getDataFolder() + File.separator + "player_data", uuid + ".clv");
-        try {
-            if (!playerFile.exists()) {
-                playerFile.createNewFile();
-                String content = levelObject.getLevel() + "\n" + levelObject.getExp();
-                BufferedWriter writer = Files.newBufferedWriter(Paths.get(main.getDataFolder().getAbsolutePath() + File.separator + "player_data" + File.separator + uuid + ".clv"));
-                writer.write(content);
-                writer.close();
-            } else {
 
-                Scanner scanner = new Scanner(playerFile);
-                levelObject.setLevel(Long.parseLong(scanner.nextLine()));
-                levelObject.setExp(Double.parseDouble(scanner.nextLine()), false);
+        if (mySQL == null) {
+            levelObject = new LevelObject(main, player);
+            File playerFile = new File(main.getDataFolder() + File.separator + "player_data", uuid + ".clv");
+            try {
+                if (!playerFile.exists()) {
+                    playerFile.createNewFile();
+                    String content = levelObject.getLevel() + "\n" + levelObject.getExp();
+                    BufferedWriter writer = Files.newBufferedWriter(Paths.get(main.getDataFolder().getAbsolutePath() + File.separator + "player_data" + File.separator + uuid + ".clv"));
+                    writer.write(content);
+                    writer.close();
+                } else {
 
+                    Scanner scanner = new Scanner(playerFile);
+                    levelObject.setLevel(Long.parseLong(scanner.nextLine()));
+                    levelObject.setExp(Double.parseDouble(scanner.nextLine()), false);
+
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                main.logger("&cFailed to make file for " + player.getName());
             }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            main.logger("&cFailed to make file for " + player.getName());
+        } else {
+            levelObject = mySQL.getPlayerData(player);
         }
+
         playerLevels.put(player, levelObject);
 
     }
@@ -122,16 +144,20 @@ public class LevelCache {
     public void savePlayer(Player player, boolean clearData) {
 
         LevelObject levelObject = playerLevels.get(player);
-        if (clearData) playerLevels.remove(player);
         String uuid = player.getUniqueId().toString();
-        try {
-            String content = levelObject.getLevel() + "\n" + levelObject.getExp();
-            BufferedWriter writer = Files.newBufferedWriter(Paths.get(main.getDataFolder().getAbsolutePath() + File.separator + "player_data" + File.separator + uuid + ".clv"));
-            writer.write(content);
-            writer.close();
-        } catch (Exception e) {
-            main.logger("&cFailed to save data for " + player.getName());
+        if (mySQL == null) {
+            try {
+                String content = levelObject.getLevel() + "\n" + levelObject.getExp();
+                BufferedWriter writer = Files.newBufferedWriter(Paths.get(main.getDataFolder().getAbsolutePath() + File.separator + "player_data" + File.separator + uuid + ".clv"));
+                writer.write(content);
+                writer.close();
+            } catch (Exception e) {
+                main.logger("&cFailed to save data for " + player.getName());
+            }
+        } else {
+            mySQL.updatePlayer(player);
         }
+        if (clearData) playerLevels.remove(player);
     }
 
     public void loadOnlinePlayers() {
@@ -164,5 +190,9 @@ public class LevelCache {
 
     public Map<Long, LevelData> levelData() {
         return levelData;
+    }
+
+    public MySQL getMySQL() {
+        return mySQL;
     }
 }

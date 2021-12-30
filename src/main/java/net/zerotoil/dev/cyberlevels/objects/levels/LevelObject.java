@@ -2,7 +2,6 @@ package net.zerotoil.dev.cyberlevels.objects.levels;
 
 import net.zerotoil.dev.cyberlevels.CyberLevels;
 import net.zerotoil.dev.cyberlevels.objects.RewardObject;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
@@ -17,7 +16,7 @@ public class LevelObject {
     public LevelObject(CyberLevels main, Player player) {
         this.main = main;
         level = main.levelCache().startLevel();
-        exp = 0.0;
+        exp = main.levelCache().startExp();
         this.player = player;
     }
 
