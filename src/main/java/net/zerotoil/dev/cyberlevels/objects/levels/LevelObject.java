@@ -21,50 +21,73 @@ public class LevelObject {
     }
 
     public void addLevel(long amount) {
+        long levelCounter = level;
         level = Math.min(level + Math.max(amount, 0), main.levelCache().maxLevel());
         if (nextExpRequirement() == 0) exp = 0.0;
+        levelCounter = level = levelCounter;
+        if (levelCounter > 0)
+            main.langUtils().sendMessage(player, player,"gained-levels", true, true, new String[]{"{gainedLevels}"}, new String[]{levelCounter + ""});
     }
 
-    public void setLevel(long amount) {
+    public void setLevel(long amount, boolean sendMessage) {
+        long levelCounter = level;
         if (amount < main.levelCache().startLevel()) exp = 0.0;
         else if (amount >= main.levelCache().maxLevel()) exp = 0.0;
         level = Math.max(Math.min(amount, main.levelCache().maxLevel()), main.levelCache().startLevel());
+        levelCounter -= level;
+        if (!sendMessage) return;
+        if (levelCounter > 0) main.langUtils().sendMessage(player, player,"lost-levels", true, true, new String[]{"{lostLevels}"}, new String[]{Math.abs(levelCounter) + ""});
+        else if (levelCounter < 0) main.langUtils().sendMessage(player, player,"gained-levels", true, true, new String[]{"{gainedLevels}"}, new String[]{Math.abs(levelCounter) + ""});
     }
 
     public void removeLevel(long amount) {
         if (level - amount < main.levelCache().startLevel()) exp = 0.0;
+        long levelCounter = level;
         level = Math.max(level - Math.max(amount, 0), main.levelCache().startLevel());
-
+        levelCounter -= level;
+        if (levelCounter > 0)
+            main.langUtils().sendMessage(player, player,"lost-levels", true, true, new String[]{"{lostLevels}"}, new String[]{levelCounter + ""});
     }
 
     public void addExp(double amount) {
-        amount = Math.max(amount, 0);
+        addExp(amount, 0, true);
+    }
 
+    public void addExp(double amount, double difference, boolean sendMessage) {
+        amount = Math.max(amount, 0);
+        if (sendMessage && (amount - difference) > 0)
+            main.langUtils().sendMessage(player, player,"gained-exp", true, true, new String[]{"{gainedEXP}"}, new String[]{(amount - difference) + ""});
+        else if (sendMessage && (amount - difference) < 0)
+            main.langUtils().sendMessage(player, player,"lost-exp", true, true, new String[]{"{lostEXP}"}, new String[]{(difference - amount) + ""});
+        long levelCounter = 0;
         // current exp + exp increase > required exp to next level
         while (exp + amount >= nextExpRequirement()) {
             if (level.equals(main.levelCache().maxLevel())) return;
             amount = (amount - nextExpRequirement()) + exp;
             exp = 0.0;
             level++;
+            levelCounter++;
             sendLevelReward();
         }
+        if (levelCounter > 0)
+            if (sendMessage) main.langUtils().sendMessage(player, player,"gained-levels", true, true, new String[]{"{gainedLevels}"}, new String[]{levelCounter + ""});
         exp += amount;
 
     }
 
-    public void setExp(double amount, boolean checkLevel) {
-
+    public void setExp(double amount, boolean checkLevel, boolean sendMessage) {
+        amount = Math.abs(amount);
         if (checkLevel) {
-            exp = 0.0;
-            addExp(amount);
+            double exp = this.exp;
+            this.exp = 0.0;
+            addExp(amount, exp, sendMessage);
         } else exp = amount;
     }
 
     public void removeExp(double amount) {
         amount = Math.max(amount, 0);
-
+        long levelsLost = 0;
         if (amount > exp) {
-
             if (level.equals(main.levelCache().startLevel())) {
                 exp = 0.0;
                 return;
@@ -72,6 +95,7 @@ public class LevelObject {
 
             amount -= exp;
             level--;
+            levelsLost++;
             exp = nextExpRequirement();
 
             while (amount > exp) {
@@ -81,11 +105,15 @@ public class LevelObject {
                 } else {
                     amount -= nextExpRequirement();
                     level--;
+                    levelsLost++;
                     exp = nextExpRequirement();
                 }
             }
         }
+        double expTemp = exp;
         exp -= amount;
+        if (levelsLost > 0) main.langUtils().sendMessage(player, player,"lost-levels", true, true, new String[]{"{lostLevels}"}, new String[]{levelsLost + ""});
+        else if (amount > 0) main.langUtils().sendMessage(player, player,"lost-exp", true, true, new String[]{"{lostEXP}"}, new String[]{amount + ""});
 
         // makes sure the level doesn't go down below the start level
         level = Math.max(main.levelCache().startLevel(), level);
@@ -103,7 +131,7 @@ public class LevelObject {
         for (RewardObject reward : main.levelCache().levelData().get(level).getRewards()) reward.giveReward(player);
     }
 
-    private double nextExpRequirement() {
+    public double nextExpRequirement() {
         if (main.levelCache().levelData().get(level + 1) == null) return 0.0;
         return main.levelCache().levelData().get(level + 1).getRequiredExp(player);
     }

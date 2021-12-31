@@ -137,8 +137,8 @@ public class MySQL {
             statement.setString(1, player.getUniqueId().toString());
             ResultSet results = statement.executeQuery();
             results.next();
-            levelObject.setLevel(results.getLong("LEVEL"));
-            levelObject.setExp(results.getDouble("EXP"), false);
+            levelObject.setLevel(results.getLong("LEVEL"), false);
+            levelObject.setExp(results.getDouble("EXP"), false, false);
             return levelObject;
 
         } catch (Exception e) {

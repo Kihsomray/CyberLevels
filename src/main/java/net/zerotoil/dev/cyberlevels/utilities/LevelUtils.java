@@ -64,15 +64,28 @@ public class LevelUtils {
     }
 
     public String getPlaceholders(String string, Player player, boolean playerPlaceholder) {
+        return getPlaceholders(string, player, playerPlaceholder, false);
+    }
+    public String getPlaceholders(String string, Player player, boolean playerPlaceholder, boolean expRequirement) {
         String[] keys = {"{level}", "{playerEXP}", "{nextLevel}",
                 "{maxLevel}", "{minLevel}", "{minEXP}"};
         String[] values = {
-                main.levelCache().playerLevels().get(player).getLevel() - 1 + "",
+                main.levelCache().playerLevels().get(player).getLevel() + "",
                 main.levelCache().playerLevels().get(player).getExp() + "",
                 main.levelCache().playerLevels().get(player).getLevel() + "",
-                main.levelCache().maxLevel() + "", main.levelCache().startLevel() + "", main.levelCache().startExp() + ""
+                main.levelCache().maxLevel() + "", main.levelCache().startLevel() + "", main.levelCache().startExp() + "",
         };
         string = StringUtils.replaceEach(string, keys, values);
+
+        if (!expRequirement) {
+            String[] keys1 = {"{requiredEXP}", "{percent}", "{progressBar}"};
+            String[] values1 = {
+                    main.levelCache().playerLevels().get(player).nextExpRequirement() + "",
+                    getPercent(main.levelCache().playerLevels().get(player).getExp(), main.levelCache().playerLevels().get(player).nextExpRequirement()),
+                    progressBar(main.levelCache().playerLevels().get(player).getExp(), main.levelCache().playerLevels().get(player).nextExpRequirement())
+            };
+            string = StringUtils.replaceEach(string, keys1, values1);
+        }
 
         if (playerPlaceholder) {
             String[] keys1 = {"{player}", "{playerDisplayName}", "{playerUUID}"};
@@ -83,6 +96,11 @@ public class LevelUtils {
             string = StringUtils.replaceEach(string, keys1, values1);
         }
         return string;
+    }
+
+    private String getPercent(Double exp, Double requiredExp) {
+        if (requiredExp.equals(exp)) return "100";
+        return (int) (100 * (exp / requiredExp)) + "";
     }
 
 }

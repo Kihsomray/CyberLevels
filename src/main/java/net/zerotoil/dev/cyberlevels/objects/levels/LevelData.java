@@ -43,7 +43,7 @@ public class LevelData {
 
     public Double getRequiredExp(Player player) {
         String formula = expFormula;
-        formula = main.levelUtils().getPlaceholders(formula, player, false);
+        formula = main.levelUtils().getPlaceholders(formula, player, false, true);
         return (new ExpressionBuilder(formula).build().evaluate());
     }
 

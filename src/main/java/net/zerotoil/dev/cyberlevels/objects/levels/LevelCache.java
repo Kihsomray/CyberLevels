@@ -64,7 +64,6 @@ public class LevelCache {
         long l = startLevel;
 
         while (l <= maxLevel) {
-
             levelData.put(l, new LevelData(main, l));
             levels.remove(l + "");
             l++;
@@ -75,17 +74,14 @@ public class LevelCache {
     }
 
     public void loadRewards() {
-
         if (main.files().getConfig("rewards").isConfigurationSection("rewards"))
             for (String s : main.files().getConfig("rewards").getConfigurationSection("rewards").getKeys(false)) new RewardObject(main, s);
-
     }
 
     public void cancelAutoSave() {
-        if (autoSave != null) {
-            autoSave.cancel();
-            autoSave = null;
-        }
+        if (autoSave == null) return;
+        autoSave.cancel();
+        autoSave = null;
     }
 
     public void startAutoSave() {
@@ -107,7 +103,6 @@ public class LevelCache {
     }
 
     public void loadPlayer(Player player) {
-
         LevelObject levelObject;
         String uuid = player.getUniqueId().toString();
 
@@ -121,24 +116,20 @@ public class LevelCache {
                     BufferedWriter writer = Files.newBufferedWriter(Paths.get(main.getDataFolder().getAbsolutePath() + File.separator + "player_data" + File.separator + uuid + ".clv"));
                     writer.write(content);
                     writer.close();
-                } else {
-
+                }
+                else {
                     Scanner scanner = new Scanner(playerFile);
-                    levelObject.setLevel(Long.parseLong(scanner.nextLine()));
-                    levelObject.setExp(Double.parseDouble(scanner.nextLine()), false);
-
+                    levelObject.setLevel(Long.parseLong(scanner.nextLine()), false);
+                    levelObject.setExp(Double.parseDouble(scanner.nextLine()), false, false);
                 }
 
             } catch (Exception e) {
                 e.printStackTrace();
                 main.logger("&cFailed to make file for " + player.getName());
             }
-        } else {
-            levelObject = mySQL.getPlayerData(player);
         }
-
+        else levelObject = mySQL.getPlayerData(player);
         playerLevels.put(player, levelObject);
-
     }
 
     public void savePlayer(Player player, boolean clearData) {
@@ -154,22 +145,17 @@ public class LevelCache {
             } catch (Exception e) {
                 main.logger("&cFailed to save data for " + player.getName());
             }
-        } else {
-            mySQL.updatePlayer(player);
         }
+        else mySQL.updatePlayer(player);
         if (clearData) playerLevels.remove(player);
     }
 
     public void loadOnlinePlayers() {
-        for (Player player : Bukkit.getOnlinePlayers()) {
-            loadPlayer(player);
-        }
+        for (Player player : Bukkit.getOnlinePlayers()) loadPlayer(player);
     }
 
     public void saveOnlinePlayers(boolean clearData) {
-        for (Player player : Bukkit.getOnlinePlayers()) {
-            savePlayer(player, clearData);
-        }
+        for (Player player : Bukkit.getOnlinePlayers()) savePlayer(player, clearData);
     }
 
     public Long startLevel() {
