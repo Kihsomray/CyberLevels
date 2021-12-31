@@ -101,7 +101,8 @@ public enum FontInfo {
     PERIOD('.', 1),
     COMMA(',', 1),
     SPACE(' ', 3),
-    DEFAULT('a', 4);
+    DEFAULT('a', 4),
+    BAR_PIECE('▬', 3);
 
     private final char character;
     private final int length;

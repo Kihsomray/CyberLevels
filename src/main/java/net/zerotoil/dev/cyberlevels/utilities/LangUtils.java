@@ -1,20 +1,16 @@
 package net.zerotoil.dev.cyberlevels.utilities;
 
-import com.google.common.collect.Lists;
 import me.clip.placeholderapi.PlaceholderAPI;
 import net.zerotoil.dev.cyberlevels.CyberLevels;
-import net.zerotoil.dev.cyberlevels.terminals.ActionBar;
-import net.zerotoil.dev.cyberlevels.terminals.Title;
+import net.zerotoil.dev.cyberlevels.objects.ActionBar;
+import net.zerotoil.dev.cyberlevels.objects.Title;
 import net.zerotoil.dev.iridiumapi.IridiumAPI;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 public class LangUtils {

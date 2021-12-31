@@ -35,6 +35,11 @@ public class LevelObject {
         else if (amount >= main.levelCache().maxLevel()) exp = 0.0;
         level = Math.max(Math.min(amount, main.levelCache().maxLevel()), main.levelCache().startLevel());
         levelCounter -= level;
+        try {
+            exp = Math.min(exp, nextExpRequirement());
+        } catch (Exception e) {
+            // nothing, too lazy to exclude the startup setLevel error lol
+        }
         if (!sendMessage) return;
         if (levelCounter > 0) main.langUtils().sendMessage(player, player,"lost-levels", true, true, new String[]{"{lostLevels}"}, new String[]{Math.abs(levelCounter) + ""});
         else if (levelCounter < 0) main.langUtils().sendMessage(player, player,"gained-levels", true, true, new String[]{"{gainedLevels}"}, new String[]{Math.abs(levelCounter) + ""});
@@ -55,10 +60,6 @@ public class LevelObject {
 
     public void addExp(double amount, double difference, boolean sendMessage) {
         amount = Math.max(amount, 0);
-        if (sendMessage && (amount - difference) > 0)
-            main.langUtils().sendMessage(player, player,"gained-exp", true, true, new String[]{"{gainedEXP}"}, new String[]{(amount - difference) + ""});
-        else if (sendMessage && (amount - difference) < 0)
-            main.langUtils().sendMessage(player, player,"lost-exp", true, true, new String[]{"{lostEXP}"}, new String[]{(difference - amount) + ""});
         long levelCounter = 0;
         // current exp + exp increase > required exp to next level
         while (exp + amount >= nextExpRequirement()) {
@@ -69,9 +70,13 @@ public class LevelObject {
             levelCounter++;
             sendLevelReward();
         }
+        exp += amount;
+        if (sendMessage && (amount - difference) > 0)
+            main.langUtils().sendMessage(player, player,"gained-exp", true, true, new String[]{"{gainedEXP}"}, new String[]{(amount - difference) + ""});
+        else if (sendMessage && (amount - difference) < 0)
+            main.langUtils().sendMessage(player, player,"lost-exp", true, true, new String[]{"{lostEXP}"}, new String[]{(difference - amount) + ""});
         if (levelCounter > 0)
             if (sendMessage) main.langUtils().sendMessage(player, player,"gained-levels", true, true, new String[]{"{gainedLevels}"}, new String[]{levelCounter + ""});
-        exp += amount;
 
     }
 

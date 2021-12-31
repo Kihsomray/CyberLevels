@@ -69,7 +69,7 @@ public class LevelCache {
             l++;
         }
 
-        main.logger("&aLoaded " + (l - startLevel) + " levels in " + (System.currentTimeMillis() - startTime) + "ms.", "");
+        main.logger("&7Loaded &d" + (l - startLevel) + " &7levels in &a" + (System.currentTimeMillis() - startTime) + "ms&7.", "");
 
     }
 

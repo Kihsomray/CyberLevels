@@ -1,4 +1,4 @@
-package net.zerotoil.dev.cyberlevels.terminals;
+package net.zerotoil.dev.cyberlevels.interfaces;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;

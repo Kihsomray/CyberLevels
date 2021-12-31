@@ -1,6 +1,7 @@
-package net.zerotoil.dev.cyberlevels.terminals;
+package net.zerotoil.dev.cyberlevels.objects;
 
 import net.zerotoil.dev.cyberlevels.CyberLevels;
+import net.zerotoil.dev.cyberlevels.interfaces.Reflection;
 import org.bukkit.entity.Player;
 
 import java.lang.reflect.Constructor;

@@ -59,7 +59,7 @@ public class LevelUtils {
 
     public String progressBar(Double exp, Double requiredExp) {
         if (requiredExp == 0) return barCompleteColor + bar + barIncompleteColor;
-        int completion = (int) ((exp / requiredExp) * bar.length());
+        int completion = Math.min((int) ((exp / requiredExp) * bar.length()), bar.length() - 1);
         return barCompleteColor + bar.substring(0, completion) + barIncompleteColor + bar.substring(completion);
     }
 
@@ -71,7 +71,7 @@ public class LevelUtils {
                 "{maxLevel}", "{minLevel}", "{minEXP}"};
         String[] values = {
                 main.levelCache().playerLevels().get(player).getLevel() + "",
-                main.levelCache().playerLevels().get(player).getExp() + "",
+                roundDecimal(main.levelCache().playerLevels().get(player).getExp()) + "",
                 main.levelCache().playerLevels().get(player).getLevel() + "",
                 main.levelCache().maxLevel() + "", main.levelCache().startLevel() + "", main.levelCache().startExp() + "",
         };
@@ -98,7 +98,7 @@ public class LevelUtils {
         return string;
     }
 
-    private String getPercent(Double exp, Double requiredExp) {
+    public String getPercent(Double exp, Double requiredExp) {
         if (requiredExp.equals(exp)) return "100";
         return (int) (100 * (exp / requiredExp)) + "";
     }

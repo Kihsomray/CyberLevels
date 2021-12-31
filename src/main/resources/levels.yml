@@ -1,9 +1,12 @@
 levels:
 
+  # What level and experience should players start with? This will
+  # also be treated as the minimum level/exp a player can get to.
   starting:
     level: 1
     experience: 0
 
+  # Maximum level a player can achieve.
   maximum:
     level: 25
 
@@ -15,3 +18,6 @@ levels:
       1: 250
       2: '{level} * 25'
       3: 'sin({level}) + ({maxEXP} / {level} + {playerEXP})'
+
+      # All levels without specific formulas/values will follow the
+      # general formula.

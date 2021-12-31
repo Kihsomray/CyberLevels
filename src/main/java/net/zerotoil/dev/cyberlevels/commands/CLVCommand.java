@@ -55,10 +55,7 @@ public class CLVCommand implements CommandExecutor {
                     main.langUtils().sendMessage(player, "reloading", true, false);
 
                     // unload
-                    main.levelCache().saveOnlinePlayers(true);
-                    main.levelCache().clearLevelData();
-                    main.levelCache().cancelAutoSave();
-                    if (main.levelCache().getMySQL() != null) main.levelCache().getMySQL().disconnect();
+                    main.onDisable();
 
                     // load
                     main.onEnable();
@@ -77,8 +74,13 @@ public class CLVCommand implements CommandExecutor {
         if (args.length == 2) {
             switch (args[0].toLowerCase()) {
                 case "info":
+                    Player target = getPlayer(args[1]);
+                    if (target == null) {
+                        main.langUtils().sendMessage(player, player, "player-offline", true, false, new String[]{"{player}"}, new String[]{args[2]});
+                        return true;
+                    }
                     if (noPlayerPerm(player, "admin.admin.info")) return true;
-                    main.langUtils().sendMessage(player, "level-info", false);
+                    main.langUtils().sendMessage(player, target, "level-info", false, true, null, null);
                     return true;
             }
         }

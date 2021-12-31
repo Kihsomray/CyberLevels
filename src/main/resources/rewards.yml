@@ -4,11 +4,11 @@ rewards:
       - '[player] spawn'
       - '[console] eco give {player} 500'
     messages:
-      - '[player] this works i guess'
-      - '[player] [actionbar] beans'
-      - '[player] [title] ayo<n>croa is no bueno'
-      - '[C] {player} is cool, he reached {level}'
-    sound: []
+      - '[player] &dGood job!'
+      - '[player] [actionbar] &7Level &d{level}'
+      - '[player] [title] &dLevel Up!<n>You are now level {level}'
+      - '[C] &d{player} &7has reached &d{level}&7!'
+    # sound: [] # Coming soon!
     levels:
       - 1
       - 2
@@ -19,4 +19,5 @@ rewards:
       - 7
       - 8
       - 9
-    economy: '[remove] 500' # remove, add, set
+    # economy: '[remove] 500' # remove, add, set
+    # Coming soon!

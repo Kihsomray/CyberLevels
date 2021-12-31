@@ -1,8 +1,9 @@
-package net.zerotoil.dev.cyberlevels.terminals;
+package net.zerotoil.dev.cyberlevels.objects;
 
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.zerotoil.dev.cyberlevels.CyberLevels;
+import net.zerotoil.dev.cyberlevels.interfaces.Reflection;
 import org.bukkit.entity.Player;
 
 import java.lang.reflect.Constructor;
