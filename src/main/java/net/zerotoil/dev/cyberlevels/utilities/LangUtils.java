@@ -1,5 +1,6 @@
 package net.zerotoil.dev.cyberlevels.utilities;
 
+import com.google.common.collect.Lists;
 import me.clip.placeholderapi.PlaceholderAPI;
 import net.zerotoil.dev.cyberlevels.CyberLevels;
 import net.zerotoil.dev.cyberlevels.objects.ActionBar;
@@ -40,7 +41,7 @@ public class LangUtils {
     // converts message to list
     public List<String> convertList(Configuration config, String path) {
         return  !config.isList(path) ?
-                Arrays.asList(config.getString(path)) :
+                Lists.newArrayList(config.getString(path)) :
                 config.getStringList(path);
     }
 
@@ -174,7 +175,7 @@ public class LangUtils {
         else if (line.toLowerCase().startsWith("[json]") && line.contains("{\"text\":"))
             Bukkit.dispatchCommand(
                     Bukkit.getConsoleSender(), "minecraft:tellraw " +
-                            player.getName() + " " + parseFormat("[json]", line)
+                    player.getName() + " " + parseFormat("[json]", line)
             );
         else sendMixed(player, line);
     }

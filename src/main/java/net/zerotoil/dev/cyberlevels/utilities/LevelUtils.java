@@ -15,10 +15,9 @@ public class LevelUtils {
     private DecimalFormat decimalFormat;
 
     private String bar;
-    private String completeStart;
-    private String completeEnd;
-    private String incompleteStart;
-    private String incompleteEnd;
+    private String startBar;
+    private String middleBar;
+    private String endBar;
 
     public LevelUtils(CyberLevels main) {
         this.main = main;
@@ -38,10 +37,9 @@ public class LevelUtils {
         else decimalFormat = null;
 
         bar = langYML().getString("messages.progress.bar");
-        completeStart = langYML().getString("messages.progress.complete-color.start", "");
-        completeEnd = langYML().getString("messages.progress.complete-color.end", "");
-        incompleteStart = langYML().getString("messages.progress.incomplete-color.start", "");
-        incompleteEnd = langYML().getString("messages.progress.incomplete-color.end", "");
+        startBar = langYML().getString("messages.progress.complete-color", "");
+        middleBar = langYML().getString("messages.progress.incomplete-color", "");
+        endBar = langYML().getString("messages.progress.end-color", "");
     }
 
     public Configuration levelsYML() {
@@ -67,11 +65,9 @@ public class LevelUtils {
     }
 
     public String progressBar(Double exp, Double requiredExp) {
-        if (requiredExp == 0) return incompleteStart + bar + incompleteEnd;
+        if (requiredExp == 0) return startBar + bar + middleBar + endBar;
         int completion = Math.min((int) ((exp / requiredExp) * bar.length()), bar.length() - 1);
-
-        String end = incompleteStart + bar.substring(completion) + incompleteEnd;
-        return completeStart + bar.substring(0, completion) + completeEnd + end;
+        return startBar + bar.substring(0, completion) + middleBar + bar.substring(completion) + endBar;
     }
 
     public String getPlaceholders(String string, Player player, boolean playerPlaceholder) {
@@ -84,7 +80,7 @@ public class LevelUtils {
         String[] values = {
                 main.levelCache().playerLevels().get(player).getLevel() + "",
                 roundDecimal(main.levelCache().playerLevels().get(player).getExp()) + "",
-                main.levelCache().playerLevels().get(player).getLevel() + 1 + "",
+                (main.levelCache().playerLevels().get(player).getLevel() + 1) + "",
                 main.levelCache().maxLevel() + "", main.levelCache().startLevel() + "",
                 main.levelCache().startExp() + "",
         };
@@ -94,8 +90,14 @@ public class LevelUtils {
             String[] keys1 = {"{requiredEXP}", "{percent}", "{progressBar}"};
             String[] values1 = {
                     main.levelCache().playerLevels().get(player).nextExpRequirement() + "",
-                    getPercent(main.levelCache().playerLevels().get(player).getExp(), main.levelCache().playerLevels().get(player).nextExpRequirement()),
-                    progressBar(main.levelCache().playerLevels().get(player).getExp(), main.levelCache().playerLevels().get(player).nextExpRequirement())
+                    getPercent(
+                            main.levelCache().playerLevels().get(player).getExp(),
+                            main.levelCache().playerLevels().get(player).nextExpRequirement()
+                    ),
+                    progressBar(
+                            main.levelCache().playerLevels().get(player).getExp(),
+                            main.levelCache().playerLevels().get(player).nextExpRequirement()
+                    )
             };
             string = StringUtils.replaceEach(string, keys1, values1);
         }

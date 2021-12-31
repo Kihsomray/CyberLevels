@@ -126,6 +126,7 @@ public class LevelObject {
 
     }
 
+    @Override
     public String toString() {
         return "level: " + level + ", exp: " + exp + ", progress: " +
                 IridiumAPI.process(main.levelUtils().progressBar(exp, nextExpRequirement())) +
