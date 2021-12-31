@@ -76,7 +76,7 @@ public class CLVCommand implements CommandExecutor {
                 case "info":
                     Player target = getPlayer(args[1]);
                     if (target == null) {
-                        main.langUtils().sendMessage(player, player, "player-offline", true, false, new String[]{"{player}"}, new String[]{args[2]});
+                        main.langUtils().sendMessage(player, player, "player-offline", true, false, new String[]{"{player}"}, new String[]{args[1]});
                         return true;
                     }
                     if (noPlayerPerm(player, "admin.admin.info")) return true;

@@ -17,7 +17,7 @@ levels:
     level:
       1: 250
       2: '{level} * 25'
-      3: 'sin({level}) + ({maxEXP} / {level} + {playerEXP})'
+      3: 'sin({level}) + ({minEXP} / {level} + {playerEXP})'
 
       # All levels without specific formulas/values will follow the
       # general formula.

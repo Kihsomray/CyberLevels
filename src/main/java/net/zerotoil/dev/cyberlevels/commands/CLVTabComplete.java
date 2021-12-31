@@ -40,9 +40,9 @@ public class CLVTabComplete implements TabCompleter {
         if (player.hasPermission(aPrefix + "exp.set")) args0.add("setExp");
         if (player.hasPermission(aPrefix + "exp.remove")) args0.add("removeExp");
 
-        if (player.hasPermission(aPrefix + "level.add")) args0.add("addLevel");
-        if (player.hasPermission(aPrefix + "level.set")) args0.add("setLevel");
-        if (player.hasPermission(aPrefix + "level.remove")) args0.add("removeLevel");
+        if (player.hasPermission(aPrefix + "levels.add")) args0.add("addLevel");
+        if (player.hasPermission(aPrefix + "levels.set")) args0.add("setLevel");
+        if (player.hasPermission(aPrefix + "levels.remove")) args0.add("removeLevel");
 
         if (args.length == 1) {
             StringUtil.copyPartialMatches(args[0], args0, args0Comp);
