@@ -48,7 +48,7 @@ public class Files {
     }
 
     public HashMap<String, YAMLFile> getFiles() { return this.files; }
-    public YAMLFile get(String file){  return files.get(file); }
+    private YAMLFile get(String file){  return files.get(file); }
     public Configuration getConfig(String file) { return files.get(file).getConfig(); }
 
 }

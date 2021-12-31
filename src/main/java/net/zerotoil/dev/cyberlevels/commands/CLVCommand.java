@@ -45,9 +45,9 @@ public class CLVCommand implements CommandExecutor {
                 case "about":
 
                     if (noPlayerPerm(player, "player.about")) return true;
-                    main.langUtils().sendMixed(player, "&d&lCyber&f&lLevels &fv" + main.getDescription().getVersion() + " &7(&7&nhttps://bit.ly/2YSlqYq&7).");
-                    main.langUtils().sendMixed(player, "&fDeveloped by &d" + main.getDescription().getAuthors().toString().replace("[", "").replace("]", "") + "&f.");
-                    main.langUtils().sendMixed(player, "A leveling system plugin with MySQL support and custom events.");
+                    main.langUtils().sendMixed(player, " &d&lCyber&f&lLevels &fv" + main.getDescription().getVersion() + " &7(&7&nhttps://bit.ly/2YSlqYq&7).");
+                    main.langUtils().sendMixed(player, " &fDeveloped by &d" + main.getAuthors() + "&f.");
+                    main.langUtils().sendMixed(player, " A leveling system plugin with MySQL support and custom events.");
                     return true;
 
                 case "reload":
@@ -58,7 +58,7 @@ public class CLVCommand implements CommandExecutor {
                     main.onDisable();
 
                     // load
-                    main.onEnable();
+                    main.reloadClasses();
 
                     main.langUtils().sendMessage(player, "reloaded", true, false);
                     return true;

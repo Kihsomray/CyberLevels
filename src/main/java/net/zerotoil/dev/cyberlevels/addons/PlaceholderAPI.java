@@ -2,6 +2,7 @@ package net.zerotoil.dev.cyberlevels.addons;
 
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import net.zerotoil.dev.cyberlevels.CyberLevels;
+import net.zerotoil.dev.iridiumapi.IridiumAPI;
 import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
 
@@ -34,7 +35,7 @@ public class PlaceholderAPI extends PlaceholderExpansion {
     }
 
     @Override
-    public String onRequest(OfflinePlayer player, String identifier) {
+    public String onRequest(OfflinePlayer player, @NotNull String identifier) {
         if (!player.isOnline()) return null;
 
         if (identifier.equalsIgnoreCase("player_level"))
@@ -54,8 +55,8 @@ public class PlaceholderAPI extends PlaceholderExpansion {
                     main.levelCache().playerLevels().get(player).getExp()) + "";
 
         if (identifier.equalsIgnoreCase("player_exp_progress_bar"))
-            return main.levelUtils().progressBar(main.levelCache().playerLevels().get(player).getExp(),
-                    main.levelCache().playerLevels().get(player).nextExpRequirement());
+            return IridiumAPI.process(main.levelUtils().progressBar(main.levelCache().playerLevels().get(player).getExp(),
+                    main.levelCache().playerLevels().get(player).nextExpRequirement()));
 
         if (identifier.equalsIgnoreCase("player_exp_percent"))
             return main.levelUtils().getPercent(main.levelCache().playerLevels().get(player).getExp(),

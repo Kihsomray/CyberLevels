@@ -18,7 +18,6 @@ public class LevelData {
     public LevelData(CyberLevels main, Long level) {
         this.main = main;
         setLevel(level);
-
     }
 
     public void setLevel(Long level) {
@@ -27,8 +26,8 @@ public class LevelData {
         if (formula == null) formula = main.levelUtils().generalFormula();
         expFormula = formula;
         clearRewards();
-
     }
+
     public void setRewards(List<RewardObject> rewards) {
         this.rewards = rewards;
     }

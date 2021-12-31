@@ -4,6 +4,7 @@ import net.zerotoil.dev.cyberlevels.CyberLevels;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.Nullable;
 
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
@@ -14,8 +15,10 @@ public class LevelUtils {
     private DecimalFormat decimalFormat;
 
     private String bar;
-    private String barCompleteColor;
-    private String barIncompleteColor;
+    private String completeStart;
+    private String completeEnd;
+    private String incompleteStart;
+    private String incompleteEnd;
 
     public LevelUtils(CyberLevels main) {
         this.main = main;
@@ -31,25 +34,31 @@ public class LevelUtils {
             this.decimalFormat = new DecimalFormat(decimalFormat);
             this.decimalFormat.setRoundingMode(RoundingMode.CEILING);
 
-        } else {
-            decimalFormat = null;
         }
-        bar = main.files().getConfig("lang").getString("messages.progress.bar");
-        barCompleteColor = main.files().getConfig("lang").getString("messages.progress.complete-color");
-        barIncompleteColor = main.files().getConfig("lang").getString("messages.progress.incomplete-color");
+        else decimalFormat = null;
+
+        bar = langYML().getString("messages.progress.bar");
+        completeStart = langYML().getString("messages.progress.complete-color.start", "");
+        completeEnd = langYML().getString("messages.progress.complete-color.end", "");
+        incompleteStart = langYML().getString("messages.progress.incomplete-color.start", "");
+        incompleteEnd = langYML().getString("messages.progress.incomplete-color.end", "");
     }
 
     public Configuration levelsYML() {
         return main.files().getConfig("levels");
     }
 
+    public Configuration langYML() {
+        return main.files().getConfig("lang");
+    }
+
     public String generalFormula() {
         return levelsYML().getString("levels.experience.general-formula");
     }
+
+    @Nullable
     public String levelFormula(long level) {
-        if (levelsYML().isSet("levels.experience.level." + level))
-            return levelsYML().getString("levels.experience.level." + level);
-        return null;
+        return levelsYML().getString("levels.experience.level." + level);
     }
 
     public double roundDecimal(double value) {
@@ -58,22 +67,26 @@ public class LevelUtils {
     }
 
     public String progressBar(Double exp, Double requiredExp) {
-        if (requiredExp == 0) return barCompleteColor + bar + barIncompleteColor;
+        if (requiredExp == 0) return incompleteStart + bar + incompleteEnd;
         int completion = Math.min((int) ((exp / requiredExp) * bar.length()), bar.length() - 1);
-        return barCompleteColor + bar.substring(0, completion) + barIncompleteColor + bar.substring(completion);
+
+        String end = incompleteStart + bar.substring(completion) + incompleteEnd;
+        return completeStart + bar.substring(0, completion) + completeEnd + end;
     }
 
     public String getPlaceholders(String string, Player player, boolean playerPlaceholder) {
         return getPlaceholders(string, player, playerPlaceholder, false);
     }
+
     public String getPlaceholders(String string, Player player, boolean playerPlaceholder, boolean expRequirement) {
         String[] keys = {"{level}", "{playerEXP}", "{nextLevel}",
                 "{maxLevel}", "{minLevel}", "{minEXP}"};
         String[] values = {
                 main.levelCache().playerLevels().get(player).getLevel() + "",
                 roundDecimal(main.levelCache().playerLevels().get(player).getExp()) + "",
-                main.levelCache().playerLevels().get(player).getLevel() + "",
-                main.levelCache().maxLevel() + "", main.levelCache().startLevel() + "", main.levelCache().startExp() + "",
+                main.levelCache().playerLevels().get(player).getLevel() + 1 + "",
+                main.levelCache().maxLevel() + "", main.levelCache().startLevel() + "",
+                main.levelCache().startExp() + "",
         };
         string = StringUtils.replaceEach(string, keys, values);
 

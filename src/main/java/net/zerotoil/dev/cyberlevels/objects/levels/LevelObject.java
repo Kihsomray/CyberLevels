@@ -2,7 +2,7 @@ package net.zerotoil.dev.cyberlevels.objects.levels;
 
 import net.zerotoil.dev.cyberlevels.CyberLevels;
 import net.zerotoil.dev.cyberlevels.objects.RewardObject;
-import org.bukkit.ChatColor;
+import net.zerotoil.dev.iridiumapi.IridiumAPI;
 import org.bukkit.entity.Player;
 
 public class LevelObject {
@@ -128,12 +128,12 @@ public class LevelObject {
 
     public String toString() {
         return "level: " + level + ", exp: " + exp + ", progress: " +
-                ChatColor.translateAlternateColorCodes('&', main.levelUtils().progressBar(exp, nextExpRequirement())) +
+                IridiumAPI.process(main.levelUtils().progressBar(exp, nextExpRequirement())) +
                 " [" + (int) (100 * (exp / nextExpRequirement())) + "%]";
     }
 
     private void sendLevelReward() {
-        for (RewardObject reward : main.levelCache().levelData().get(level).getRewards()) reward.giveReward(player);
+        for (RewardObject rewardObject : main.levelCache().levelData().get(level).getRewards()) rewardObject.giveReward(player);
     }
 
     public double nextExpRequirement() {

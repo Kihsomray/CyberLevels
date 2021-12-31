@@ -4,6 +4,7 @@ import net.zerotoil.dev.cyberlevels.CyberLevels;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Collections;
 
@@ -23,8 +24,8 @@ public class YAMLFile {
         dataConfig = YamlConfiguration.loadConfiguration(getFile());
     }
 
-    private java.io.File getFile() {
-        return new java.io.File(main.getDataFolder(), location);
+    private File getFile() {
+        return new File(main.getDataFolder(), location);
     }
 
     public FileConfiguration getConfig() {
@@ -52,13 +53,8 @@ public class YAMLFile {
     }
 
     public void saveDefaultConfig() {
-        if (configFile == null) {
-            configFile = getFile();
-        }
-
-        if (configFile.exists()) {
-            return;
-        }
+        if (configFile == null) configFile = getFile();
+        if (configFile.exists()) return;
         main.saveResource(location, false);
     }
 

@@ -4,7 +4,7 @@ import net.zerotoil.dev.cyberlevels.addons.Metrics;
 import net.zerotoil.dev.cyberlevels.addons.PlaceholderAPI;
 import net.zerotoil.dev.cyberlevels.commands.CLVCommand;
 import net.zerotoil.dev.cyberlevels.commands.CLVTabComplete;
-import net.zerotoil.dev.cyberlevels.events.OnJoin;
+import net.zerotoil.dev.cyberlevels.listeners.JoinListener;
 import net.zerotoil.dev.cyberlevels.objects.levels.LevelCache;
 import net.zerotoil.dev.cyberlevels.objects.files.Files;
 import net.zerotoil.dev.cyberlevels.utilities.LangUtils;
@@ -30,7 +30,8 @@ public final class CyberLevels extends JavaPlugin {
     public void onEnable() {
         long startTime = System.currentTimeMillis();
         logger = new Logger(this);
-        if (!SystemUtils.OS_NAME.contains("Windows")) {
+
+        if (!SystemUtils.OS_NAME.contains("Windows"))
             logger("&d―――――――――――――――――――――――――――――――――――――――――――――――",
                     "&d╭━━━╮&7╱╱╱&d╭╮&7╱╱╱╱╱╱&d╭╮&7╱╱╱╱╱╱╱╱╱╱╱&d╭╮",
                     "&d┃╭━╮┃&7╱╱╱&d┃┃&7╱╱╱╱╱╱&d┃┃&7╱╱╱╱╱╱╱╱╱╱╱&d┃┃",
@@ -42,7 +43,7 @@ public final class CyberLevels extends JavaPlugin {
                     "&7╱╱╱╱&d╰━━╯  &7Version: &f" + getDescription().getVersion(),
                     "&d―――――――――――――――――――――――――――――――――――――――――――――――", ""
             );
-        } else
+        else
             logger("-----------------------------------------------",
                     "_________ .____ ____   ____",
                     "\\_   ___ \\|    |\\   \\ /   /",
@@ -55,9 +56,27 @@ public final class CyberLevels extends JavaPlugin {
                     "-----------------------------------------------", ""
             );
 
+        reloadClasses();
+        playerUtils = new PlayerUtils(this);
 
+        new CLVCommand(this);
+        new CLVTabComplete(this);
+        new JoinListener(this);
+
+        if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null)
+            new PlaceholderAPI(this).register();
+
+        new Metrics(this, 13782, this);
+        logger("&7Loaded &dCWR v" + getDescription().getVersion() + "&7 in &a" +
+                (System.currentTimeMillis() - startTime) + "ms&7.");
+
+        if (SystemUtils.OS_NAME.contains("Windows"))
+            logger("-----------------------------------------------");
+        else logger("&d―――――――――――――――――――――――――――――――――――――――――――――――");
+    }
+
+    public void reloadClasses() {
         files = new Files(this);
-
         langUtils = new LangUtils(this);
         levelUtils = new LevelUtils(this);
         levelCache = new LevelCache(this);
@@ -65,21 +84,6 @@ public final class CyberLevels extends JavaPlugin {
         levelCache.loadLevelData();
         levelCache.loadOnlinePlayers();
         levelCache.loadRewards();
-
-        playerUtils = new PlayerUtils(this);
-        //testPlayer = new LevelObject(this);
-        new CLVCommand(this);
-        new CLVTabComplete(this);
-        new OnJoin(this);
-
-        if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) new PlaceholderAPI(this).register();
-
-        new Metrics(this, 13782, this);
-        logger("&7Loaded &dCWR v" + getDescription().getVersion() + "&7 in &a" +
-                (System.currentTimeMillis() - startTime) + "ms&7.");
-        if (SystemUtils.OS_NAME.contains("Windows")) logger("-----------------------------------------------");
-        else logger("&d―――――――――――――――――――――――――――――――――――――――――――――――");
-
     }
 
     @Override
