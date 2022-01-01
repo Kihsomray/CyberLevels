@@ -27,9 +27,11 @@ public class Files {
         addFile("lang");
         addFile("levels");
         addFile("rewards");
+        addFile("earn-exp");
 
         if (getConfig("config").getBoolean("config.auto-update.config")) get("config").updateConfig();
         if (getConfig("config").getBoolean("config.auto-update.lang")) get("lang").updateConfig();
+        if (getConfig("config").getBoolean("config.auto-update.earn-exp")) get("earn-exp").updateConfig();
 
         // back end
         File playerData = new File(main.getDataFolder(),"player_data");

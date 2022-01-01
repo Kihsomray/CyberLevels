@@ -1,0 +1,112 @@
+earn-exp:
+  damaging:
+    player:
+      enabled: false
+      # Earns between 2 and 5 exp (random integer).
+      exp: 2-5
+      includes:
+        enabled: false
+        whitelist: false
+        # Does not gain EXP for the following players.
+        list:
+          - MD_5
+          - Kihsomray
+    animal:
+      enabled: false
+      # Earns 1 exp.
+      exp: 1
+      includes:
+        enabled: false
+        whitelist: true
+        # Does not gain EXP for the following mobs.
+        list:
+          - CHICKEN
+          - BUNNY
+    monster:
+      enabled: false
+      # Earns between 1 and 3 exp (random integer).
+      exp: 1-3
+      includes:
+        enabled: false
+        whitelist: false
+        # Only gains EXP for the following mobs.
+        list:
+          - PHANTOM
+          - CREEPER
+          - SPIDER
+    specific-entities:
+      # These WILL stack on the ones above.
+      enabled: false
+      entities:
+        COW: 1-2
+        SHEEP: 1-2
+
+  placing:
+    general:
+      enabled: false
+      exp: 1
+      includes:
+        enabled: false
+        whitelist: false
+        list:
+          - "DIRT"
+          - "GRASS_BLOCK"
+          - "SAND"
+          - "STONE"
+          - "NETHERRACK"
+    specific-blocks:
+      enabled: false
+      blocks:
+        DIAMOND_ORE: 4-6
+
+  breaking:
+    general:
+      enabled: false
+      exp: 1
+      includes:
+        enabled: false
+        whitelist: false
+        list:
+          - "DIRT"
+          - "GRASS_BLOCK"
+          - "SAND"
+          - "STONE"
+          - "NETHERRACK"
+    specific-blocks:
+      enabled: false
+      blocks:
+        DIAMOND_ORE: 4-6
+
+  crafting:
+    general:
+      enabled: false
+      exp: 1-2
+      includes:
+        enabled: false
+        whitelist: false
+        list:
+          - "CRAFTING_TABLE"
+          - "OAK_PLANKS"
+          - "WOODEN_PICKAXE"
+    specific-items:
+      enabled: false
+      items:
+        DIAMOND_BLOCK: 10-15
+
+  fishing:
+    general:
+      enabled: false
+      exp: 3-5
+      includes:
+        enabled: false
+        whitelist: false
+        list:
+          - "COD"
+          - "SALMON"
+          - "STRING"
+    specific-fish:
+      enabled: false
+      fish:
+        COD: 2-3
+        SALMON: 2-3
+        STRING: 1

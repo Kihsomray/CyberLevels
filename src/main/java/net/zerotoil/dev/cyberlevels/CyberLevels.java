@@ -4,7 +4,9 @@ import net.zerotoil.dev.cyberlevels.addons.Metrics;
 import net.zerotoil.dev.cyberlevels.addons.PlaceholderAPI;
 import net.zerotoil.dev.cyberlevels.commands.CLVCommand;
 import net.zerotoil.dev.cyberlevels.commands.CLVTabComplete;
+import net.zerotoil.dev.cyberlevels.listeners.EXPListeners;
 import net.zerotoil.dev.cyberlevels.listeners.JoinListener;
+import net.zerotoil.dev.cyberlevels.objects.exp.EXPCache;
 import net.zerotoil.dev.cyberlevels.objects.levels.LevelCache;
 import net.zerotoil.dev.cyberlevels.objects.files.Files;
 import net.zerotoil.dev.cyberlevels.utilities.LangUtils;
@@ -25,6 +27,7 @@ public final class CyberLevels extends JavaPlugin {
     private PlayerUtils playerUtils;
 
     private LevelCache levelCache;
+    private EXPCache expCache;
 
     @Override
     public void onEnable() {
@@ -80,10 +83,13 @@ public final class CyberLevels extends JavaPlugin {
         langUtils = new LangUtils(this);
         levelUtils = new LevelUtils(this);
         levelCache = new LevelCache(this);
+        expCache = new EXPCache(this);
 
         levelCache.loadLevelData();
         levelCache.loadOnlinePlayers();
         levelCache.loadRewards();
+
+        new EXPListeners(this);
     }
 
     @Override
@@ -120,6 +126,9 @@ public final class CyberLevels extends JavaPlugin {
 
     public LevelCache levelCache() {
         return levelCache;
+    }
+    public EXPCache expCache() {
+        return expCache;
     }
 
     public LangUtils langUtils() {

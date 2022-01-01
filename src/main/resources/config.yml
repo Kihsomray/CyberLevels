@@ -28,3 +28,4 @@ config:
   auto-update:
     config: true
     lang: true
+    earn-exp: true
