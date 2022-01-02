@@ -49,7 +49,7 @@ public class EXPListeners implements Listener {
     private void onMobDeath(EntityDeathEvent event) {
         if (event.getEntity().getLastDamageCause() == null) return;
         EntityDamageEvent damageEvent = event.getEntity().getLastDamageCause();
-        if (!(damageEvent instanceof EntityDamageEvent)) return;
+        if (!(damageEvent instanceof EntityDamageByEntityEvent)) return;
         Entity attacker = ((EntityDamageByEntityEvent) damageEvent).getDamager();
         if (!(attacker instanceof Player)) return;
 
