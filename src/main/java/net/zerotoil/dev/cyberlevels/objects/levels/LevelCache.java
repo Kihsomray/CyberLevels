@@ -112,7 +112,7 @@ public class LevelCache {
             try {
                 if (!playerFile.exists()) {
                     playerFile.createNewFile();
-                    String content = levelObject.getLevel() + "\n" + levelObject.getExp();
+                    String content = levelObject.getLevel() + "\n" + main.levelUtils().roundStringDecimal(levelObject.getExp());
                     BufferedWriter writer = Files.newBufferedWriter(Paths.get(main.getDataFolder().getAbsolutePath() + File.separator + "player_data" + File.separator + uuid + ".clv"));
                     writer.write(content);
                     writer.close();
@@ -138,7 +138,7 @@ public class LevelCache {
         String uuid = player.getUniqueId().toString();
         if (mySQL == null) {
             try {
-                String content = levelObject.getLevel() + "\n" + levelObject.getExp();
+                String content = levelObject.getLevel() + "\n" + main.levelUtils().roundStringDecimal(levelObject.getExp());
                 BufferedWriter writer = Files.newBufferedWriter(Paths.get(main.getDataFolder().getAbsolutePath() + File.separator + "player_data" + File.separator + uuid + ".clv"));
                 writer.write(content);
                 writer.close();

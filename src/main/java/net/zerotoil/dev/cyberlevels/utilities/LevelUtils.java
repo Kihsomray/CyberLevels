@@ -13,6 +13,7 @@ public class LevelUtils {
 
     private final CyberLevels main;
     private DecimalFormat decimalFormat;
+    private int decimals;
 
     private String bar;
     private String startBar;
@@ -28,8 +29,9 @@ public class LevelUtils {
         if (main.files().getConfig("config").isConfigurationSection("config.round-evaluation") &&
                 main.files().getConfig("config").getBoolean("config.round-evaluation.enabled")) {
             String decimalFormat = "#.";
-            for (int i = 0; i < main.files().getConfig("config").getLong("config.round-evaluation.digits"); i++) decimalFormat += "#";
+            for (int i = 0; i < main.files().getConfig("config").getInt("config.round-evaluation.digits"); i++) decimalFormat += "#";
 
+            this.decimals = main.files().getConfig("config").getInt("config.round-evaluation.digits");
             this.decimalFormat = new DecimalFormat(decimalFormat);
             this.decimalFormat.setRoundingMode(RoundingMode.CEILING);
 
@@ -62,6 +64,11 @@ public class LevelUtils {
     public double roundDecimal(double value) {
         if (decimalFormat == null) return value;
         return Double.parseDouble(decimalFormat.format(value));
+    }
+
+    public String roundStringDecimal(double value) {
+        if (decimalFormat == null) return value + "";
+        return decimalFormat.format(value);
     }
 
     public String progressBar(Double exp, Double requiredExp) {
@@ -118,4 +125,7 @@ public class LevelUtils {
         return (int) (100 * (exp / requiredExp)) + "";
     }
 
+    public int getDecimals() {
+        return decimals;
+    }
 }

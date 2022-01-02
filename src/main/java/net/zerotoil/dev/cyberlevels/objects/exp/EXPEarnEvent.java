@@ -13,15 +13,14 @@ public class EXPEarnEvent {
     private final CyberLevels main;
     private Boolean enabled = false;
     private String category, name;
-    private long minEXP, maxEXP;
+    private double minEXP, maxEXP;
     private boolean includedEnabled = false, whitelist = false;
     private List<String> list = new ArrayList<>();
 
     private boolean specificEnabled = false;
-    private HashMap<String, Long> specificMin = new HashMap<>(), specificMax = new HashMap<>();
+    private HashMap<String, Double> specificMin = new HashMap<>(), specificMax = new HashMap<>();
 
     private static Random random = new Random();
-
 
     public EXPEarnEvent(CyberLevels main, String category, String name) {
         this.main = main;
@@ -44,17 +43,20 @@ public class EXPEarnEvent {
             return;
         }
 
-        if (config.getString("exp") == null) {            // if exp isn't set, disable it
+        String exp = config.getString("exp");
+        if (exp == null) {            // if exp isn't set, disable it
             enabled = false;
             return;
         }
 
         // correctly parses the exp values
-        if (config.getString("exp").contains("-")) {
-            String[] string = config.getString("exp").split("-", 2);
-            minEXP = Long.parseLong(string[0]);
-            maxEXP = Long.parseLong(string[1]);
-        } else maxEXP = minEXP = config.getLong("exp");
+        if (exp.contains(",")) {
+            String[] string = exp.replace(" ", "").split(",", 2);
+            double tempMin = Math.min(Double.parseDouble(string[0]), Double.parseDouble(string[1]));
+            double tempMax = Math.max(Double.parseDouble(string[0]), Double.parseDouble(string[1]));
+            minEXP = tempMin;
+            maxEXP = tempMax;
+        } else maxEXP = minEXP = config.getDouble("exp");
 
         config = config.getConfigurationSection("includes");
         if (config == null) return;                             // if no section with includes, just stop
@@ -65,6 +67,7 @@ public class EXPEarnEvent {
         } catch (Exception e) {
             return;                                             // return if not enabled, the rest isn't important
         }
+
         try {
             whitelist = config.getBoolean("whitelist");   // if whitelist isn't in config, set it to false
         } catch (Exception e) {
@@ -73,7 +76,6 @@ public class EXPEarnEvent {
 
         for (String s : config.getStringList("list"))     // if gets to the end, get the whitelist/blacklist
             list.add(s.toUpperCase());
-
     }
 
     private void loadSpecific(ConfigurationSection config) {
@@ -90,14 +92,19 @@ public class EXPEarnEvent {
         config = config.getConfigurationSection(name);
         if (config == null) return;
 
+        // -1, -5
+
         for (String s : config.getKeys(false)) {
-            if (config.getString(s).contains("-")) {
-                String[] string = config.getString(s).split("-", 2);
-                specificMin.put(s.toUpperCase(), Long.parseLong(string[0]));
-                specificMax.put(s.toUpperCase(), Long.parseLong(string[1]));
+            String val = config.getString(s, "").replace(" ", "");
+            if (val.contains(",")) {
+                String[] string = val.split(",", 2);
+                double tempMin = Math.min(Double.parseDouble(string[0]), Double.parseDouble(string[1]));
+                double tempMax = Math.max(Double.parseDouble(string[0]), Double.parseDouble(string[1]));
+                specificMin.put(s.toUpperCase(), tempMin);
+                specificMax.put(s.toUpperCase(), tempMax);
             } else {
-                specificMin.put(s.toUpperCase(), config.getLong(s));
-                specificMax.put(s.toUpperCase(), config.getLong(s));
+                specificMin.put(s.toUpperCase(), config.getDouble(s));
+                specificMax.put(s.toUpperCase(), config.getDouble(s));
             }
         }
 
@@ -111,12 +118,19 @@ public class EXPEarnEvent {
     }
 
     public double getGeneralExp() {
-        return random.nextInt(Math.round((maxEXP - minEXP) + 1)) + minEXP;
+        double tempExp = minEXP + (maxEXP - minEXP) * random.nextDouble();
+        if (main.expCache().roundExp()) tempExp = main.levelUtils().roundDecimal(tempExp);
+        if (main.expCache().useDouble()) tempExp = Math.round(tempExp);
+        return tempExp;
     }
 
     public double getSpecificExp(String string) {
         if (!isInSpecificList(string)) return 0.0;
-        return random.nextInt(Math.round((specificMax.get(string.toUpperCase()) - specificMin.get(string.toUpperCase())) + 1)) + specificMin.get(string.toUpperCase());
+        double tempExp = specificMin.get(string.toUpperCase()) + (specificMax.get(string.toUpperCase()) - specificMin.get(string.toUpperCase())) * random.nextDouble();
+        if (main.expCache().roundExp()) tempExp = main.levelUtils().roundDecimal(tempExp);
+        if (main.expCache().useDouble()) tempExp = Math.round(tempExp);
+        return tempExp;
+
     }
 
     public boolean isInGeneralList(String string) {

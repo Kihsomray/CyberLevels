@@ -15,8 +15,15 @@ config:
   round-evaluation:
     enabled: true
 
+    # Should exp earned in earn-exp.yml be rounded?
+    round-earn-exp: true
+
     # 2 digits: #.##, 4 digits: #.####
     digits: 2
+
+  earn-exp:
+    # Should decimals be rounded to the nearest integer?
+    integer-only: false
 
   # Should player data be auto-saved?
   auto-save:

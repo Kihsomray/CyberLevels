@@ -72,11 +72,10 @@ public class LevelObject {
         }
         exp += amount;
         if (sendMessage && (amount - difference) > 0)
-            main.langUtils().sendMessage(player, player,"gained-exp", true, true, new String[]{"{gainedEXP}"}, new String[]{(amount - difference) + ""});
+            main.langUtils().sendMessage(player, player,"gained-exp", true, true, new String[]{"{gainedEXP}"}, new String[]{main.levelUtils().roundStringDecimal(amount - difference)});
         else if (sendMessage && (amount - difference) < 0)
-            main.langUtils().sendMessage(player, player,"lost-exp", true, true, new String[]{"{lostEXP}"}, new String[]{(difference - amount) + ""});
-        if (levelCounter > 0)
-            if (sendMessage) main.langUtils().sendMessage(player, player,"gained-levels", true, true, new String[]{"{gainedLevels}"}, new String[]{levelCounter + ""});
+            main.langUtils().sendMessage(player, player,"lost-exp", true, true, new String[]{"{lostEXP}"}, new String[]{main.levelUtils().roundStringDecimal(difference - amount)});
+        if (levelCounter > 0 && sendMessage) main.langUtils().sendMessage(player, player,"gained-levels", true, true, new String[]{"{gainedLevels}"}, new String[]{levelCounter + ""});
 
     }
 
@@ -118,7 +117,7 @@ public class LevelObject {
         double expTemp = exp;
         exp -= amount;
         if (levelsLost > 0) main.langUtils().sendMessage(player, player,"lost-levels", true, true, new String[]{"{lostLevels}"}, new String[]{levelsLost + ""});
-        else if (amount > 0) main.langUtils().sendMessage(player, player,"lost-exp", true, true, new String[]{"{lostEXP}"}, new String[]{amount + ""});
+        else if (amount > 0) main.langUtils().sendMessage(player, player,"lost-exp", true, true, new String[]{"{lostEXP}"}, new String[]{main.levelUtils().roundStringDecimal(amount)});
 
         // makes sure the level doesn't go down below the start level
         level = Math.max(main.levelCache().startLevel(), level);
