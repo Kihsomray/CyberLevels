@@ -89,13 +89,12 @@ public class EXPEarnEvent {
             return;
         }
 
-        config = config.getConfigurationSection(name);
-        if (config == null) return;
+        if (config.get(name) == null) return;
 
-        // -1, -5
-
-        for (String s : config.getKeys(false)) {
-            String val = config.getString(s, "").replace(" ", "");
+        for (String s : main.langUtils().convertList(main.files().getConfig("earn-exp"), "earn-exp." + category + ".specific-" + name + "." + name)) {
+            s = s.replace(" ", "");
+            String val = s.split(":", 2)[1];
+            s = s.split(":", 2)[0];
             if (val.contains(",")) {
                 String[] string = val.split(",", 2);
                 double tempMin = Math.min(Double.parseDouble(string[0]), Double.parseDouble(string[1]));

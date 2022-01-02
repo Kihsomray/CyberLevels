@@ -24,8 +24,8 @@ messages:
   progress:
     bar: '▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬'
     complete-color: '<R:1>'
-    incomplete-color: '</R><G:254322>'
-    end-color: '</G>&r'
+    incomplete-color: '</R>&7'
+    end-color: '&7'
 
   reloading: '&7Reloading...'
   reloaded: '&aReloaded!'

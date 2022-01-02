@@ -55,6 +55,7 @@ public class LevelCache {
 
     public void loadLevelData() {
 
+        main.logger("&dLoading level data...");
         long startTime = System.currentTimeMillis();
 
         ConfigurationSection levelSection = main.files().getConfig("levels").getConfigurationSection("levels.experience.level");
@@ -69,13 +70,20 @@ public class LevelCache {
             l++;
         }
 
-        main.logger("&7Loaded &d" + (l - startLevel) + " &7levels in &a" + (System.currentTimeMillis() - startTime) + "ms&7.", "");
+        main.logger("&7Loaded &d" + (l - startLevel) + " &7level(s) in &a" + (System.currentTimeMillis() - startTime) + "ms&7.", "");
 
     }
 
     public void loadRewards() {
-        if (main.files().getConfig("rewards").isConfigurationSection("rewards"))
-            for (String s : main.files().getConfig("rewards").getConfigurationSection("rewards").getKeys(false)) new RewardObject(main, s);
+        if (!main.files().getConfig("rewards").isConfigurationSection("rewards")) return;
+        main.logger("&dLoading reward data...");
+        long startTime = System.currentTimeMillis(), counter = 0;
+        for (String s : main.files().getConfig("rewards").getConfigurationSection("rewards").getKeys(false)) {
+            new RewardObject(main, s);
+            counter++;
+        }
+        main.logger("&7Loaded &d" + counter + " &7reward(s) in &a" + (System.currentTimeMillis() - startTime) + "ms&7.", "");
+
     }
 
     public void cancelAutoSave() {
@@ -151,7 +159,14 @@ public class LevelCache {
     }
 
     public void loadOnlinePlayers() {
-        for (Player player : Bukkit.getOnlinePlayers()) loadPlayer(player);
+        if (Bukkit.getOnlinePlayers().isEmpty()) return;
+        main.logger("&dLoading data for online players...");
+        long startTime = System.currentTimeMillis(), counter = 0;
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            loadPlayer(player);
+            counter++;
+        }
+        main.logger("&7Loaded data for &e" + counter + " &7online player(s) in &a" + (System.currentTimeMillis() - startTime) + "ms&7.", "");
     }
 
     public void saveOnlinePlayers(boolean clearData) {

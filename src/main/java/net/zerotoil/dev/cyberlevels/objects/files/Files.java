@@ -19,7 +19,7 @@ public class Files {
 
     public void loadFiles() {
         if (!files.isEmpty()) files.clear();
-        main.logger("&bLoading YAML files...");
+        main.logger("&dLoading YAML files...");
         long startTime = System.currentTimeMillis();
 
         // front end

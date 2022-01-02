@@ -26,7 +26,8 @@ public class MySQL {
      */
     public MySQL(CyberLevels main, String[] data, boolean ssl) {
         if (data.length < 6) throw new IllegalArgumentException();
-
+        main.logger("&dAttempting to connect to MySQL...");
+        long startTime = System.currentTimeMillis();
         this.main = main;
         ip = data[0];
         port = Integer.parseInt(data[1]);
@@ -35,8 +36,8 @@ public class MySQL {
         password = data[4];
         table = data[5];
         this.ssl = ssl;
-        System.out.println(ip + ", " + port + ", " + database + ", " + username + ", " + password + ", "  + table);
         connect();
+        main.logger("&7Connected to &eMySQL &7in &a" + (System.currentTimeMillis() - startTime) + "ms&7.", "");
     }
 
     // returns if connect to the database
@@ -47,11 +48,8 @@ public class MySQL {
     // connect to the database
     private void connect() {
         if (isConnected()) return;
-        long startTime = System.currentTimeMillis();
-        main.logger("&bAttempting to connect to MySQL...");
         try {
             connection = DriverManager.getConnection("jdbc:mysql://" + ip + ":" + port + "/" + database + "?autoReconnect=true&useSSL=" + ssl, username, password);
-            main.logger("&aConnected to MySQL successfully in &a" + (System.currentTimeMillis() - startTime) + "ms&7.", "");
             makeTable();
         } catch (Exception e) {
             main.logger("&cThere was an issue connecting to MySQL Database.");

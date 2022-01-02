@@ -1,6 +1,6 @@
 earn-exp:
-  damaging:
-    player:
+  damaging-players:
+    general:
       enabled: false
       # Earns between 2 and 5 exp (random integer).
       exp: 2, 5
@@ -11,7 +11,15 @@ earn-exp:
         list:
           - MD_5
           - Kihsomray
-    animal:
+    specific-players:
+      # These WILL stack on the ones above.
+      enabled: false
+      players:
+        - 'CroaBeast: 2, 4'
+        - 'ThiccPickle: 3, 5'
+
+  damaging-animals:
+    general:
       enabled: false
       # Earns 1 exp.
       exp: 1
@@ -22,7 +30,15 @@ earn-exp:
         list:
           - CHICKEN
           - BUNNY
-    monster:
+    specific-animals:
+      # These WILL stack on the ones above.
+      enabled: false
+      animals:
+        - 'COW: 1, 2'
+        - 'SHEEP: 1, 2'
+
+  damaging-monsters:
+    general:
       enabled: false
       # Earns between 1 and 3 exp (random integer).
       exp: 1, 3
@@ -34,12 +50,70 @@ earn-exp:
           - PHANTOM
           - CREEPER
           - SPIDER
-    specific-entities:
+    specific-monsters:
       # These WILL stack on the ones above.
       enabled: false
-      entities:
-        COW: 1, 2
-        SHEEP: 1, 2
+      monsters:
+        - 'SPIDER: 1, 2'
+        - 'CREEPER: 1, 2'
+
+  killing-players:
+    general:
+      enabled: false
+      # Earns between 2 and 5 exp (random integer).
+      exp: 2, 5
+      includes:
+        enabled: false
+        whitelist: false
+        # Does not gain EXP for the following players.
+        list:
+          - MD_5
+          - Kihsomray
+    specific-players:
+      # These WILL stack on the ones above.
+      enabled: false
+      players:
+        - 'CroaBeast: 2, 4'
+        - 'ThiccPickle: 3, 5'
+
+  killing-animals:
+    general:
+      enabled: false
+      # Earns 1 exp.
+      exp: 1
+      includes:
+        enabled: false
+        whitelist: true
+        # Does not gain EXP for the following mobs.
+        list:
+          - CHICKEN
+          - BUNNY
+    specific-animals:
+      # These WILL stack on the ones above.
+      enabled: false
+      animals:
+        - 'COW: 1, 2'
+        - 'SHEEP: 1, 2'
+
+  killing-monsters:
+    general:
+      enabled: false
+      # Earns between 1 and 3 exp (random integer).
+      exp: 1, 3
+      includes:
+        enabled: false
+        whitelist: false
+        # Only gains EXP for the following mobs.
+        list:
+          - PHANTOM
+          - CREEPER
+          - SPIDER
+    specific-monsters:
+      # These WILL stack on the ones above.
+      enabled: false
+      monsters:
+        - 'SPIDER: 1, 2'
+        - 'CREEPER: 1, 2'
 
   placing:
     general:
@@ -57,7 +131,7 @@ earn-exp:
     specific-blocks:
       enabled: false
       blocks:
-        DIAMOND_ORE: 4, 6
+        - 'DIAMOND_ORE: 4, 6'
 
   breaking:
     general:
@@ -75,7 +149,7 @@ earn-exp:
     specific-blocks:
       enabled: false
       blocks:
-        DIAMOND_ORE: 4, 6
+        - 'DIAMOND_ORE: 4, 6'
 
   crafting:
     general:
@@ -91,7 +165,7 @@ earn-exp:
     specific-items:
       enabled: false
       items:
-        DIAMOND_BLOCK: 10, 15
+        - 'DIAMOND_BLOCK: 10, 15'
 
   fishing:
     general:
@@ -107,6 +181,6 @@ earn-exp:
     specific-fish:
       enabled: false
       fish:
-        COD: 2, 3
-        SALMON: 2, 3
-        STRING: 1
+        - 'COD: 2, 3'
+        - 'SALMON: 2, 3'
+        - 'STRING: 1'

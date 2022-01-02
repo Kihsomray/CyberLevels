@@ -10,7 +10,6 @@ public class EXPCache {
     private final CyberLevels main;
     private Map<String, EXPEarnEvent> expEarnEvents = new HashMap<>();
     private boolean useDouble, roundExp;
-    private long counter = 0;
 
     public EXPCache(CyberLevels main) {
         this.main = main;
@@ -21,18 +20,30 @@ public class EXPCache {
 
     public void loadExpEvents() {
 
+        main.logger("&dLoading exp earning events...");
         long startTime = System.currentTimeMillis();
+        addEvent("damaging-players", "players");
+        addEvent("damaging-animals", "animals");
+        addEvent("damaging-monsters", "monsters");
+
+        addEvent("killing-players", "players");
+        addEvent("killing-animals", "animals");
+        addEvent("killing-monsters", "monsters");
+
         addEvent("placing", "blocks");
         addEvent("breaking", "blocks");
         addEvent("crafting", "items");
         addEvent("fishing", "fish");
-        main.logger("Loaded " + counter + " exp earn events in " + (System.currentTimeMillis() - startTime) + "ms.");
+
+        long counter = 0;
+        for (EXPEarnEvent event : expEarnEvents.values()) if (event.isEnabled() || event.isSpecificEnabled()) counter++;
+
+        main.logger("&7Loaded &e" + counter + " &7exp earn events in &a" + (System.currentTimeMillis() - startTime) + "ms&7.", "");
 
     }
 
     private void addEvent(String category, String name) {
         expEarnEvents.put(category, new EXPEarnEvent(main, category, name));
-        counter++;
     }
 
     public Map<String, EXPEarnEvent> expEarnEvents() {
