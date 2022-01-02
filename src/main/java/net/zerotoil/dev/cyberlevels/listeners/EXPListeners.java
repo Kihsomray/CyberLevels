@@ -27,7 +27,7 @@ public class EXPListeners implements Listener {
     }
 
     // Works 1.7.10 - latest
-    @EventHandler (priority = EventPriority.MONITOR)
+    @EventHandler (priority = EventPriority.HIGHEST)
     private void onDamage(EntityDamageByEntityEvent event) {
         if (event.isCancelled()) return;
         if (!(event.getDamager() instanceof Player)) return;
@@ -45,7 +45,7 @@ public class EXPListeners implements Listener {
     }
 
     // Works 1.7.10 - latest
-    @EventHandler (priority = EventPriority.MONITOR)
+    @EventHandler (priority = EventPriority.HIGHEST)
     private void onMobDeath(EntityDeathEvent event) {
         if (event.getEntity().getLastDamageCause() == null) return;
         EntityDamageEvent damageEvent = event.getEntity().getLastDamageCause();
@@ -67,13 +67,13 @@ public class EXPListeners implements Listener {
     }
 
     // Works 1.10.x - latest
-    /* @EventHandler (priority = EventPriority.MONITOR)
+    /* @EventHandler (priority = EventPriority.HIGHEST)
     private void onBreeding(EntityBreedEvent event) {
         if (event.isCancelled()) return;
     } */
 
     // Works 1.7.10 - latest
-    @EventHandler (priority = EventPriority.MONITOR)
+    @EventHandler (priority = EventPriority.HIGHEST)
     private void onPlacing(BlockPlaceEvent event) {
         if (event.isCancelled()) return;
         sendExp(event.getPlayer(), main.expCache().expEarnEvents().get("placing"), event.getBlock().getType().toString());
@@ -81,14 +81,14 @@ public class EXPListeners implements Listener {
     }
 
     // Works 1.7.10 - latest
-    @EventHandler (priority = EventPriority.MONITOR)
+    @EventHandler (priority = EventPriority.HIGHEST)
     private void onBreaking(BlockBreakEvent event) {
         if (event.isCancelled()) return;
         sendExp(event.getPlayer(), main.expCache().expEarnEvents().get("breaking"), event.getBlock().getType().toString());
     }
 
     // Works 1.7.10 - latest
-    @EventHandler (priority = EventPriority.MONITOR)
+    @EventHandler (priority = EventPriority.HIGHEST)
     private void onCrafting(CraftItemEvent event) {
         if (event.isCancelled()) return;
         if (!(event.getWhoClicked() instanceof Player)) return;
@@ -98,18 +98,17 @@ public class EXPListeners implements Listener {
     }
 
     // Works 1.7.10 - latest
-    @EventHandler (priority = EventPriority.MONITOR)
+    @EventHandler (priority = EventPriority.HIGHEST)
     private void onFishing(PlayerFishEvent event) {
         if (event.isCancelled()) return;
         if (event.getCaught() == null) return;
 
         sendExp(event.getPlayer(), main.expCache().expEarnEvents().get("fishing"), ((Item) event.getCaught()).getItemStack().getType().toString());
-        event.getPlayer().sendMessage(((Item) event.getCaught()).getItemStack().getType().toString());
 
     }
 
     // Works 1.16.1 - latest
-    /* @EventHandler (priority = EventPriority.MONITOR)
+    /* @EventHandler (priority = EventPriority.HIGHEST)
     private void onHarvesting(PlayerHarvestBlockEvent event) {
         if (event.isCancelled()) return;
     } */

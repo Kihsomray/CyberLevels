@@ -56,7 +56,7 @@ public class EXPEarnEvent {
             double tempMax = Math.max(Double.parseDouble(string[0]), Double.parseDouble(string[1]));
             minEXP = tempMin;
             maxEXP = tempMax;
-        } else maxEXP = minEXP = config.getDouble("exp");
+        } else maxEXP = minEXP = Double.parseDouble(exp);
 
         config = config.getConfigurationSection("includes");
         if (config == null) return;                             // if no section with includes, just stop
@@ -102,8 +102,8 @@ public class EXPEarnEvent {
                 specificMin.put(s.toUpperCase(), tempMin);
                 specificMax.put(s.toUpperCase(), tempMax);
             } else {
-                specificMin.put(s.toUpperCase(), config.getDouble(s));
-                specificMax.put(s.toUpperCase(), config.getDouble(s));
+                specificMin.put(s.toUpperCase(), Double.parseDouble(val));
+                specificMax.put(s.toUpperCase(), Double.parseDouble(val));
             }
         }
 

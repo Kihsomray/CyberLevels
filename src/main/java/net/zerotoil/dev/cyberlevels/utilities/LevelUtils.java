@@ -63,12 +63,12 @@ public class LevelUtils {
 
     public double roundDecimal(double value) {
         if (decimalFormat == null) return value;
-        return Double.parseDouble(decimalFormat.format(value));
+        return Double.parseDouble(decimalFormat.format(value).replace(",", "."));
     }
 
     public String roundStringDecimal(double value) {
         if (decimalFormat == null) return value + "";
-        return decimalFormat.format(value);
+        return decimalFormat.format(value).replace(",", ".");
     }
 
     public String progressBar(Double exp, Double requiredExp) {
