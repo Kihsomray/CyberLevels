@@ -3,10 +3,7 @@ package net.zerotoil.dev.cyberlevels.objects.exp;
 import net.zerotoil.dev.cyberlevels.CyberLevels;
 import org.bukkit.configuration.ConfigurationSection;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class EXPEarnEvent {
 
@@ -142,6 +139,59 @@ public class EXPEarnEvent {
     public boolean isInSpecificList(String string) {
         if (!specificEnabled) return false;
         return specificMin.containsKey(string);
+    }
+
+    public boolean hasPartialMatches(String string, boolean generalList) {
+        if (generalList) {
+            if (!includedEnabled) return true;
+            else if (whitelist) for (String s : list) if (string.contains(s.toUpperCase())) return true;
+            for (String s : list) if (!string.contains(s.toUpperCase())) return true;
+        } else {
+            if (!specificEnabled) return true;
+            for (String s : specificMin.keySet()) if (string.contains(s.toUpperCase())) return true;
+        }
+        return false;
+    }
+
+    public double getPartialMatchesExp(String string, boolean generalList) {
+
+        double amount = 0.0;
+        string = string.toUpperCase();
+
+        while (hasPartialMatches(string, generalList)) {
+            if (generalList) {
+                if (!includedEnabled) return getGeneralExp();
+                if (whitelist) {
+                    for (String s : list) {
+                        if (string.contains(s.toUpperCase())) {
+                            string = string.replace(s, "");
+                            amount += getGeneralExp();
+                            System.out.println(string + ", " + s);
+                        }
+                    }
+                } else {
+                    for (String s : list) {
+                        if (!string.contains(s.toUpperCase())) {
+                            string = string.replace(s, "");
+                            amount += getGeneralExp();
+                            System.out.println(string + ", " + s);
+                        }
+                    }
+                }
+            } else {
+                if (!specificEnabled) return 0.0;
+                for (String s : specificMin.keySet()) {
+                    if (string.contains(s.toUpperCase())) {
+                        string = string.replace(s, "");
+                        amount += getSpecificExp(s);
+                        System.out.println(string + ", " + s);
+                    }
+                }
+            }
+        }
+
+        return amount;
+
     }
 
 }

@@ -9,13 +9,12 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.entity.EntityBreedEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerFishEvent;
-import org.bukkit.event.player.PlayerHarvestBlockEvent;
 
 public class EXPListeners implements Listener {
 
@@ -24,6 +23,7 @@ public class EXPListeners implements Listener {
     public EXPListeners(CyberLevels main) {
         this.main = main;
         Bukkit.getPluginManager().registerEvents(this, main);
+        if (main.serverVersion() >= 10) new EXPListenersV10(main, this);
     }
 
     // Works 1.7.10 - latest
@@ -66,12 +66,6 @@ public class EXPListeners implements Listener {
 
     }
 
-    // Works 1.10.x - latest
-    /* @EventHandler (priority = EventPriority.HIGHEST)
-    private void onBreeding(EntityBreedEvent event) {
-        if (event.isCancelled()) return;
-    } */
-
     // Works 1.7.10 - latest
     @EventHandler (priority = EventPriority.HIGHEST)
     private void onPlacing(BlockPlaceEvent event) {
@@ -107,13 +101,32 @@ public class EXPListeners implements Listener {
 
     }
 
+    /* @EventHandler (priority = EventPriority.HIGHEST)
+    private void onChat(AsyncPlayerChatEvent event) {
+        if (event.isCancelled()) return;
+
+        EXPEarnEvent expEarnEvent = main.expCache().expEarnEvents().get("chatting");
+        Player player = event.getPlayer();
+        String item = event.getMessage().toUpperCase();
+        double counter = 0;
+
+        if (expEarnEvent.isEnabled() && expEarnEvent.hasPartialMatches(item, true))
+            counter += expEarnEvent.getPartialMatchesExp(item, true);
+
+        if (expEarnEvent.isSpecificEnabled() && expEarnEvent.hasPartialMatches(item, false))
+            counter += expEarnEvent.getPartialMatchesExp(item, false);
+
+        if (counter > 0) main.levelCache().playerLevels().get(player).addExp(counter);
+        else if (counter < 0) main.levelCache().playerLevels().get(player).removeExp(Math.abs(counter));
+    } */
+
     // Works 1.16.1 - latest
     /* @EventHandler (priority = EventPriority.HIGHEST)
     private void onHarvesting(PlayerHarvestBlockEvent event) {
         if (event.isCancelled()) return;
     } */
 
-    private void sendExp(Player player, EXPEarnEvent expEarnEvent, String item) {
+    public void sendExp(Player player, EXPEarnEvent expEarnEvent, String item) {
         double counter = 0;
 
         if (expEarnEvent.isEnabled() && expEarnEvent.isInGeneralList(item))

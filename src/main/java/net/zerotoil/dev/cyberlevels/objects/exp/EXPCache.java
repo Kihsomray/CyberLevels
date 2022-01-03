@@ -34,6 +34,9 @@ public class EXPCache {
         addEvent("breaking", "blocks");
         addEvent("crafting", "items");
         addEvent("fishing", "fish");
+        addEvent("breeding", "animals");
+
+        //addEvent("chatting", "words");
 
         long counter = 0;
         for (EXPEarnEvent event : expEarnEvents.values()) if (event.isEnabled() || event.isSpecificEnabled()) counter++;
