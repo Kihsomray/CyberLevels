@@ -45,7 +45,7 @@ public class EXPListeners implements Listener {
     }
 
     // Works 1.7.10 - latest
-    @EventHandler (priority = EventPriority.HIGHEST)
+    @EventHandler
     private void onMobDeath(EntityDeathEvent event) {
 
         if (event.getEntity().getLastDamageCause() == null) return;
@@ -66,7 +66,6 @@ public class EXPListeners implements Listener {
         else return;
 
         sendExp(player, main.expCache().expEarnEvents().get(eventType), target.getType().toString());
-
     }
 
     // Works 1.7.10 - latest

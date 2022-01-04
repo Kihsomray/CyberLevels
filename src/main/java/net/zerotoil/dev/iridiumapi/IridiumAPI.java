@@ -80,7 +80,7 @@ public class IridiumAPI {
 
     @NotNull
     public static String stripRGB(@NotNull String string) {
-        return string.replaceAll("(?i)<[/]?[gr](:[0-9]{3,6})?>|\\{#[0-9A-F]{6}}|" +
+        return string.replaceAll("(?i)<[/]?[gr](:[0-9A-F]{3,6})?>|\\{#[0-9A-F]{6}}|" +
                 "<#[0-9A-F]{6}>|&#[0-9A-F]{6}|#[0-9A-F]{6}", "");
     }
 
@@ -91,43 +91,45 @@ public class IridiumAPI {
     }
 
     @NotNull
-    public static String stripGradient(@NotNull String string) {
-        return string.replaceAll("(?i)<[/]?[gr](:[0-9a-f]{3,6})?>", "");
-    }
-
-    @NotNull
     private static String apply(@NotNull String source, ChatColor[] colors) {
         StringBuilder specialColors = new StringBuilder();
         StringBuilder stringBuilder = new StringBuilder();
         String[] characters = source.split("");
 
         int outIndex = 0;
-        for (int i = 0; i < characters.length; i++) {
-            if ((characters[i].equals("&") || characters[i].equals("§"))
-                    && i + 1 < characters.length) {
-                if (!characters[i + 1].equals("r")) {
-                    specialColors.append(characters[i]);
-                    specialColors.append(characters[i + 1]);
+
+        try {
+            for (int i = 0; i < characters.length; i++) {
+                if ((characters[i].equals("&") || characters[i].equals("§"))
+                        && i + 1 < characters.length || colors == null) {
+                    if (!characters[i + 1].equals("r")) {
+                        specialColors.append(characters[i]);
+                        specialColors.append(characters[i + 1]);
+                    }
+                    else specialColors.setLength(0);
+                    i++;
                 }
-                else specialColors.setLength(0);
-                i++;
+                else stringBuilder.append(colors[outIndex++])
+                        .append(specialColors).append(characters[i]);
             }
-            else stringBuilder.append(colors[outIndex++])
-                    .append(specialColors).append(characters[i]);
         }
+        catch (IndexOutOfBoundsException e) {
+            return source;
+        }
+
         return stringBuilder.toString();
     }
 
     @NotNull
     private static String withoutSpecialChar(@NotNull String source) {
         String workingString = source;
-        for (String color : SPECIAL_COLORS)
-            if (workingString.contains(color)) workingString = workingString.replace(color, "");
+        for (String color : SPECIAL_COLORS) if (workingString.contains(color))
+            workingString = workingString.replace(color, "");
         return workingString;
     }
 
-    @NotNull
     private static ChatColor[] createRainbow(int step, float saturation) {
+        if (step == 0) return null;
         ChatColor[] colors = new ChatColor[step];
         double colorStep = (1.00 / step);
 
@@ -138,8 +140,8 @@ public class IridiumAPI {
         return colors;
     }
 
-    @NotNull
     private static ChatColor[] createGradient(@NotNull Color start, @NotNull Color end, int step) {
+        if (step == 1) return null;
         ChatColor[] colors = new ChatColor[step];
         int stepR = Math.abs(start.getRed() - end.getRed()) / (step - 1);
         int stepG = Math.abs(start.getGreen() - end.getGreen()) / (step - 1);

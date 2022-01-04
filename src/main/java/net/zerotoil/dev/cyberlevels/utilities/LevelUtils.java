@@ -1,7 +1,6 @@
 package net.zerotoil.dev.cyberlevels.utilities;
 
 import net.zerotoil.dev.cyberlevels.CyberLevels;
-import net.zerotoil.dev.iridiumapi.IridiumAPI;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.entity.Player;
@@ -29,11 +28,12 @@ public class LevelUtils {
     private void loadUtility() {
         if (main.files().getConfig("config").isConfigurationSection("config.round-evaluation") &&
                 main.files().getConfig("config").getBoolean("config.round-evaluation.enabled")) {
-            String decimalFormat = "#.";
-            for (int i = 0; i < main.files().getConfig("config").getInt("config.round-evaluation.digits"); i++) decimalFormat += "#";
+            StringBuilder decimalFormat = new StringBuilder("#.");
+            for (int i = 0; i < main.files().getConfig("config").getInt("config.round-evaluation.digits"); i++)
+                decimalFormat.append("#");
 
             this.decimals = main.files().getConfig("config").getInt("config.round-evaluation.digits");
-            this.decimalFormat = new DecimalFormat(decimalFormat);
+            this.decimalFormat = new DecimalFormat(decimalFormat.toString());
             this.decimalFormat.setRoundingMode(RoundingMode.CEILING);
 
         }
@@ -75,9 +75,11 @@ public class LevelUtils {
     public String progressBar(Double exp, Double requiredExp) {
         if (requiredExp == 0) return startBar + bar + middleBar + endBar;
         int completion = Math.min((int) ((exp / requiredExp) * bar.length()), bar.length());
+        if (completion == 0) return startBar + middleBar + bar + endBar;
         return startBar + bar.substring(0, completion) + middleBar + bar.substring(completion) + endBar;
 
     }
+
     public String getPlaceholders(String string, Player player, boolean playerPlaceholder) {
         return getPlaceholders(string, player, playerPlaceholder, false);
     }

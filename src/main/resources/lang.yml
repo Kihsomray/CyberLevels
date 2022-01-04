@@ -23,8 +23,8 @@ messages:
 
   progress:
     bar: '▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬'
-    complete-color: '<R:1>'
-    incomplete-color: '</R>&7'
+    complete-color: '&d'
+    incomplete-color: '&7'
     end-color: '&7'
 
   reloading: '&7Reloading...'
