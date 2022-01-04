@@ -47,6 +47,7 @@ public class EXPListeners implements Listener {
     // Works 1.7.10 - latest
     @EventHandler (priority = EventPriority.HIGHEST)
     private void onMobDeath(EntityDeathEvent event) {
+
         if (event.getEntity().getLastDamageCause() == null) return;
         EntityDamageEvent damageEvent = event.getEntity().getLastDamageCause();
         if (!(damageEvent instanceof EntityDamageByEntityEvent)) return;
@@ -56,6 +57,8 @@ public class EXPListeners implements Listener {
         Player player = (Player) attacker;
         Entity target = event.getEntity();
         String eventType;
+
+        player.sendMessage("You killed " + target.getType());
 
         if (target instanceof Player) eventType = "killing-players";
         else if (target instanceof Animals) eventType = "killing-animals";

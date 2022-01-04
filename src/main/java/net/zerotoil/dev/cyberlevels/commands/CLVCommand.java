@@ -18,7 +18,7 @@ public class CLVCommand implements CommandExecutor {
     public CLVCommand(CyberLevels main) {
         this.main = main;
         main.getCommand("clv").setExecutor(this);
-        consoleCmds = Arrays.asList("about", "reload");
+        consoleCmds = Arrays.asList("about", "reload", "addexp", "setexp", "removeexp", "addlevel", "setlevel", "removelevel");
     }
 
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
@@ -64,7 +64,7 @@ public class CLVCommand implements CommandExecutor {
                     return true;
 
                 case "info":
-                    if (noPlayerPerm(player, "admin.player.info")) return true;
+                    if (noPlayerPerm(player, "player.info")) return true;
                     main.langUtils().sendMessage(player, "level-info", false);
                     return true;
 
@@ -79,12 +79,16 @@ public class CLVCommand implements CommandExecutor {
                         main.langUtils().sendMessage(player, player, "player-offline", true, false, new String[]{"{player}"}, new String[]{args[1]});
                         return true;
                     }
-                    if (noPlayerPerm(player, "admin.admin.info")) return true;
+                    if (noPlayerPerm(player, "admin.info")) return true;
                     main.langUtils().sendMessage(player, target, "level-info", false, true, null, null);
                     return true;
             }
         }
 
+        if (player == null && args.length != 3) {
+            main.logger("&cYou need to specify a player!");
+            return true;
+        }
         if (args.length == 3 || args.length == 2) {
 
             Player target;

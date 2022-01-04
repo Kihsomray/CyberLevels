@@ -204,18 +204,18 @@ earn-exp:
   # When a player sends a message, it will check if a
   # player has a keyword containing the word in the
   # included list or specific words (case-insensitive).
-  chatting:
-    general:
-      enabled: false
-      exp: 4, 6
-      includes:
-        enabled: false
-        whitelist: false
-        list:
-          - "oh hi mark"
-    specific-words:
-      enabled: false
-      words:
-        - 'HELLO: 1, 2'
-        - 'AWESOME: 1, 2'
-        - 'OBAMA: 5'
+  #chatting:
+  #  general:
+  #    enabled: false
+  #    exp: 4, 6
+  #    includes:
+  #      enabled: false
+  #      whitelist: false
+  #      list:
+  #        - "oh hi mark"
+  #  specific-words:
+  #    enabled: false
+  #    words:
+  #      - 'HELLO: 1, 2'
+  #      - 'AWESOME: 1, 2'
+  #      - 'OBAMA: 5'

@@ -91,6 +91,11 @@ public class IridiumAPI {
     }
 
     @NotNull
+    public static String stripGradient(@NotNull String string) {
+        return string.replaceAll("(?i)<[/]?[gr](:[0-9a-f]{3,6})?>", "");
+    }
+
+    @NotNull
     private static String apply(@NotNull String source, ChatColor[] colors) {
         StringBuilder specialColors = new StringBuilder();
         StringBuilder stringBuilder = new StringBuilder();

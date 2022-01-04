@@ -1,6 +1,7 @@
 package net.zerotoil.dev.cyberlevels.utilities;
 
 import net.zerotoil.dev.cyberlevels.CyberLevels;
+import net.zerotoil.dev.iridiumapi.IridiumAPI;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.entity.Player;
@@ -73,10 +74,10 @@ public class LevelUtils {
 
     public String progressBar(Double exp, Double requiredExp) {
         if (requiredExp == 0) return startBar + bar + middleBar + endBar;
-        int completion = Math.min((int) ((exp / requiredExp) * bar.length()), bar.length() - 1);
+        int completion = Math.min((int) ((exp / requiredExp) * bar.length()), bar.length());
         return startBar + bar.substring(0, completion) + middleBar + bar.substring(completion) + endBar;
-    }
 
+    }
     public String getPlaceholders(String string, Player player, boolean playerPlaceholder) {
         return getPlaceholders(string, player, playerPlaceholder, false);
     }

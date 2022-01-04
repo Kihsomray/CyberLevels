@@ -1,6 +1,7 @@
 package net.zerotoil.dev.cyberlevels.listeners;
 
 import net.zerotoil.dev.cyberlevels.CyberLevels;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -15,6 +16,7 @@ public class EXPListenersV10 implements Listener {
     public EXPListenersV10(CyberLevels main, EXPListeners expListeners) {
         this.main = main;
         this.expListeners = expListeners;
+        Bukkit.getPluginManager().registerEvents(this, main);
     }
 
     // Works 1.10 - latest

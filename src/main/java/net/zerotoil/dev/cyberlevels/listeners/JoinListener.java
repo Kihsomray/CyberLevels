@@ -25,4 +25,5 @@ public class JoinListener implements Listener {
     private void onLeave(PlayerQuitEvent event) {
         main.levelCache().savePlayer(event.getPlayer(), true);
     }
+
 }
