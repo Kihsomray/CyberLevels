@@ -58,8 +58,6 @@ public class EXPListeners implements Listener {
         Entity target = event.getEntity();
         String eventType;
 
-        player.sendMessage("You killed " + target.getType());
-
         if (target instanceof Player) eventType = "killing-players";
         else if (target instanceof Animals) eventType = "killing-animals";
         else if (target instanceof Mob) eventType = "killing-monsters";
@@ -73,7 +71,6 @@ public class EXPListeners implements Listener {
     private void onPlacing(BlockPlaceEvent event) {
         if (event.isCancelled()) return;
         sendExp(event.getPlayer(), main.expCache().expEarnEvents().get("placing"), event.getBlock().getType().toString());
-
     }
 
     // Works 1.7.10 - latest

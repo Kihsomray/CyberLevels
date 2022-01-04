@@ -2,6 +2,8 @@ package net.zerotoil.dev.cyberlevels.objects;
 
 import net.zerotoil.dev.cyberlevels.CyberLevels;
 import org.bukkit.Bukkit;
+import org.bukkit.Sound;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -12,6 +14,7 @@ public class RewardObject {
     private final CyberLevels main;
 
     private final String rewardName;
+    private String soundName;
     private List<String> commands;
     private List<String> messages;
     private List<Long> levels;
@@ -20,6 +23,7 @@ public class RewardObject {
         this.main = main;
         this.rewardName = rewardName;
 
+        soundName = main.files().getConfig("rewards").getString("rewards." + rewardName + ".sound", "");
         commands = main.langUtils().convertList(main.files().getConfig("rewards"), "rewards." + rewardName + ".commands");
         messages = main.langUtils().convertList(main.files().getConfig("rewards"), "rewards." + rewardName + ".messages");
         levels = new ArrayList<>();
@@ -31,13 +35,9 @@ public class RewardObject {
     }
 
     public void giveReward(Player player) {
-
         sendCommands(player);
         sendMessage(player);
-
-
-
-
+        playSound(player);
     }
 
     private void sendCommands(Player player) {
@@ -61,7 +61,6 @@ public class RewardObject {
     }
 
     public void sendMessage(Player player) {
-
         if (messages == null) return;
         for (String message : messages) {
 
@@ -79,5 +78,18 @@ public class RewardObject {
         }
     }
 
+    private void playSound(Player player) {
+        Sound sound;
+        if (soundName.equals("")) return;
 
+        try {
+            Enum.valueOf(Sound.class, soundName);
+            sound = Sound.valueOf(soundName);
+        }
+        catch (Exception e) {
+            return;
+        }
+
+        player.playSound(player.getLocation(), sound, 1, 1);
+    }
 }
