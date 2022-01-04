@@ -3,6 +3,7 @@ package net.zerotoil.dev.cyberlevels.objects;
 import net.zerotoil.dev.cyberlevels.CyberLevels;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
+import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
@@ -14,7 +15,11 @@ public class RewardObject {
     private final CyberLevels main;
 
     private final String rewardName;
+
     private String soundName;
+    private float volume;
+    private float pitch;
+
     private List<String> commands;
     private List<String> messages;
     private List<Long> levels;
@@ -23,15 +28,22 @@ public class RewardObject {
         this.main = main;
         this.rewardName = rewardName;
 
-        soundName = main.files().getConfig("rewards").getString("rewards." + rewardName + ".sound", "");
-        commands = main.langUtils().convertList(main.files().getConfig("rewards"), "rewards." + rewardName + ".commands");
-        messages = main.langUtils().convertList(main.files().getConfig("rewards"), "rewards." + rewardName + ".messages");
+        soundName = rewardsYML().getString("rewards." + rewardName + ".sound.sound-effect", "");
+        volume = rewardsYML().getInt("rewards." + rewardName + ".sound.volume", 1);
+        pitch = rewardsYML().getInt("rewards." + rewardName + ".sound.pitch", 1);
+
+        commands = main.langUtils().convertList(rewardsYML(), "rewards." + rewardName + ".commands");
+        messages = main.langUtils().convertList(rewardsYML(), "rewards." + rewardName + ".messages");
         levels = new ArrayList<>();
-        for (String s : main.langUtils().convertList(main.files().getConfig("rewards"), "rewards." + rewardName + ".levels")) {
+        for (String s : main.langUtils().convertList(rewardsYML(), "rewards." + rewardName + ".levels")) {
             levels.add(Long.parseLong(s));
             if (main.levelCache().levelData().get(Long.parseLong(s)) != null)
                 main.levelCache().levelData().get(Long.parseLong(s)).addReward(this);
         }
+    }
+
+    private Configuration rewardsYML() {
+        return main.files().getConfig("rewards");
     }
 
     public void giveReward(Player player) {
@@ -90,6 +102,6 @@ public class RewardObject {
             return;
         }
 
-        player.playSound(player.getLocation(), sound, 1, 1);
+        player.playSound(player.getLocation(), sound, volume, pitch);
     }
 }

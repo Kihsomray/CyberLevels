@@ -8,7 +8,10 @@ rewards:
       - '[player] [actionbar] &7Level &d{level}'
       - '[player] [title] &dLevel Up!<n>You are now level {level}'
       - '[C] &d{player} &7has reached &d{level}&7!'
-    # sound: [] # Coming soon!
+    sound:
+      sound-effect: ''
+      volume: 1
+      pitch: 1
     levels:
       - 1
       - 2
