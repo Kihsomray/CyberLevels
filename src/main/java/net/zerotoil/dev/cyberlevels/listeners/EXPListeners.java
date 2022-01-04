@@ -13,7 +13,6 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerFishEvent;
 
 public class EXPListeners implements Listener {
@@ -95,6 +94,7 @@ public class EXPListeners implements Listener {
     private void onFishing(PlayerFishEvent event) {
         if (event.isCancelled()) return;
         if (event.getCaught() == null) return;
+        if (!(event.getCaught() instanceof Item)) return;
 
         sendExp(event.getPlayer(), main.expCache().expEarnEvents().get("fishing"), ((Item) event.getCaught()).getItemStack().getType().toString());
 
