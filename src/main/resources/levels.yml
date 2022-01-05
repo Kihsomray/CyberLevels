@@ -10,7 +10,6 @@ levels:
   maximum:
     level: 25
 
-
   # {level} {playerEXP} {maxLevel} {minLevel} {minEXP}
   experience:
     general-formula: '25 * {level}'

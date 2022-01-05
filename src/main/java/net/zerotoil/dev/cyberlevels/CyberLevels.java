@@ -1,5 +1,6 @@
 package net.zerotoil.dev.cyberlevels;
 
+import net.zerotoil.dev.cyberlevels.addons.LevelledMobs;
 import net.zerotoil.dev.cyberlevels.addons.Metrics;
 import net.zerotoil.dev.cyberlevels.addons.PlaceholderAPI;
 import net.zerotoil.dev.cyberlevels.commands.CLVCommand;
@@ -90,6 +91,7 @@ public final class CyberLevels extends JavaPlugin {
         levelCache.loadRewards();
 
         new EXPListeners(this);
+        new LevelledMobs(this);
     }
 
     @Override

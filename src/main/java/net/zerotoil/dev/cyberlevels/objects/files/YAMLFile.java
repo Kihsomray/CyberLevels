@@ -10,21 +10,37 @@ import java.util.Collections;
 
 public class YAMLFile {
 
-    private CyberLevels main;
-    private java.io.File configFile;
-    private FileConfiguration dataConfig;
-    private String location;
-    private String name;
+    private final CyberLevels main;
 
-    public YAMLFile(CyberLevels main, String location) {
+    private File configFile;
+    private FileConfiguration dataConfig;
+
+    private String location;
+    private String folder = null;
+
+    public YAMLFile(CyberLevels main, String name) {
         this.main = main;
-        this.location = location;
-        this.name = location.replace(".yml", "");
+        this.location = name + ".yml";
+
+        saveDefaultConfig();
+        dataConfig = YamlConfiguration.loadConfiguration(getFile());
+    }
+
+    public YAMLFile(CyberLevels main, String name, String folder) {
+        this.main = main;
+        this.location = name + ".yml";
+        this.folder = folder;
+
         saveDefaultConfig();
         dataConfig = YamlConfiguration.loadConfiguration(getFile());
     }
 
     private File getFile() {
+        if (folder != null) {
+            File file = new File(main.getDataFolder(), folder);
+            if (!file.exists()) file.mkdirs();
+            return new File(file, location);
+        }
         return new File(main.getDataFolder(), location);
     }
 
@@ -40,8 +56,8 @@ public class YAMLFile {
 
     public void updateConfig() {
         try {
-            ConfigUpdater.update(main, location, getFile(), Collections.emptyList());
-            if (main.serverVersion() < 13) ConfigUpdater.update(main, location, getFile(), Collections.emptyList());
+            ConfigUpdater.update(main, location, getFile(), null);
+            if (main.serverVersion() < 13) ConfigUpdater.update(main, location, getFile(), null);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -55,6 +71,8 @@ public class YAMLFile {
     public void saveDefaultConfig() {
         if (configFile == null) configFile = getFile();
         if (configFile.exists()) return;
+
+        if (folder != null) location = folder + File.separator + location;
         main.saveResource(location, false);
     }
 

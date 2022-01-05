@@ -44,12 +44,13 @@ public class EXPListeners implements Listener {
     }
 
     // Works 1.7.10 - latest
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGH)
     private void onMobDeath(EntityDeathEvent event) {
-
         if (event.getEntity().getLastDamageCause() == null) return;
+
         EntityDamageEvent damageEvent = event.getEntity().getLastDamageCause();
         if (!(damageEvent instanceof EntityDamageByEntityEvent)) return;
+        
         Entity attacker = ((EntityDamageByEntityEvent) damageEvent).getDamager();
         if (!(attacker instanceof Player)) return;
 

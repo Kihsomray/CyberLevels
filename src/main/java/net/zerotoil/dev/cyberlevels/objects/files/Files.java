@@ -29,9 +29,13 @@ public class Files {
         addFile("rewards");
         addFile("earn-exp");
 
-        if (getConfig("config").getBoolean("config.auto-update.config")) get("config").updateConfig();
-        if (getConfig("config").getBoolean("config.auto-update.lang")) get("lang").updateConfig();
-        if (getConfig("config").getBoolean("config.auto-update.earn-exp")) get("earn-exp").updateConfig();
+        addFile("levelled-mobs", "addons");
+
+        if (updateFile("config")) get("config").updateConfig();
+        if (updateFile("lang")) get("lang").updateConfig();
+        if (updateFile("earn-exp")) get("earn-exp").updateConfig();
+
+        if (updateFile("levelled-mobs")) get("levelled-mobs").updateConfig();
 
         // back end
         File playerData = new File(main.getDataFolder(),"player_data");
@@ -42,11 +46,22 @@ public class Files {
         );
     }
 
+    private boolean updateFile(String name) {
+        return getConfig("config").getBoolean("config.auto-update." + name);
+    }
+
     private void addFile(String file) {
         counter++;
-        files.put(file, new YAMLFile(main, file + ".yml"));
+        files.put(file, new YAMLFile(main, file));
         files.get(file).reloadConfig();
         main.logger("&7Loaded file &e" + file + ".yml&7.");
+    }
+
+    public void addFile(String file, String folder) {
+        counter++;
+        files.put(file, new YAMLFile(main, file, folder));
+        files.get(file).reloadConfig();
+        main.logger("&7Loaded file &e" + file + ".yml&7 in &e" + folder + "&7 folder.");
     }
 
     public HashMap<String, YAMLFile> getFiles() { return this.files; }

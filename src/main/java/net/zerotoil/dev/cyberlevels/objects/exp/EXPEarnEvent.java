@@ -7,7 +7,7 @@ import java.util.*;
 
 public class EXPEarnEvent {
 
-    private final CyberLevels main;
+    private CyberLevels main;
     private Boolean enabled = false;
     private String category, name;
     private double minEXP, maxEXP;
@@ -19,6 +19,10 @@ public class EXPEarnEvent {
 
     private static Random random = new Random();
 
+    protected EXPEarnEvent(CyberLevels main) {
+        this.main = main;
+    }
+
     public EXPEarnEvent(CyberLevels main, String category, String name) {
         this.main = main;
         this.category = category;
@@ -28,7 +32,7 @@ public class EXPEarnEvent {
         loadSpecific(config);
     }
 
-    private void loadGeneral(ConfigurationSection config) {
+    protected void loadGeneral(ConfigurationSection config) {
         if (config == null) return;
         config = config.getConfigurationSection("general");     // general section
         if (config == null) return;                             // if no general section
@@ -75,7 +79,7 @@ public class EXPEarnEvent {
             list.add(s.toUpperCase());
     }
 
-    private void loadSpecific(ConfigurationSection config) {
+    protected void loadSpecific(ConfigurationSection config) {
         if (config == null) return;
         config = config.getConfigurationSection("specific-" + name);
         if (config == null) return;
@@ -191,7 +195,53 @@ public class EXPEarnEvent {
         }
 
         return amount;
-
     }
 
+    protected void setEnabled(Boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    protected void setCategory(String category) {
+        this.category = category;
+    }
+
+    protected void setName(String name) {
+        this.name = name;
+    }
+
+    protected void setMinEXP(double minEXP) {
+        this.minEXP = minEXP;
+    }
+
+    protected void setMaxEXP(double maxEXP) {
+        this.maxEXP = maxEXP;
+    }
+
+    protected void setIncludedEnabled(boolean includedEnabled) {
+        this.includedEnabled = includedEnabled;
+    }
+
+    protected void setWhitelist(boolean whitelist) {
+        this.whitelist = whitelist;
+    }
+
+    protected void setList(List<String> list) {
+        this.list = list;
+    }
+
+    protected void setSpecificEnabled(boolean specificEnabled) {
+        this.specificEnabled = specificEnabled;
+    }
+
+    protected void setSpecificMin(HashMap<String, Double> specificMin) {
+        this.specificMin = specificMin;
+    }
+
+    protected void setSpecificMax(HashMap<String, Double> specificMax) {
+        this.specificMax = specificMax;
+    }
+
+    protected static void setRandom(Random random) {
+        EXPEarnEvent.random = random;
+    }
 }

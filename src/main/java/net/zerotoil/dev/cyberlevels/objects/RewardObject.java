@@ -4,7 +4,6 @@ import net.zerotoil.dev.cyberlevels.CyberLevels;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.configuration.Configuration;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -13,8 +12,6 @@ import java.util.List;
 public class RewardObject {
 
     private final CyberLevels main;
-
-    private final String rewardName;
 
     private String soundName;
     private float volume;
@@ -26,7 +23,6 @@ public class RewardObject {
 
     public RewardObject(CyberLevels main, String rewardName) {
         this.main = main;
-        this.rewardName = rewardName;
 
         soundName = rewardsYML().getString("rewards." + rewardName + ".sound.sound-effect", "");
         volume = rewardsYML().getInt("rewards." + rewardName + ".sound.volume", 1);
