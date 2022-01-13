@@ -1,4 +1,7 @@
 earn-exp:
+
+  # COMING SOON! DOES NOT WORK YET!
+
   killing-animals:
     general:
       enabled: false
