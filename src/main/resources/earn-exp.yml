@@ -1,4 +1,26 @@
 earn-exp:
+
+  timed-giving:
+    general:
+      enabled: false
+      # Interval in seconds.
+      interval: 360
+      # Earns between 2 and 5 exp (random integer).
+      exp: 1, 3
+      includes:
+        enabled: false
+        # Disable whitelist to use blacklist.
+        whitelist: false
+        # For the following permissions.
+        list:
+          - 'permission.no.exp'
+    specific-permissions:
+      # These WILL stack on the ones above.
+      enabled: false
+      permissions:
+        - 'permission.vip: 2, 4'
+        - 'permission.mvp: 3, 5'
+
   damaging-players:
     general:
       enabled: false

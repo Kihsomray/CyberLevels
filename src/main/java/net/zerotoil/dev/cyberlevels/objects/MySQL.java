@@ -37,7 +37,7 @@ public class MySQL {
         table = data[5];
         this.ssl = ssl;
         connect();
-        main.logger("&7Connected to &eMySQL &7in &a" + (System.currentTimeMillis() - startTime) + "ms&7.", "");
+        if (isConnected()) main.logger("&7Connected to &eMySQL &7in &a" + (System.currentTimeMillis() - startTime) + "ms&7.", "");
     }
 
     // returns if connect to the database
@@ -53,6 +53,7 @@ public class MySQL {
             makeTable();
         } catch (Exception e) {
             main.logger("&cThere was an issue connecting to MySQL Database.");
+            e.printStackTrace();
         }
     }
 
@@ -67,6 +68,7 @@ public class MySQL {
             main.logger("&aDisconnected from MySQL successfully in &a" + (System.currentTimeMillis() - startTime) + "ms&7.", "");
         } catch (Exception e) {
             main.logger("&cThere was an issue disconnecting to MySQL Database.");
+            e.printStackTrace();
         }
     }
 
@@ -83,6 +85,7 @@ public class MySQL {
 
         } catch (Exception e) {
             main.logger("&cFailed to create a MySQL table.");
+            e.printStackTrace();
         }
     }
 
@@ -99,6 +102,7 @@ public class MySQL {
             if (statement.executeQuery().next()) return true;
         } catch (Exception e) {
             main.logger("&cFailed to check if players exists in table.");
+            e.printStackTrace();
         }
         return false;
     }
@@ -120,8 +124,8 @@ public class MySQL {
             statement.executeUpdate();
 
         } catch (Exception e) {
-            e.printStackTrace();
             main.logger("&cFailed to update player " + player.getName() + ".");
+            e.printStackTrace();
         }
     }
 
@@ -141,6 +145,7 @@ public class MySQL {
 
         } catch (Exception e) {
             main.logger("&cFailed to get player data for " + player.getName() + ".");
+            e.printStackTrace();
             return null;
         }
 
@@ -165,9 +170,8 @@ public class MySQL {
 
         } catch (Exception e) {
             main.logger("&cFailed to update player " + player.getName() + ".");
+            e.printStackTrace();
         }
-
-
 
     }
 

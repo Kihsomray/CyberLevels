@@ -1,6 +1,8 @@
 config:
 
   # Should data be stored in MySQL?
+  # Tested on MySQL 10.4 and MariaDB 10.6.
+  # Other versions may not work yet!
   mysql:
     enabled: false
     host: 'localhost'

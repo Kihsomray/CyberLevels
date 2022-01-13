@@ -200,48 +200,71 @@ public class EXPEarnEvent {
     protected void setEnabled(Boolean enabled) {
         this.enabled = enabled;
     }
-
     protected void setCategory(String category) {
         this.category = category;
     }
-
     protected void setName(String name) {
         this.name = name;
     }
-
     protected void setMinEXP(double minEXP) {
         this.minEXP = minEXP;
     }
-
     protected void setMaxEXP(double maxEXP) {
         this.maxEXP = maxEXP;
     }
-
     protected void setIncludedEnabled(boolean includedEnabled) {
         this.includedEnabled = includedEnabled;
     }
-
     protected void setWhitelist(boolean whitelist) {
         this.whitelist = whitelist;
     }
-
     protected void setList(List<String> list) {
         this.list = list;
     }
-
     protected void setSpecificEnabled(boolean specificEnabled) {
         this.specificEnabled = specificEnabled;
     }
-
     protected void setSpecificMin(HashMap<String, Double> specificMin) {
         this.specificMin = specificMin;
     }
-
     protected void setSpecificMax(HashMap<String, Double> specificMax) {
         this.specificMax = specificMax;
     }
-
     protected static void setRandom(Random random) {
         EXPEarnEvent.random = random;
+    }
+
+    public Boolean getEnabled() {
+        return enabled;
+    }
+    public String getCategory() {
+        return category;
+    }
+    public String getName() {
+        return name;
+    }
+    public double getMinEXP() {
+        return minEXP;
+    }
+    public double getMaxEXP() {
+        return maxEXP;
+    }
+    public boolean isIncludedEnabled() {
+        return includedEnabled;
+    }
+    public boolean isWhitelist() {
+        return whitelist;
+    }
+    public List<String> getList() {
+        return list;
+    }
+    public HashMap<String, Double> getSpecificMin() {
+        return specificMin;
+    }
+    public HashMap<String, Double> getSpecificMax() {
+        return specificMax;
+    }
+    public static Random getRandom() {
+        return random;
     }
 }

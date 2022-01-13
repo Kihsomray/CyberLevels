@@ -14,6 +14,7 @@ public class LevelUtils {
     private final CyberLevels main;
     private DecimalFormat decimalFormat;
     private int decimals;
+    private boolean useSpecificFormula;
 
     private String bar;
     private String startBar;
@@ -23,6 +24,7 @@ public class LevelUtils {
     public LevelUtils(CyberLevels main) {
         this.main = main;
         loadUtility();
+        useSpecificFormula = levelsYML().isConfigurationSection("levels.experience.level");
     }
 
     private void loadUtility() {
@@ -59,6 +61,7 @@ public class LevelUtils {
 
     @Nullable
     public String levelFormula(long level) {
+        if (!useSpecificFormula) return null;
         return levelsYML().getString("levels.experience.level." + level);
     }
 

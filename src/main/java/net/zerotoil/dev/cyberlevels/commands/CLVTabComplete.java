@@ -23,6 +23,7 @@ public class CLVTabComplete implements TabCompleter {
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+        if (!(sender instanceof Player)) return null;
         Player player = (Player) sender;
 
         List<String> args0 = new ArrayList<>();
