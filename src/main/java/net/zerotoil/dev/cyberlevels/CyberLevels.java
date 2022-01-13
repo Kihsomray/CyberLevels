@@ -80,6 +80,7 @@ public final class CyberLevels extends JavaPlugin {
     }
 
     public void reloadClasses() {
+        if (expCache != null) expCache.cancelTimedEXP();
         files = new Files(this);
         langUtils = new LangUtils(this);
         levelUtils = new LevelUtils(this);

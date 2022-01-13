@@ -29,6 +29,7 @@ public class EXPCache {
     public void loadExpEvents() {
 
         main.logger("&dLoading exp earning events...");
+        if (!expEarnEvents.isEmpty()) expEarnEvents.clear();
         long startTime = System.currentTimeMillis();
         addEvent("damaging-players", "players");
         addEvent("damaging-animals", "animals");
@@ -44,7 +45,7 @@ public class EXPCache {
         addEvent("fishing", "fish");
         addEvent("breeding", "animals");
 
-        expEarnEvents.put("exp-giving", new EXPTimed(main, "exp-giving", "permissions"));
+        expEarnEvents.put("timed-giving", new EXPTimed(main, "timed-giving", "permissions"));
 
         //addEvent("chatting", "words");
 
@@ -62,12 +63,13 @@ public class EXPCache {
     }
 
     public void startTimedEXP() {
-        if (!main.files().getConfig("earn-exp").getBoolean("earn-exp.timed-giving.general.enabled") ||
+        if (!main.files().getConfig("earn-exp").getBoolean("earn-exp.timed-giving.general.enabled") &&
                 !main.files().getConfig("earn-exp").getBoolean("earn-exp.timed-giving.specific-permissions.enabled")) return;
+        //if (timedEXP != null && !timedEXP.isCancelled()) return;
         timedEXP = (new BukkitRunnable() {
             @Override
             public void run() {
-                EXPEarnEvent expEarnEvent = expEarnEvents.get("exp-giving");
+                EXPEarnEvent expEarnEvent = expEarnEvents.get("timed-giving");
 
                 for (Player p : Bukkit.getOnlinePlayers()) {
                     double counter = 0;
@@ -81,12 +83,11 @@ public class EXPCache {
 
                     if (counter > 0) main.levelCache().playerLevels().get(p).addExp(counter);
                     else if (counter < 0) main.levelCache().playerLevels().get(p).removeExp(Math.abs(counter));
+
                 }
 
-
-                startTimedEXP();
             }
-        }).runTaskLater(main, 20L * Math.max(1, main.files().getConfig("earn-exp").getLong("earn-exp.timed-giving.general.interval")));
+        }).runTaskTimer(main, 0L, Math.max(20L * Math.max(1, main.files().getConfig("earn-exp").getLong("earn-exp.timed-giving.general.interval")), 1));
     }
 
     private void addEvent(String category, String name) {

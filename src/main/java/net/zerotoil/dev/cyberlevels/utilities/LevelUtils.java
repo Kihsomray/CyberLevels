@@ -61,7 +61,7 @@ public class LevelUtils {
 
     @Nullable
     public String levelFormula(long level) {
-        if (!useSpecificFormula) return null;
+        if (!useSpecificFormula) return generalFormula();
         return levelsYML().getString("levels.experience.level." + level);
     }
 

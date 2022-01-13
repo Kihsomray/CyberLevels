@@ -59,8 +59,8 @@ public class LevelCache {
         long startTime = System.currentTimeMillis();
 
         ConfigurationSection levelSection = main.files().getConfig("levels").getConfigurationSection("levels.experience.level");
-        if (levelSection == null) return;
-        Set<String> levels = levelSection.getKeys(false);
+        Set<String> levels = new HashSet<>();
+        if (levelSection != null) levels = levelSection.getKeys(false);
 
         long l = startLevel;
 
