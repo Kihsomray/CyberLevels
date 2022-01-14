@@ -76,7 +76,11 @@ public class EXPCache {
 
                     if (expEarnEvent.isEnabled())
                         for (String s : expEarnEvent.getList())
-                            if (p.hasPermission(s)) counter += expEarnEvent.getGeneralExp();
+                            if (p.hasPermission(s)) {
+                                counter += expEarnEvent.getGeneralExp();
+                                break;
+                            }
+
 
                     if (expEarnEvent.isSpecificEnabled() && ((EXPTimed) expEarnEvent).hasPermission(p))
                         for (String s : expEarnEvent.getSpecificMin().keySet())

@@ -1,0 +1,60 @@
+anti-abuse:
+
+  general:
+    # Should pickaxes with silk touch reward EXP
+    # when breaking a block?
+    silk-touch-reward: false
+
+    # If you would like more general anti-abuse option
+    # to be added, make sure to mention them on our
+    # Discord: https://discord.gg/DC4Gqj3y5V
+
+  1:
+    # What events should be included in this module?
+    exp-events:
+      - 'damaging-players'
+      - 'damaging-animals'
+      - 'damaging-monsters'
+
+    cooldown:
+      enabled: false
+
+      # In seconds, the cooldown between each
+      # time a player can gain exp.
+      time: 5
+
+    limiter:
+      enabled: false
+
+      # How many times can exp be earned from this
+      # event (until timer resets it).
+      amount: 250
+
+      # A reset will occur for the first time at
+      # the mentioned date and time. Afterwards,
+      # it will reset using the interval specified.
+      #
+      # In our case, it will reset the first time
+      # on Jan 15, 2022, and every 6 hours after.
+      #
+      # These timers are REBOOT IMMUNE! This means
+      # that even if you reboot, it will recalculate
+      # and continue the exact same pattern. For
+      # more details visit dev.zerotoil.net
+      timer: '2022-01-15 00:00 6h'
+
+  2:
+    # What events should be included in this module?
+    exp-events:
+      - 'killing-players'
+      - 'killing-animals'
+      - 'killing-monsters'
+
+    cooldown:
+      enabled: false
+      time: 5
+
+    limiter:
+      enabled: false
+      amount: 250
+      timer: '2022-01-15 00:00 12h'
