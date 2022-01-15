@@ -152,17 +152,7 @@ public class TimedAbuseReset {
         public void run() {
 
             // regen world
-            Bukkit.getScheduler().runTask(main, new Runnable() {
-
-                @Override
-                public void run() {
-
-                    // add antiabuse reset here
-
-
-                }
-
-            });
+            Bukkit.getScheduler().runTask(main, antiAbuse::resetLimiters);
 
             // reruns timed reset
             (new BukkitRunnable() {

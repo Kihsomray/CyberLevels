@@ -3,6 +3,7 @@ package net.zerotoil.dev.cyberlevels.listeners;
 import net.zerotoil.dev.cyberlevels.CyberLevels;
 import net.zerotoil.dev.cyberlevels.objects.exp.EXPEarnEvent;
 import org.bukkit.Bukkit;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -77,6 +78,10 @@ public class EXPListeners implements Listener {
     @EventHandler (priority = EventPriority.HIGHEST)
     private void onBreaking(BlockBreakEvent event) {
         if (event.isCancelled()) return;
+        if (main.expCache().isPreventSilkTouchAbuse() &&
+                event.getPlayer().getInventory().getItemInMainHand().containsEnchantment(Enchantment.SILK_TOUCH)) {
+            return;
+        }
         sendExp(event.getPlayer(), main.expCache().expEarnEvents().get("breaking"), event.getBlock().getType().toString());
     }
 
@@ -127,6 +132,9 @@ public class EXPListeners implements Listener {
     } */
 
     public void sendExp(Player player, EXPEarnEvent expEarnEvent, String item) {
+
+        if (main.expCache().isAntiAbuse(player, expEarnEvent.getCategory())) return;
+
         double counter = 0;
 
         if (expEarnEvent.isEnabled() && expEarnEvent.isInGeneralList(item))

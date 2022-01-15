@@ -62,6 +62,7 @@ public final class CyberLevels extends JavaPlugin {
 
         reloadClasses();
         playerUtils = new PlayerUtils(this);
+        new EXPListeners(this);
 
         new CLVCommand(this);
         new CLVTabComplete(this);
@@ -80,7 +81,10 @@ public final class CyberLevels extends JavaPlugin {
     }
 
     public void reloadClasses() {
-        if (expCache != null) expCache.cancelTimedEXP();
+        if (expCache != null) {
+            expCache.cancelTimedEXP();
+            expCache.cancelAntiAbuseTimers();
+        }
         files = new Files(this);
         langUtils = new LangUtils(this);
         levelUtils = new LevelUtils(this);
@@ -91,7 +95,6 @@ public final class CyberLevels extends JavaPlugin {
         levelCache.loadOnlinePlayers();
         levelCache.loadRewards();
 
-        new EXPListeners(this);
         new LevelledMobs(this);
     }
 

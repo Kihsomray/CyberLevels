@@ -28,6 +28,7 @@ public class Files {
         addFile("levels");
         addFile("rewards");
         addFile("earn-exp");
+        addFile("anti-abuse");
 
         addFile("levelled-mobs", "addons");
 
@@ -47,7 +48,7 @@ public class Files {
     }
 
     private boolean updateFile(String name) {
-        return getConfig("config").getBoolean("config.auto-update." + name);
+        return getConfig("config").getBoolean("config.auto-update." + name, false);
     }
 
     private void addFile(String file) {

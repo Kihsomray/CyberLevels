@@ -1,6 +1,7 @@
 package net.zerotoil.dev.cyberlevels.objects.exp;
 
 import net.zerotoil.dev.cyberlevels.CyberLevels;
+import net.zerotoil.dev.cyberlevels.objects.antiabuse.AntiAbuse;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -13,16 +14,21 @@ public class EXPCache {
 
     private final CyberLevels main;
     private Map<String, EXPEarnEvent> expEarnEvents = new HashMap<>();
+    private Map<String, AntiAbuse> antiAbuse = new HashMap<>();
     private boolean useDouble, roundExp;
+
+    private boolean preventSilkTouchAbuse;
 
     private BukkitTask timedEXP;
 
     public EXPCache(CyberLevels main) {
         cancelTimedEXP();
+        cancelAntiAbuseTimers();
         this.main = main;
         useDouble = main.files().getConfig("config").getBoolean("config.earn-exp.integer-only");
         roundExp = main.files().getConfig("config").getBoolean("config.round-evaluation.round-earn-exp");
         loadExpEvents();
+        loadAntiAbuse();
         startTimedEXP();
     }
 
@@ -54,6 +60,35 @@ public class EXPCache {
 
         main.logger("&7Loaded &e" + counter + " &7exp earn events in &a" + (System.currentTimeMillis() - startTime) + "ms&7.", "");
 
+    }
+
+    public void loadAntiAbuse() {
+        main.logger("&dLoading anti-abuse...");
+        preventSilkTouchAbuse = !main.files().getConfig("anti-abuse").getBoolean("anti-abuse.general.silk-touch-reward", true);
+        if (!antiAbuse.isEmpty()) antiAbuse.clear();
+        long startTime = System.currentTimeMillis();
+        long counter = 0;
+        if (main.files().getConfig("anti-abuse").isConfigurationSection("anti-abuse")) {
+            for (String s : main.files().getConfig("anti-abuse").getConfigurationSection("anti-abuse").getKeys(false)) {
+                if (s.equalsIgnoreCase("general")) continue;
+                antiAbuse.put(s, new AntiAbuse(main, s));
+                counter++;
+            }
+        }
+
+        main.logger("&7Loaded &e" + counter + " &7anti-abuse settings in &a" + (System.currentTimeMillis() - startTime) + "ms&7.", "");
+    }
+
+    public boolean isAntiAbuse(Player player, String event) {
+        for (AntiAbuse a : antiAbuse.values()) {
+            if (a.isCoolingDown(player, event)) return true;
+            else if (a.isLimited(player, event)) return true;
+        }
+        return false;
+    }
+
+    public void cancelAntiAbuseTimers() {
+        for (AntiAbuse a : antiAbuse.values()) a.cancelTimer();
     }
 
     public void cancelTimedEXP() {
@@ -110,4 +145,7 @@ public class EXPCache {
         return roundExp;
     }
 
+    public boolean isPreventSilkTouchAbuse() {
+        return preventSilkTouchAbuse;
+    }
 }
