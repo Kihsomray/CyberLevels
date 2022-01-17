@@ -15,6 +15,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.player.PlayerFishEvent;
+import org.bukkit.metadata.FixedMetadataValue;
 
 public class EXPListeners implements Listener {
 
@@ -71,6 +72,10 @@ public class EXPListeners implements Listener {
     @EventHandler (priority = EventPriority.HIGHEST)
     private void onPlacing(BlockPlaceEvent event) {
         if (event.isCancelled()) return;
+
+        if (main.expCache().isOnlyNaturalBlocks())
+            event.getBlock().setMetadata("CLV_PLACED", new FixedMetadataValue(main, true));
+
         sendExp(event.getPlayer(), main.expCache().expEarnEvents().get("placing"), event.getBlock().getType().toString());
     }
 
@@ -82,6 +87,7 @@ public class EXPListeners implements Listener {
                 event.getPlayer().getInventory().getItemInMainHand().containsEnchantment(Enchantment.SILK_TOUCH)) {
             return;
         }
+        if (main.expCache().isOnlyNaturalBlocks() && event.getBlock().hasMetadata("CLV_PLACED")) return;
         sendExp(event.getPlayer(), main.expCache().expEarnEvents().get("breaking"), event.getBlock().getType().toString());
     }
 

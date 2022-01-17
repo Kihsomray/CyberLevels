@@ -39,6 +39,12 @@ public class CLVCommand implements CommandExecutor {
             uuid = player.getUniqueId().toString();
         }
 
+        if (args.length == 0) {
+            if (noPlayerPerm(player, "player.info")) return true;
+            main.langUtils().sendMessage(player, "level-info", false);
+            return true;
+        }
+
         if (args.length == 1) {
 
             switch (args[0].toLowerCase()) {
@@ -71,7 +77,7 @@ public class CLVCommand implements CommandExecutor {
             }
         }
 
-        if (args.length == 2 || args.length == 0) {
+        if (args.length == 2) {
             switch (args[0].toLowerCase()) {
                 case "info":
                     Player target = getPlayer(args[1]);

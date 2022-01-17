@@ -5,6 +5,10 @@ anti-abuse:
     # when breaking a block? Not tested in <1.10
     silk-touch-reward: false
 
+    # When a block is broken, must it be naturally
+    # generated to gain EXP?
+    only-natural-blocks: false
+
     # If you would like more general anti-abuse option
     # to be added, make sure to mention them on our
     # Discord: https://discord.gg/DC4Gqj3y5V

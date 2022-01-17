@@ -18,6 +18,7 @@ public class EXPCache {
     private boolean useDouble, roundExp;
 
     private boolean preventSilkTouchAbuse;
+    private boolean onlyNaturalBlocks;
 
     private BukkitTask timedEXP;
 
@@ -65,6 +66,7 @@ public class EXPCache {
     public void loadAntiAbuse() {
         main.logger("&dLoading anti-abuse...");
         preventSilkTouchAbuse = !main.files().getConfig("anti-abuse").getBoolean("anti-abuse.general.silk-touch-reward", true);
+        onlyNaturalBlocks = main.files().getConfig("anti-abuse").getBoolean("anti-abuse.general.only-natural-blocks", false);
         if (!antiAbuse.isEmpty()) antiAbuse.clear();
         long startTime = System.currentTimeMillis();
         long counter = 0;
@@ -148,4 +150,8 @@ public class EXPCache {
     public boolean isPreventSilkTouchAbuse() {
         return preventSilkTouchAbuse;
     }
+    public boolean isOnlyNaturalBlocks() {
+        return onlyNaturalBlocks;
+    }
+
 }
