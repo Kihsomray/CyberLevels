@@ -15,6 +15,7 @@ public class PlayerUtils {
     public boolean hasParentPerm(Player player, String permission, boolean checkOp) {
         if (checkOp && player.isOp()) return true;
         for (PermissionAttachmentInfo permissionNode : player.getEffectivePermissions()) {
+            if (!permissionNode.getValue()) continue;
             if (permissionNode.getPermission().toLowerCase().startsWith(permission.toLowerCase())) return true;
         }
         return false;
@@ -23,6 +24,7 @@ public class PlayerUtils {
     public double getMultiplier(Player player) {
         double multiplier = 0;
         for (PermissionAttachmentInfo perm : player.getEffectivePermissions()) {
+            if (!perm.getValue()) continue;
             String s = perm.getPermission().toLowerCase();
             if (!s.startsWith("cyberlevels.player.multiplier")) continue;
             try {
