@@ -64,7 +64,7 @@ public class LevelObject {
         amount = Math.max(amount, 0);
 
         // does player have a multiplier permission?
-        if (doMultiplier && main.playerUtils().hasParentPerm(player, "CyberLevels.player.multiplier", false))
+        if (doMultiplier && main.playerUtils().hasParentPerm(player, "CyberLevels.player.multiplier.", false))
             amount *= main.playerUtils().getMultiplier(player);
 
         long levelCounter = 0;

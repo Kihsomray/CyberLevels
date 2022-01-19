@@ -153,7 +153,7 @@ public class LangUtils {
         if (addPrefix && (prefix != null) && (!prefix.equals("")) && !message.get(0).toLowerCase().startsWith("[actionbar]") &&
                 !message.get(0).toLowerCase().startsWith("[title]") && !message.get(0).toLowerCase().startsWith("[c]"))
             message.set(0, prefix + " " + message.get(0));
-        if (message.size() == 1 && message.get(0).equalsIgnoreCase(" ")) return;
+        if (message.size() == 1 && (message.get(0).equalsIgnoreCase(" ") || message.get(0).equalsIgnoreCase(""))) return;
         for (String s : message) typeMessage(player, s);
     }
 

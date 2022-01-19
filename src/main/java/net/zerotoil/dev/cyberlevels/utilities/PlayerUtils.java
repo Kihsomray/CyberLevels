@@ -26,7 +26,7 @@ public class PlayerUtils {
         for (PermissionAttachmentInfo perm : player.getEffectivePermissions()) {
             if (!perm.getValue()) continue;
             String s = perm.getPermission().toLowerCase();
-            if (!s.startsWith("cyberlevels.player.multiplier")) continue;
+            if (!s.startsWith("cyberlevels.player.multiplier.")) continue;
             try {
                 double currentMultiplier = Double.parseDouble(s.substring(30));
                 if (currentMultiplier > multiplier) multiplier = currentMultiplier;
