@@ -150,9 +150,10 @@ public class LangUtils {
         if (getPlaceholders) for (int i = 0; i < message.size(); i++) message.set(i, main.levelUtils().getPlaceholders(message.get(i), target, true));
         if ((placeholders != null) && (placeholders.length == replacements.length))
             for (int i = 0; i < message.size(); i++) message.set(i, StringUtils.replaceEach(message.get(i), placeholders, replacements));
-        if (addPrefix && (prefix != null ) && (!prefix.equals("")) && !message.get(0).toLowerCase().startsWith("[actionbar]") &&
+        if (addPrefix && (prefix != null) && (!prefix.equals("")) && !message.get(0).toLowerCase().startsWith("[actionbar]") &&
                 !message.get(0).toLowerCase().startsWith("[title]") && !message.get(0).toLowerCase().startsWith("[c]"))
             message.set(0, prefix + " " + message.get(0));
+        if (message.size() == 1 && message.get(0).equalsIgnoreCase(" ")) return;
         for (String s : message) typeMessage(player, s);
     }
 

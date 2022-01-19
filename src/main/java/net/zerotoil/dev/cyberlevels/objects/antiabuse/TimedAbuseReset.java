@@ -151,22 +151,26 @@ public class TimedAbuseReset {
 
         public void run() {
 
-            // regen world
-            Bukkit.getScheduler().runTask(main, antiAbuse::resetLimiters);
+            try {
+                // regen world
+                Bukkit.getScheduler().runTask(main, antiAbuse::resetLimiters);
 
-            // reruns timed reset
-            (new BukkitRunnable() {
+                // reruns timed reset
+                (new BukkitRunnable() {
 
-                @Override
-                public void run() {
-                    try {
-                        formatTime(true);
-                    } catch (ParseException e) {
-                        e.printStackTrace();
+                    @Override
+                    public void run() {
+                        try {
+                            formatTime(true);
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
                     }
-                }
 
-            }).runTaskLater(main, 200L);
+                }).runTaskLater(main, 200L);
+            } catch (Exception e) {
+                // nothing
+            }
 
         }
 

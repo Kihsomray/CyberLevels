@@ -4,6 +4,8 @@ import net.zerotoil.dev.cyberlevels.CyberLevels;
 import net.zerotoil.dev.cyberlevels.objects.RewardObject;
 import net.zerotoil.dev.iridiumapi.IridiumAPI;
 import org.bukkit.entity.Player;
+import org.bukkit.permissions.Permission;
+import org.bukkit.permissions.PermissionAttachmentInfo;
 
 public class LevelObject {
 
@@ -24,7 +26,7 @@ public class LevelObject {
         long levelCounter = level;
         level = Math.min(level + Math.max(amount, 0), main.levelCache().maxLevel());
         if (nextExpRequirement() == 0) exp = 0.0;
-        levelCounter = level = levelCounter;
+        level = levelCounter;
         if (levelCounter > 0)
             main.langUtils().sendMessage(player, player,"gained-levels", true, true, new String[]{"{gainedLevels}"}, new String[]{levelCounter + ""});
     }
@@ -54,12 +56,17 @@ public class LevelObject {
             main.langUtils().sendMessage(player, player,"lost-levels", true, true, new String[]{"{lostLevels}"}, new String[]{levelCounter + ""});
     }
 
-    public void addExp(double amount) {
-        addExp(amount, 0, true);
+    public void addExp(double amount, boolean doMultiplier) {
+        addExp(amount, 0, true, doMultiplier);
     }
 
-    public void addExp(double amount, double difference, boolean sendMessage) {
+    public void addExp(double amount, double difference, boolean sendMessage, boolean doMultiplier) {
         amount = Math.max(amount, 0);
+
+        // does player have a multiplier permission?
+        if (doMultiplier && main.playerUtils().hasParentPerm(player, "CyberLevels.player.multiplier", false))
+            amount *= main.playerUtils().getMultiplier(player);
+
         long levelCounter = 0;
         // current exp + exp increase > required exp to next level
         while (exp + amount >= nextExpRequirement()) {
@@ -84,7 +91,7 @@ public class LevelObject {
         if (checkLevel) {
             double exp = this.exp;
             this.exp = 0.0;
-            addExp(amount, exp, sendMessage);
+            addExp(amount, exp, sendMessage, false);
         } else exp = amount;
     }
 

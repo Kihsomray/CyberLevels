@@ -149,7 +149,7 @@ public class EXPListeners implements Listener {
         if (expEarnEvent.isSpecificEnabled() && expEarnEvent.isInSpecificList(item))
             counter += expEarnEvent.getSpecificExp(item);
 
-        if (counter > 0) main.levelCache().playerLevels().get(player).addExp(counter);
+        if (counter > 0) main.levelCache().playerLevels().get(player).addExp(counter, main.levelCache().doEventMultiplier());
         else if (counter < 0) main.levelCache().playerLevels().get(player).removeExp(Math.abs(counter));
     }
 }

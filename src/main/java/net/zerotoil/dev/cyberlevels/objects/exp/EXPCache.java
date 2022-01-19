@@ -123,7 +123,7 @@ public class EXPCache {
                         for (String s : expEarnEvent.getSpecificMin().keySet())
                             if (p.hasPermission(s)) counter += expEarnEvent.getSpecificExp(s);
 
-                    if (counter > 0) main.levelCache().playerLevels().get(p).addExp(counter);
+                    if (counter > 0) main.levelCache().playerLevels().get(p).addExp(counter, main.levelCache().doEventMultiplier());
                     else if (counter < 0) main.levelCache().playerLevels().get(p).removeExp(Math.abs(counter));
 
                 }
