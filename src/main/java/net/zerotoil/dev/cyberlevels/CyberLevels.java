@@ -72,7 +72,7 @@ public final class CyberLevels extends JavaPlugin {
             new PlaceholderAPI(this).register();
 
         new Metrics(this, 13782, this);
-        logger("&7Loaded &dCWR v" + getDescription().getVersion() + "&7 in &a" +
+        logger("&7Loaded &dCLV v" + getDescription().getVersion() + "&7 in &a" +
                 (System.currentTimeMillis() - startTime) + "ms&7.");
 
         if (SystemUtils.OS_NAME.contains("Windows"))

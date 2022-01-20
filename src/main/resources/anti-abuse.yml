@@ -2,7 +2,7 @@ anti-abuse:
 
   general:
     # Should pickaxes with silk touch reward EXP
-    # when breaking a block? Not tested in <1.10
+    # when breaking a block?
     silk-touch-reward: false
 
     # When a block is broken, must it be naturally

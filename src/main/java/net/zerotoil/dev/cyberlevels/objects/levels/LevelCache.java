@@ -138,7 +138,7 @@ public class LevelCache {
 
             } catch (Exception e) {
                 e.printStackTrace();
-                main.logger("&cFailed to make file for " + player.getName());
+                main.logger("&cFailed to make file for " + player.getName() + ".");
             }
         }
         else levelObject = mySQL.getPlayerData(player);
@@ -156,7 +156,7 @@ public class LevelCache {
                 writer.write(content);
                 writer.close();
             } catch (Exception e) {
-                main.logger("&cFailed to save data for " + player.getName());
+                main.logger("&cFailed to save data for " + player.getName() + ".");
             }
         }
         else mySQL.updatePlayer(player);

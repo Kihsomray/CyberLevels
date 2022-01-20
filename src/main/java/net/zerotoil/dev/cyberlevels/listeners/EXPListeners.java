@@ -83,6 +83,17 @@ public class EXPListeners implements Listener {
     @EventHandler (priority = EventPriority.HIGHEST)
     private void onBreaking(BlockBreakEvent event) {
         if (event.isCancelled()) return;
+
+        // silk touch abuse
+        if (main.expCache().isPreventSilkTouchAbuse()) {
+
+            if (main.serverVersion() > 8 && event.getPlayer().getInventory()
+                    .getItemInMainHand().containsEnchantment(Enchantment.SILK_TOUCH)) return;
+
+            else if (main.serverVersion() <= 8 && event.getPlayer().getItemInHand()
+                    .containsEnchantment(Enchantment.SILK_TOUCH)) return;
+
+        }
         if (main.expCache().isPreventSilkTouchAbuse() &&
                 event.getPlayer().getInventory().getItemInMainHand().containsEnchantment(Enchantment.SILK_TOUCH)) {
             return;
