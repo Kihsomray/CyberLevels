@@ -94,10 +94,6 @@ public class EXPListeners implements Listener {
                     .containsEnchantment(Enchantment.SILK_TOUCH)) return;
 
         }
-        if (main.expCache().isPreventSilkTouchAbuse() &&
-                event.getPlayer().getInventory().getItemInMainHand().containsEnchantment(Enchantment.SILK_TOUCH)) {
-            return;
-        }
         if (main.expCache().isOnlyNaturalBlocks() && event.getBlock().hasMetadata("CLV_PLACED")) return;
         sendExp(event.getPlayer(), main.expCache().expEarnEvents().get("breaking"), event.getBlock().getType().toString());
     }
