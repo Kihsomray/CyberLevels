@@ -38,8 +38,6 @@ public class RewardObject {
             String start = tempList.get(0).split(",")[0].replace(" ", "");
             String end = tempList.get(0).split(",")[1].replace(" ", "");
 
-            System.out.println(start + ", " + end);
-
             for (long i = Long.parseLong(start); i <= Long.parseLong(end); i++) {
                 levels.add(i);
                 if (main.levelCache().levelData().get(i) != null)
