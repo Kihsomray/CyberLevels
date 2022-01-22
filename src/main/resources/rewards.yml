@@ -12,15 +12,6 @@ rewards:
       sound-effect: ''
       volume: 1
       pitch: 1
-    levels:
-      - 1
-      - 2
-      - 3
-      - 4
-      - 5
-      - 6
-      - 7
-      - 8
-      - 9
+    levels: '1, 1000'
     # economy: '[remove] 500' # remove, add, set
     # Coming soon!

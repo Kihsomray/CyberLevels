@@ -34,6 +34,14 @@ config:
     # How often (in seconds)?
     interval: 300
 
+  # Should adding levels give rewards?
+  add-level-reward: false
+
+  multipliers:
+    # Should multipliers apply to the following?
+    commands: false
+    events: true
+
   auto-update:
     config: true
     lang: true

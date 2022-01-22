@@ -1,10 +1,5 @@
 levels:
 
-  multipliers:
-    # Should multipliers apply to the following?
-    commands: false
-    events: true
-
   # What level and experience should players start with? This will
   # also be treated as the minimum level/exp a player can get to.
   starting:

@@ -31,10 +31,27 @@ public class RewardObject {
         commands = main.langUtils().convertList(rewardsYML(), "rewards." + rewardName + ".commands");
         messages = main.langUtils().convertList(rewardsYML(), "rewards." + rewardName + ".messages");
         levels = new ArrayList<>();
-        for (String s : main.langUtils().convertList(rewardsYML(), "rewards." + rewardName + ".levels")) {
-            levels.add(Long.parseLong(s));
-            if (main.levelCache().levelData().get(Long.parseLong(s)) != null)
-                main.levelCache().levelData().get(Long.parseLong(s)).addReward(this);
+
+        List<String> tempList = main.langUtils().convertList(rewardsYML(), "rewards." + rewardName + ".levels");
+
+        if (tempList.size() == 1 && tempList.get(0).contains(",")) {
+            String start = tempList.get(0).split(",")[0].replace(" ", "");
+            String end = tempList.get(0).split(",")[1].replace(" ", "");
+
+            System.out.println(start + ", " + end);
+
+            for (long i = Long.parseLong(start); i <= Long.parseLong(end); i++) {
+                levels.add(i);
+                if (main.levelCache().levelData().get(i) != null)
+                    main.levelCache().levelData().get(i).addReward(this);
+            }
+
+        } else {
+            for (String s : main.langUtils().convertList(rewardsYML(), "rewards." + rewardName + ".levels")) {
+                levels.add(Long.parseLong(s));
+                if (main.levelCache().levelData().get(Long.parseLong(s)) != null)
+                    main.levelCache().levelData().get(Long.parseLong(s)).addReward(this);
+            }
         }
     }
 

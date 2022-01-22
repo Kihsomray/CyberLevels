@@ -26,7 +26,12 @@ public class LevelObject {
         long levelCounter = level;
         level = Math.min(level + Math.max(amount, 0), main.levelCache().maxLevel());
         if (nextExpRequirement() == 0) exp = 0.0;
-        level = levelCounter;
+
+        if (main.levelCache().addLevelReward() && levelCounter < level)
+            for (long i = levelCounter + 1; i <= level; i++)
+                sendLevelReward(i);
+
+        levelCounter = level - levelCounter;
         if (levelCounter > 0)
             main.langUtils().sendMessage(player, player,"gained-levels", true, true, new String[]{"{gainedLevels}"}, new String[]{levelCounter + ""});
     }
@@ -137,6 +142,10 @@ public class LevelObject {
         return "level: " + level + ", exp: " + exp + ", progress: " +
                 IridiumAPI.process(main.levelUtils().progressBar(exp, nextExpRequirement())) +
                 " [" + (int) (100 * (exp / nextExpRequirement())) + "%]";
+    }
+
+    private void sendLevelReward(long level) {
+        for (RewardObject rewardObject : main.levelCache().levelData().get(level).getRewards()) rewardObject.giveReward(player);
     }
 
     private void sendLevelReward() {

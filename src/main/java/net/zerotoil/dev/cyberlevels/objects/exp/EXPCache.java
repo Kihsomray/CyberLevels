@@ -111,13 +111,8 @@ public class EXPCache {
                 for (Player p : Bukkit.getOnlinePlayers()) {
                     double counter = 0;
 
-                    if (expEarnEvent.isEnabled())
-                        for (String s : expEarnEvent.getList())
-                            if (p.hasPermission(s)) {
-                                counter += expEarnEvent.getGeneralExp();
-                                break;
-                            }
-
+                    if (expEarnEvent.isEnabled() && expEarnEvent.isInGeneralList(p.getName()))
+                        counter += expEarnEvent.getGeneralExp();
 
                     if (expEarnEvent.isSpecificEnabled() && ((EXPTimed) expEarnEvent).hasPermission(p))
                         for (String s : expEarnEvent.getSpecificMin().keySet())

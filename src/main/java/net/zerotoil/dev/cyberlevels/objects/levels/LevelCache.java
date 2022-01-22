@@ -32,6 +32,8 @@ public class LevelCache {
     private boolean doCommandMultiplier;
     private boolean doEventMultiplier;
 
+    private boolean addLevelReward;
+
     private MySQL mySQL;
 
     public LevelCache(CyberLevels main) {
@@ -39,8 +41,9 @@ public class LevelCache {
         startLevel = main.levelUtils().levelsYML().getLong("levels.starting.level");
         startExp = main.levelUtils().levelsYML().getDouble("levels.starting.experience");
         maxLevel = main.levelUtils().levelsYML().getLong("levels.maximum.level");
-        doCommandMultiplier = main.levelUtils().levelsYML().getBoolean("levels.multipliers.commands", false);
-        doEventMultiplier = main.levelUtils().levelsYML().getBoolean("levels.multipliers.events", true);
+        doCommandMultiplier = main.files().getConfig("config").getBoolean("config.multipliers.commands", false);
+        doEventMultiplier = main.files().getConfig("config").getBoolean("config.multipliers.events", true);
+        addLevelReward = main.files().getConfig("config").getBoolean("config.add-level-reward", false);
         playerLevels = new HashMap<>();
         clearLevelData();
         startAutoSave();
@@ -208,6 +211,10 @@ public class LevelCache {
 
     public boolean doEventMultiplier() {
         return doEventMultiplier;
+    }
+
+    public boolean addLevelReward() {
+        return addLevelReward;
     }
 
 }
