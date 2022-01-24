@@ -24,12 +24,15 @@ public class LevelObject {
 
     public void addLevel(long amount) {
         long levelCounter = level;
-        level = Math.min(level + Math.max(amount, 0), main.levelCache().maxLevel());
+        long newLevel = Math.min(level + Math.max(amount, 0), main.levelCache().maxLevel());
         if (nextExpRequirement() == 0) exp = 0.0;
 
-        if (main.levelCache().addLevelReward() && levelCounter < level)
-            for (long i = levelCounter + 1; i <= level; i++)
+        if (main.levelCache().addLevelReward() && levelCounter < newLevel)
+            for (long i = levelCounter + 1; i <= newLevel; i++) {
+                level++;
                 sendLevelReward(i);
+            }
+        else level = newLevel;
 
         levelCounter = level - levelCounter;
         if (levelCounter > 0)

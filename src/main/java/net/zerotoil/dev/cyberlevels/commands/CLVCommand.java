@@ -28,7 +28,7 @@ public class CLVCommand implements CommandExecutor {
 
         // console check
         if (!(sender instanceof Player)) {
-            if (args.length == 0 || !consoleCmds.contains(args[0])) {
+            if (args.length == 0 || !consoleCmds.contains(args[0].toLowerCase())) {
                 main.logger("&cConsole cannot use this command!");
                 return true;
             }
