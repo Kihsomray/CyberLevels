@@ -1,6 +1,8 @@
 package net.zerotoil.dev.cyberlevels.objects;
 
 import net.zerotoil.dev.cyberlevels.CyberLevels;
+import net.zerotoil.dev.cyberlevels.objects.leaderboard.Leaderboard;
+import net.zerotoil.dev.cyberlevels.objects.leaderboard.LeaderboardPlayer;
 import net.zerotoil.dev.cyberlevels.objects.levels.LevelObject;
 import org.bukkit.entity.Player;
 
@@ -8,6 +10,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MySQL {
 
@@ -41,7 +45,7 @@ public class MySQL {
     }
 
     // returns if connect to the database
-    private boolean isConnected() {
+    public boolean isConnected() {
         return connection != null;
     }
 
@@ -150,6 +154,24 @@ public class MySQL {
         }
 
     }
+
+    public List<LeaderboardPlayer> getAllPlayers() {
+        try {
+            List<LeaderboardPlayer> allPlayers = new ArrayList<>();
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM " + table);
+            ResultSet rs = statement.executeQuery();
+            while (rs.next())
+                allPlayers.add(new LeaderboardPlayer(main, rs.getString("UUID"), rs.getLong("LEVEL"), rs.getDouble("EXP")));
+
+            return allPlayers;
+
+        } catch (Exception e) {
+            main.logger("&cFailed to generate a new leaderboard.");
+            e.printStackTrace();
+            return null;
+        }
+    }
+
 
     private void addPlayer(Player player, boolean defaultValues) {
         if (playerInTable(player)) return;

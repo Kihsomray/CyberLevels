@@ -49,3 +49,11 @@ messages:
   lost-exp: '[actionbar] &c-{lostEXP} EXP'
   gained-levels: '[actionbar] &d+{gainedLevels} Level(s)'
   lost-levels: '[actionbar] &c-{lostLevels} Level(s)'
+
+leaderboard-placeholders:
+  no-player-name: '&c-'
+  no-player-level: '&c-'
+  no-player-exp: '&c-'
+  loading-name: '&6loading...'
+  loading-level: '&6-'
+  loading-exp: '&6-'

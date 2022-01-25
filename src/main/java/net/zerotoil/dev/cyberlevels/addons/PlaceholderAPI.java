@@ -2,9 +2,12 @@ package net.zerotoil.dev.cyberlevels.addons;
 
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import net.zerotoil.dev.cyberlevels.CyberLevels;
+import net.zerotoil.dev.cyberlevels.objects.leaderboard.LeaderboardPlayer;
 import net.zerotoil.dev.cyberlevels.objects.levels.LevelObject;
 import net.zerotoil.dev.iridiumapi.IridiumAPI;
+import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 public class PlaceholderAPI extends PlaceholderExpansion {
@@ -47,6 +50,46 @@ public class PlaceholderAPI extends PlaceholderExpansion {
 
         if (identifier.equalsIgnoreCase("exp_minimum"))
             return main.levelCache().startLevel() + "";
+
+        if (identifier.startsWith("player_leaderboard_name_")) {
+            int place = Integer.parseInt(identifier.substring(24));
+            if (place > 10 || place < 1) return null;
+            LeaderboardPlayer lPlayer = main.levelCache().getLeaderboard().getTopPlayer(place);
+            if (lPlayer == null) return ChatColor.translateAlternateColorCodes('&', main.files().getConfig("lang")
+                    .getString("leaderboard-placeholders.loading-name", "&6Loading..."));
+
+            String playerName = main.files().getConfig("lang").getString("leaderboard-placeholders.no-player-name", "&c-");
+            if (lPlayer.getPlayer() != null) playerName = lPlayer.getPlayer().getName();
+            if (!(player instanceof Player)) return ChatColor.translateAlternateColorCodes('&', playerName);
+            return main.langUtils().parse((Player) player, playerName);
+        }
+
+        if (identifier.startsWith("player_leaderboard_level_")) {
+            int place = Integer.parseInt(identifier.substring(25));
+            if (place > 10 || place < 1) return null;
+            LeaderboardPlayer lPlayer = main.levelCache().getLeaderboard().getTopPlayer(place);
+            if (lPlayer == null) return ChatColor.translateAlternateColorCodes('&', main.files().getConfig("lang")
+                    .getString("leaderboard-placeholders.loading-level", "&6-"));
+
+            String playerLevel = main.files().getConfig("lang").getString("leaderboard-placeholders.no-player-level", "&c-");
+            if (lPlayer.getPlayer() != null) playerLevel = lPlayer.getLevel() + "";
+            if (!(player instanceof Player)) return ChatColor.translateAlternateColorCodes('&', playerLevel);
+            return main.langUtils().parse((Player) player, playerLevel);
+        }
+
+        if (identifier.startsWith("player_leaderboard_exp_")) {
+            int place = Integer.parseInt(identifier.substring(23));
+            if (place > 10 || place < 1) return null;
+            LeaderboardPlayer lPlayer = main.levelCache().getLeaderboard().getTopPlayer(place);
+            if (lPlayer == null) return ChatColor.translateAlternateColorCodes('&', main.files().getConfig("lang")
+                    .getString("leaderboard-placeholders.loading-exp", "&6-"));
+
+            String playerEXP = main.files().getConfig("lang").getString("leaderboard-placeholders.no-player-level", "&c-");
+            if (lPlayer.getPlayer() != null) playerEXP = main.levelUtils().roundDecimal(lPlayer.getExp()) + "";
+
+            if (!(player instanceof Player)) return ChatColor.translateAlternateColorCodes('&', playerEXP);
+            return main.langUtils().parse((Player) player, playerEXP);
+        }
 
         LevelObject playerLevel = main.levelCache().playerLevels().get(player);
         if (playerLevel == null) return null;

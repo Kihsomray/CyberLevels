@@ -90,6 +90,7 @@ public class RewardObject {
             if (message == null || message.equals("")) continue;
             while (message.charAt(0) == ' ') message = message.substring(1);
 
+            message = message.replace("[global]", "");
             message = main.levelUtils().getPlaceholders(message, player, true);
 
             if (message.toLowerCase().startsWith("[player]"))

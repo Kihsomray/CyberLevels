@@ -3,6 +3,8 @@ package net.zerotoil.dev.cyberlevels.objects.levels;
 import net.zerotoil.dev.cyberlevels.CyberLevels;
 import net.zerotoil.dev.cyberlevels.objects.MySQL;
 import net.zerotoil.dev.cyberlevels.objects.RewardObject;
+import net.zerotoil.dev.cyberlevels.objects.leaderboard.Leaderboard;
+import net.zerotoil.dev.cyberlevels.objects.leaderboard.LeaderboardPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.ConfigurationSection;
@@ -28,6 +30,7 @@ public class LevelCache {
 
     private Map<Player, LevelObject> playerLevels;
     private Map<Long, LevelData> levelData;
+    private Leaderboard leaderboard;
 
     private boolean doCommandMultiplier;
     private boolean doEventMultiplier;
@@ -79,7 +82,17 @@ public class LevelCache {
         }
 
         main.logger("&7Loaded &d" + (l - startLevel) + " &7level(s) in &a" + (System.currentTimeMillis() - startTime) + "ms&7.", "");
+        loadLeaderboard();
 
+    }
+
+    public void loadLeaderboard() {
+        main.logger("&dLoading leaderboard data...");
+        long startTime = System.currentTimeMillis();
+
+        leaderboard = new Leaderboard(main);
+
+        main.logger("&7Loaded &d10 &7players in &a" + (System.currentTimeMillis() - startTime) + "ms&7.", "");
     }
 
     public void loadRewards() {
@@ -107,6 +120,7 @@ public class LevelCache {
             public void run() {
                 long startTime = System.currentTimeMillis();
                 saveOnlinePlayers(false);
+                leaderboard.updateLeaderboard();
                 main.langUtils().sendMixed(null, main.files().getConfig("lang").getString("messages.auto-save")
                         .replace("{ms}", (System.currentTimeMillis() - startTime) + ""));
                 startAutoSave();
@@ -215,6 +229,10 @@ public class LevelCache {
 
     public boolean addLevelReward() {
         return addLevelReward;
+    }
+
+    public Leaderboard getLeaderboard() {
+        return leaderboard;
     }
 
 }
