@@ -37,6 +37,10 @@ public class LevelCache {
 
     private boolean addLevelReward;
 
+    private boolean leaderboardEnabled;
+    private boolean syncLeaderboardAutoSave;
+    private boolean leaderboardInstantUpdate;
+
     private MySQL mySQL;
 
     public LevelCache(CyberLevels main) {
@@ -47,6 +51,10 @@ public class LevelCache {
         doCommandMultiplier = main.files().getConfig("config").getBoolean("config.multipliers.commands", false);
         doEventMultiplier = main.files().getConfig("config").getBoolean("config.multipliers.events", true);
         addLevelReward = main.files().getConfig("config").getBoolean("config.add-level-reward", false);
+        leaderboardEnabled = main.files().getConfig("config").getBoolean("config.leaderboard.enabled", false);
+        syncLeaderboardAutoSave = main.files().getConfig("config").getBoolean("config.leaderboard.sync-on-auto-save", true) && leaderboardEnabled;
+        leaderboardInstantUpdate = main.files().getConfig("config").getBoolean("config.leaderboard.instant-update", true) && leaderboardEnabled;
+
         playerLevels = new HashMap<>();
         clearLevelData();
         startAutoSave();
@@ -82,7 +90,7 @@ public class LevelCache {
         }
 
         main.logger("&7Loaded &d" + (l - startLevel) + " &7level(s) in &a" + (System.currentTimeMillis() - startTime) + "ms&7.", "");
-        loadLeaderboard();
+        if (leaderboardEnabled) loadLeaderboard();
 
     }
 
@@ -120,7 +128,7 @@ public class LevelCache {
             public void run() {
                 long startTime = System.currentTimeMillis();
                 saveOnlinePlayers(false);
-                leaderboard.updateLeaderboard();
+                if (syncLeaderboardAutoSave) leaderboard.updateLeaderboard();
                 main.langUtils().sendMixed(null, main.files().getConfig("lang").getString("messages.auto-save")
                         .replace("{ms}", (System.currentTimeMillis() - startTime) + ""));
                 startAutoSave();
@@ -233,6 +241,14 @@ public class LevelCache {
 
     public Leaderboard getLeaderboard() {
         return leaderboard;
+    }
+
+    public boolean isLeaderboardEnabled() {
+        return leaderboardEnabled;
+    }
+
+    public boolean isLeaderboardInstantUpdate() {
+        return leaderboardInstantUpdate;
     }
 
 }

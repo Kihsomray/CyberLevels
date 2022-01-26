@@ -52,6 +52,7 @@ public class PlaceholderAPI extends PlaceholderExpansion {
             return main.levelCache().startLevel() + "";
 
         if (identifier.startsWith("player_leaderboard_name_")) {
+            if (!main.levelCache().isLeaderboardEnabled()) return null;
             int place = Integer.parseInt(identifier.substring(24));
             if (place > 10 || place < 1) return null;
             LeaderboardPlayer lPlayer = main.levelCache().getLeaderboard().getTopPlayer(place);
@@ -65,6 +66,7 @@ public class PlaceholderAPI extends PlaceholderExpansion {
         }
 
         if (identifier.startsWith("player_leaderboard_level_")) {
+            if (!main.levelCache().isLeaderboardEnabled()) return null;
             int place = Integer.parseInt(identifier.substring(25));
             if (place > 10 || place < 1) return null;
             LeaderboardPlayer lPlayer = main.levelCache().getLeaderboard().getTopPlayer(place);
@@ -78,6 +80,7 @@ public class PlaceholderAPI extends PlaceholderExpansion {
         }
 
         if (identifier.startsWith("player_leaderboard_exp_")) {
+            if (!main.levelCache().isLeaderboardEnabled()) return null;
             int place = Integer.parseInt(identifier.substring(23));
             if (place > 10 || place < 1) return null;
             LeaderboardPlayer lPlayer = main.levelCache().getLeaderboard().getTopPlayer(place);

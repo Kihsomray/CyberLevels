@@ -27,6 +27,20 @@ config:
     # Should decimals be rounded to the nearest integer?
     integer-only: false
 
+  leaderboard:
+
+    # This feature is in BETA! Any bugs you encounter
+    # please report them on Discord! Use at own risk.
+    enabled: false
+
+    # Should the leaderboard sync with your storage
+    # system when the auto-save is called?
+    sync-on-auto-save: true
+
+    # Instantly update on exp loss or gain? NOTE: not
+    # recommended for servers with lots of players.
+    instant-update: true
+
   # Should player data be auto-saved?
   auto-save:
     enabled: true

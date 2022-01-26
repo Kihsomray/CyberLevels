@@ -34,6 +34,9 @@ public class LeaderboardPlayer implements Comparable {
         else return Double.compare(this.exp, otherPlayer.exp);
     }
 
+    public String getUUID() {
+        return uuid;
+    }
 
     public long getLevel() {
         OfflinePlayer player = getPlayer();

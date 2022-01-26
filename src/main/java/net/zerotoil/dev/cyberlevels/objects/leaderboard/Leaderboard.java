@@ -2,6 +2,7 @@ package net.zerotoil.dev.cyberlevels.objects.leaderboard;
 
 import net.zerotoil.dev.cyberlevels.CyberLevels;
 import net.zerotoil.dev.cyberlevels.objects.levels.LevelObject;
+import org.bukkit.entity.Player;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -90,9 +91,15 @@ public class Leaderboard {
         return topTenPlayers.get(position - 1);
     }
 
+    public List<LeaderboardPlayer> getTopTenPlayers() {
+        return topTenPlayers;
+    }
 
+    public int checkFrom(Player player) {
+        for (int i = 0; i < 10; i++)
+            if (player.getUniqueId().toString().equals(topTenPlayers.get(i).getUUID())) return i + 1;
 
-
-
+        return 10;
+    }
 
 }

@@ -2,10 +2,14 @@ package net.zerotoil.dev.cyberlevels.objects.levels;
 
 import net.zerotoil.dev.cyberlevels.CyberLevels;
 import net.zerotoil.dev.cyberlevels.objects.RewardObject;
+import net.zerotoil.dev.cyberlevels.objects.leaderboard.Leaderboard;
+import net.zerotoil.dev.cyberlevels.objects.leaderboard.LeaderboardPlayer;
 import net.zerotoil.dev.iridiumapi.IridiumAPI;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionAttachmentInfo;
+
+import java.util.List;
 
 public class LevelObject {
 
@@ -37,6 +41,7 @@ public class LevelObject {
         levelCounter = level - levelCounter;
         if (levelCounter > 0)
             main.langUtils().sendMessage(player, player,"gained-levels", true, true, new String[]{"{gainedLevels}"}, new String[]{levelCounter + ""});
+        checkLeaderboard();
     }
 
     public void setLevel(long amount, boolean sendMessage) {
@@ -53,6 +58,7 @@ public class LevelObject {
         if (!sendMessage) return;
         if (levelCounter > 0) main.langUtils().sendMessage(player, player,"lost-levels", true, true, new String[]{"{lostLevels}"}, new String[]{Math.abs(levelCounter) + ""});
         else if (levelCounter < 0) main.langUtils().sendMessage(player, player,"gained-levels", true, true, new String[]{"{gainedLevels}"}, new String[]{Math.abs(levelCounter) + ""});
+        checkLeaderboard();
     }
 
     public void removeLevel(long amount) {
@@ -62,6 +68,7 @@ public class LevelObject {
         levelCounter -= level;
         if (levelCounter > 0)
             main.langUtils().sendMessage(player, player,"lost-levels", true, true, new String[]{"{lostLevels}"}, new String[]{levelCounter + ""});
+        checkLeaderboard();
     }
 
     public void addExp(double amount, boolean doMultiplier) {
@@ -91,7 +98,7 @@ public class LevelObject {
         else if (sendMessage && (amount - difference) < 0)
             main.langUtils().sendMessage(player, player,"lost-exp", true, true, new String[]{"{lostEXP}"}, new String[]{main.levelUtils().roundStringDecimal(difference - amount)});
         if (levelCounter > 0 && sendMessage) main.langUtils().sendMessage(player, player,"gained-levels", true, true, new String[]{"{gainedLevels}"}, new String[]{levelCounter + ""});
-
+        if (sendMessage) checkLeaderboard();
     }
 
     public void setExp(double amount, boolean checkLevel, boolean sendMessage) {
@@ -101,6 +108,7 @@ public class LevelObject {
             this.exp = 0.0;
             addExp(amount, exp, sendMessage, false);
         } else exp = amount;
+        checkLeaderboard();
     }
 
     public void removeExp(double amount) {
@@ -137,7 +145,7 @@ public class LevelObject {
         // makes sure the level doesn't go down below the start level
         level = Math.max(main.levelCache().startLevel(), level);
         exp = Math.max(0, exp);
-
+        checkLeaderboard();
     }
 
     @Override
@@ -158,6 +166,42 @@ public class LevelObject {
     public double nextExpRequirement() {
         if (main.levelCache().levelData().get(level + 1) == null) return 0.0;
         return main.levelCache().levelData().get(level + 1).getRequiredExp(player);
+    }
+
+    private void checkLeaderboard() {
+        if (!main.levelCache().isLeaderboardInstantUpdate()) return;
+
+        // checks if player is promoted
+        int startFrom = main.levelCache().getLeaderboard().checkFrom(player);
+        List<LeaderboardPlayer> topPlayers = main.levelCache().getLeaderboard().getTopTenPlayers();
+        boolean movedUp = false;
+        for (int i = startFrom; i >= 1; i--) {
+            LeaderboardPlayer lbp = main.levelCache().getLeaderboard().getTopPlayer(i);
+            if (lbp.getUUID() == null || lbp.getUUID().equals(player.getUniqueId().toString())) continue;
+            if (this.level < lbp.getLevel()) break;
+            if (this.level == lbp.getLevel() && this.exp < lbp.getExp()) break;
+            LeaderboardPlayer cp = new LeaderboardPlayer(main, player.getUniqueId().toString(), level, exp);
+            if (topPlayers.size() > i)
+                topPlayers.set(i, topPlayers.get(i - 1)); // puts the above player down
+            topPlayers.set(i - 1, cp);
+            movedUp = true;
+        }
+        if (movedUp) return;
+
+        // checks if player is demoted
+        for (int i = startFrom; i <= 10; i++) {
+            LeaderboardPlayer lbp = main.levelCache().getLeaderboard().getTopPlayer(i);
+            if (lbp.getUUID() == null) break;
+            if (lbp.getUUID().equals(player.getUniqueId().toString())) continue;
+            if (this.level > lbp.getLevel()) break;
+            if (this.level == lbp.getLevel() && this.exp > lbp.getExp()) break;
+            LeaderboardPlayer cp = new LeaderboardPlayer(main, player.getUniqueId().toString(), level, exp);
+            topPlayers.set(i - 2, topPlayers.get(i - 1));
+            if (topPlayers.size() > i)
+                topPlayers.set(i - 1, cp);
+            if (topPlayers.size() == i) main.levelCache().getLeaderboard().updateLeaderboard();
+        }
+
     }
 
     public Player getPlayer() {
