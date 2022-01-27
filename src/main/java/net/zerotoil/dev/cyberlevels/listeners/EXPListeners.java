@@ -1,7 +1,9 @@
 package net.zerotoil.dev.cyberlevels.listeners;
 
+import javafx.scene.layout.Priority;
 import net.zerotoil.dev.cyberlevels.CyberLevels;
 import net.zerotoil.dev.cyberlevels.objects.exp.EXPEarnEvent;
+import net.zerotoil.dev.cyberlevels.objects.exp.EXPTimed;
 import org.bukkit.Bukkit;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
@@ -13,6 +15,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.player.PlayerFishEvent;
 import org.bukkit.metadata.FixedMetadataValue;
@@ -46,7 +49,7 @@ public class EXPListeners implements Listener {
     }
 
     // Works 1.7.10 - latest
-    @EventHandler(priority = EventPriority.HIGH)
+    @EventHandler (priority = EventPriority.HIGH)
     private void onMobDeath(EntityDeathEvent event) {
         if (event.getEntity().getLastDamageCause() == null) return;
 
@@ -66,6 +69,13 @@ public class EXPListeners implements Listener {
         else return;
 
         sendExp(player, main.expCache().expEarnEvents().get(eventType), target.getType().toString());
+    }
+
+    @EventHandler (priority = EventPriority.HIGH)
+    private void onPlayerDeath(PlayerDeathEvent event) {
+        if (event.getEntity().getLastDamageCause() == null) return;
+        Player player = event.getEntity();
+        sendPermissionExp(player, main.expCache().expEarnEvents().get("dying"));
     }
 
     // Works 1.7.10 - latest
@@ -159,4 +169,30 @@ public class EXPListeners implements Listener {
         if (counter > 0) main.levelCache().playerLevels().get(player).addExp(counter, main.levelCache().doEventMultiplier());
         else if (counter < 0) main.levelCache().playerLevels().get(player).removeExp(Math.abs(counter));
     }
+
+    public void sendPermissionExp(Player player, EXPEarnEvent expEarnEvent) {
+        double counter = 0;
+
+        if (expEarnEvent.isEnabled()) {
+            boolean giveEXP = false;
+            for (String s : expEarnEvent.getList()) {
+                if (expEarnEvent.isWhitelist() && player.hasPermission(s)) {
+                    giveEXP = true;
+                    break;
+                }
+                if (!expEarnEvent.isWhitelist() && player.hasPermission(s)) break;
+            }
+            if (giveEXP) counter += expEarnEvent.getGeneralExp();
+        }
+
+        if (expEarnEvent.isSpecificEnabled() && (expEarnEvent).hasPermission(player))
+            for (String s : expEarnEvent.getSpecificMin().keySet())
+                if (player.hasPermission(s)) counter += expEarnEvent.getSpecificExp(s);
+
+        if (counter > 0) main.levelCache().playerLevels().get(player).addExp(counter, main.levelCache().doEventMultiplier());
+        else if (counter < 0) main.levelCache().playerLevels().get(player).removeExp(Math.abs(counter));
+    }
+
+
+
 }

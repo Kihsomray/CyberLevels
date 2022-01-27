@@ -21,6 +21,25 @@ earn-exp:
         - 'permission.vip: 2, 4'
         - 'permission.mvp: 3, 5'
 
+  dying:
+    general:
+      enabled: false
+      # Loses between 2 and 5 exp (randomly).
+      exp: -2, -5
+      includes:
+        enabled: false
+        whitelist: false
+        # Does not gain EXP for the following players.
+        list:
+          - 'permission.no.exp'
+    specific-permissions:
+      # These WILL stack on the ones above. Could be
+      # used to reduce EXP loss for special users.
+      enabled: false
+      permissions:
+        - 'permission.vip: 1, 2'
+        - 'permission.mvp: 2, 3'
+
   damaging-players:
     general:
       enabled: false

@@ -52,6 +52,8 @@ public class EXPCache {
         addEvent("fishing", "fish");
         addEvent("breeding", "animals");
 
+        addEvent("dying", "permissions");
+
         expEarnEvents.put("timed-giving", new EXPTimed(main, "timed-giving", "permissions"));
 
         //addEvent("chatting", "words");

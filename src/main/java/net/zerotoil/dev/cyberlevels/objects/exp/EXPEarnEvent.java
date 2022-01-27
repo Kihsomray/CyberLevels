@@ -2,6 +2,7 @@ package net.zerotoil.dev.cyberlevels.objects.exp;
 
 import net.zerotoil.dev.cyberlevels.CyberLevels;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.entity.Player;
 
 import java.util.*;
 
@@ -154,6 +155,13 @@ public class EXPEarnEvent {
             if (!specificEnabled) return true;
             for (String s : specificMin.keySet()) if (string.contains(s.toUpperCase())) return true;
         }
+        return false;
+    }
+
+    public boolean hasPermission(Player player) {
+        if (!isSpecificEnabled()) return false;
+        for (String s : getSpecificMin().keySet())
+            if (player.hasPermission(s)) return true;
         return false;
     }
 
