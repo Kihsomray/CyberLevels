@@ -54,7 +54,7 @@ public class EXPCache {
 
         addEvent("dying", "permissions");
 
-        expEarnEvents.put("timed-giving", new EXPTimed(main, "timed-giving", "permissions"));
+        addEvent("timed-giving", "permissions");
 
         //addEvent("chatting", "words");
 
@@ -102,28 +102,14 @@ public class EXPCache {
     }
 
     public void startTimedEXP() {
-        if (!main.files().getConfig("earn-exp").getBoolean("earn-exp.timed-giving.general.enabled") &&
-                !main.files().getConfig("earn-exp").getBoolean("earn-exp.timed-giving.specific-permissions.enabled")) return;
+        if (!main.files().getConfig("earn-exp").getBoolean("earn-exp.timed-giving.general.enabled", false) &&
+                !main.files().getConfig("earn-exp").getBoolean("earn-exp.timed-giving.specific-permissions.enabled", false)) return;
         //if (timedEXP != null && !timedEXP.isCancelled()) return;
         timedEXP = (new BukkitRunnable() {
             @Override
             public void run() {
-                EXPEarnEvent expEarnEvent = expEarnEvents.get("timed-giving");
 
-                for (Player p : Bukkit.getOnlinePlayers()) {
-                    double counter = 0;
-
-                    if (expEarnEvent.isEnabled() && expEarnEvent.isInGeneralList(p.getName()))
-                        counter += expEarnEvent.getGeneralExp();
-
-                    if (expEarnEvent.isSpecificEnabled() && ((EXPTimed) expEarnEvent).hasPermission(p))
-                        for (String s : expEarnEvent.getSpecificMin().keySet())
-                            if (p.hasPermission(s)) counter += expEarnEvent.getSpecificExp(s);
-
-                    if (counter > 0) main.levelCache().playerLevels().get(p).addExp(counter, main.levelCache().doEventMultiplier());
-                    else if (counter < 0) main.levelCache().playerLevels().get(p).removeExp(Math.abs(counter));
-
-                }
+                for (Player p : Bukkit.getOnlinePlayers()) main.expListeners().sendPermissionExp(p, expEarnEvents.get("timed-giving"));
 
             }
         }).runTaskTimer(main, 0L, Math.max(20L * Math.max(1, main.files().getConfig("earn-exp").getLong("earn-exp.timed-giving.general.interval")), 1));

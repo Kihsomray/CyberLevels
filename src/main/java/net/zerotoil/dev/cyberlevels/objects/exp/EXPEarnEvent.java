@@ -158,6 +158,20 @@ public class EXPEarnEvent {
         return false;
     }
 
+    public boolean hasGeneralPermission(Player player) {
+        if (includedEnabled) {
+            boolean giveEXP = false;
+            for (String s : list) {
+                if (whitelist && player.hasPermission(s)) {
+                    giveEXP = true;
+                    break;
+                }
+                if (!whitelist && player.hasPermission(s)) break;
+            }
+            return giveEXP;
+        } return true;
+    }
+
     public boolean hasPermission(Player player) {
         if (!isSpecificEnabled()) return false;
         for (String s : getSpecificMin().keySet())

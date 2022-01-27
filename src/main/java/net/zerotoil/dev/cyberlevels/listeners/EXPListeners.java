@@ -3,7 +3,6 @@ package net.zerotoil.dev.cyberlevels.listeners;
 import javafx.scene.layout.Priority;
 import net.zerotoil.dev.cyberlevels.CyberLevels;
 import net.zerotoil.dev.cyberlevels.objects.exp.EXPEarnEvent;
-import net.zerotoil.dev.cyberlevels.objects.exp.EXPTimed;
 import org.bukkit.Bukkit;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
@@ -173,17 +172,8 @@ public class EXPListeners implements Listener {
     public void sendPermissionExp(Player player, EXPEarnEvent expEarnEvent) {
         double counter = 0;
 
-        if (expEarnEvent.isEnabled()) {
-            boolean giveEXP = false;
-            for (String s : expEarnEvent.getList()) {
-                if (expEarnEvent.isWhitelist() && player.hasPermission(s)) {
-                    giveEXP = true;
-                    break;
-                }
-                if (!expEarnEvent.isWhitelist() && player.hasPermission(s)) break;
-            }
-            if (giveEXP) counter += expEarnEvent.getGeneralExp();
-        }
+        if (expEarnEvent.isEnabled() && expEarnEvent.hasGeneralPermission(player))
+            counter += expEarnEvent.getGeneralExp();
 
         if (expEarnEvent.isSpecificEnabled() && (expEarnEvent).hasPermission(player))
             for (String s : expEarnEvent.getSpecificMin().keySet())

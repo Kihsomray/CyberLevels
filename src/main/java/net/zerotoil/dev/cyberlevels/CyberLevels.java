@@ -30,6 +30,8 @@ public final class CyberLevels extends JavaPlugin {
     private LevelCache levelCache;
     private EXPCache expCache;
 
+    private EXPListeners expListeners;
+
     @Override
     public void onEnable() {
         long startTime = System.currentTimeMillis();
@@ -62,7 +64,7 @@ public final class CyberLevels extends JavaPlugin {
 
         reloadClasses();
         playerUtils = new PlayerUtils(this);
-        new EXPListeners(this);
+        expListeners = new EXPListeners(this);
 
         new CLVCommand(this);
         new CLVTabComplete(this);
@@ -95,7 +97,7 @@ public final class CyberLevels extends JavaPlugin {
         levelCache.loadOnlinePlayers();
         levelCache.loadRewards();
 
-        new LevelledMobs(this);
+        //new LevelledMobs(this);
     }
 
     @Override
@@ -141,4 +143,7 @@ public final class CyberLevels extends JavaPlugin {
         return langUtils;
     }
 
+    public EXPListeners expListeners() {
+        return expListeners;
+    }
 }
