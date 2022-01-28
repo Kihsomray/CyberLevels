@@ -93,9 +93,11 @@ public class RewardObject {
             message = message.replace("[global]", "");
             message = main.levelUtils().getPlaceholders(message, player, true);
 
-            if (message.toLowerCase().startsWith("[player]"))
+            if (message.toLowerCase().startsWith("[player]")) {
+                if (player.hasPermission("CyberLevels.suppress.player.levelup")) continue;
                 main.langUtils().typeMessage(player, main.langUtils().parseFormat("[player]", message));
-            else {
+            } else {
+                if (player.hasPermission("CyberLevels.suppress.global.levelup")) continue;
                 String result = message;
                 Bukkit.getOnlinePlayers().forEach(p -> main.langUtils().typeMessage(p, result));
             }

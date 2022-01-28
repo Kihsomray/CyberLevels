@@ -51,50 +51,20 @@ public class PlaceholderAPI extends PlaceholderExpansion {
         if (identifier.equalsIgnoreCase("exp_minimum"))
             return main.levelCache().startLevel() + "";
 
-        if (identifier.startsWith("leaderboard_name_")) {
-            if (!main.levelCache().isLeaderboardEnabled()) return null;
-            int place = Integer.parseInt(identifier.substring(17));
-            if (place > 10 || place < 1) return null;
-            LeaderboardPlayer lPlayer = main.levelCache().getLeaderboard().getTopPlayer(place);
-            if (lPlayer == null) return ChatColor.translateAlternateColorCodes('&', main.files().getConfig("lang")
-                    .getString("leaderboard-placeholders.loading-name", "&6Loading..."));
+        if (identifier.startsWith("leaderboard_displayname_"))
+            return getLeaderboard(player, "displayname", identifier.substring(24));
 
-            String playerName = main.files().getConfig("lang").getString("leaderboard-placeholders.no-player-name", "&c-");
-            if (lPlayer.getPlayer() != null) playerName = lPlayer.getPlayer().getName();
-            if (!(player instanceof Player)) return ChatColor.translateAlternateColorCodes('&', playerName);
-            return main.langUtils().parse((Player) player, playerName);
-        }
+        if (identifier.startsWith("leaderboard_name_"))
+            return getLeaderboard(player, "name", identifier.substring(17));
 
-        if (identifier.startsWith("leaderboard_level_")) {
-            if (!main.levelCache().isLeaderboardEnabled()) return null;
-            int place = Integer.parseInt(identifier.substring(18));
-            if (place > 10 || place < 1) return null;
-            LeaderboardPlayer lPlayer = main.levelCache().getLeaderboard().getTopPlayer(place);
-            if (lPlayer == null) return ChatColor.translateAlternateColorCodes('&', main.files().getConfig("lang")
-                    .getString("leaderboard-placeholders.loading-level", "&6-"));
+        if (identifier.startsWith("leaderboard_level_"))
+            return getLeaderboard(player, "level", identifier.substring(18));
 
-            String playerLevel = main.files().getConfig("lang").getString("leaderboard-placeholders.no-player-level", "&c-");
-            if (lPlayer.getPlayer() != null) playerLevel = lPlayer.getLevel() + "";
-            if (!(player instanceof Player)) return ChatColor.translateAlternateColorCodes('&', playerLevel);
-            return main.langUtils().parse((Player) player, playerLevel);
-        }
+        if (identifier.startsWith("leaderboard_exp_"))
+            return getLeaderboard(player, "exp", identifier.substring(16));
 
-        if (identifier.startsWith("leaderboard_exp_")) {
-            if (!main.levelCache().isLeaderboardEnabled()) return null;
-            int place = Integer.parseInt(identifier.substring(16));
-            if (place > 10 || place < 1) return null;
-            LeaderboardPlayer lPlayer = main.levelCache().getLeaderboard().getTopPlayer(place);
-            if (lPlayer == null) return ChatColor.translateAlternateColorCodes('&', main.files().getConfig("lang")
-                    .getString("leaderboard-placeholders.loading-exp", "&6-"));
 
-            String playerEXP = main.files().getConfig("lang").getString("leaderboard-placeholders.no-player-level", "&c-");
-            if (lPlayer.getPlayer() != null) playerEXP = main.levelUtils().roundDecimal(lPlayer.getExp()) + "";
-
-            if (!(player instanceof Player)) return ChatColor.translateAlternateColorCodes('&', playerEXP);
-            return main.langUtils().parse((Player) player, playerEXP);
-        }
-
-        LevelObject playerLevel = main.levelCache().playerLevels().get(player);
+        LevelObject playerLevel = main.levelCache().playerLevels().get((Player) player);
         if (playerLevel == null) return null;
 
         if (identifier.equalsIgnoreCase("player_level"))
@@ -125,24 +95,34 @@ public class PlaceholderAPI extends PlaceholderExpansion {
     }
 
 
+    private String getLeaderboard(OfflinePlayer player, String type, String position) {
+        if (!main.levelCache().isLeaderboardEnabled()) return null;
+        int place;
+        try {
+            place = Integer.parseInt(position);
+        } catch (Exception e) {
+            return null;
+        }
+        if (place > 10 || place < 1) return null;
+        LeaderboardPlayer lPlayer = main.levelCache().getLeaderboard().getTopPlayer(place);
+        if (lPlayer == null) return ChatColor.translateAlternateColorCodes('&', main.files().getConfig("lang")
+                .getString("leaderboard-placeholders.loading-" + type.replace("display", ""), "&c-"));
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        String value = main.files().getConfig("lang").getString("leaderboard-placeholders.no-player-" + type.replace("display", ""), "&c-");
+        if (lPlayer.getPlayer() != null) {
+            if (type.equalsIgnoreCase("name")) value = lPlayer.getPlayer().getName();
+            else if (type.equalsIgnoreCase("displayname")) {
+                try {
+                    value = lPlayer.getPlayer().getPlayer().getDisplayName();
+                } catch (Exception e) {
+                    value = lPlayer.getPlayer().getName();
+                }
+            }
+            else if (type.equalsIgnoreCase("level")) value = lPlayer.getLevel() + "";
+            else if (type.equalsIgnoreCase("exp")) value = lPlayer.getExp() + "";
+        }
+        if (!(player instanceof Player)) return ChatColor.translateAlternateColorCodes('&', value);
+        return main.langUtils().parse((Player) player, value);
+    }
 
 }
