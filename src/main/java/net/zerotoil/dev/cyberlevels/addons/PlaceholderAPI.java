@@ -119,7 +119,7 @@ public class PlaceholderAPI extends PlaceholderExpansion {
                 }
             }
             else if (type.equalsIgnoreCase("level")) value = lPlayer.getLevel() + "";
-            else if (type.equalsIgnoreCase("exp")) value = lPlayer.getExp() + "";
+            else if (type.equalsIgnoreCase("exp")) value = main.levelUtils().roundStringDecimal(lPlayer.getExp());
         }
         if (!(player instanceof Player)) return ChatColor.translateAlternateColorCodes('&', value);
         return main.langUtils().parse((Player) player, value);

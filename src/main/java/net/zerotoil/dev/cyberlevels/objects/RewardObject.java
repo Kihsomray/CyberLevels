@@ -5,6 +5,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.entity.Player;
+import org.bukkit.permissions.PermissionAttachmentInfo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -94,14 +95,26 @@ public class RewardObject {
             message = main.levelUtils().getPlaceholders(message, player, true);
 
             if (message.toLowerCase().startsWith("[player]")) {
-                if (player.hasPermission("CyberLevels.suppress.player.levelup")) continue;
+                if (isSuppressed(player, "player")) continue;
                 main.langUtils().typeMessage(player, main.langUtils().parseFormat("[player]", message));
             } else {
-                if (player.hasPermission("CyberLevels.suppress.global.levelup")) continue;
+                if (isSuppressed(player, "global")) continue;
                 String result = message;
                 Bukkit.getOnlinePlayers().forEach(p -> main.langUtils().typeMessage(p, result));
             }
         }
+    }
+
+    private boolean isSuppressed(Player player, String type) {
+        if (!player.hasPermission("CyberLevels.suppress.levelup." + type)) return false;
+        boolean skip = false;
+        for (PermissionAttachmentInfo perm : player.getEffectivePermissions()) {
+            if (!perm.getPermission().toLowerCase().startsWith("cyberlevels.suppress")) continue;
+            if (perm.getValue() && (perm.getPermission().equalsIgnoreCase("CyberLevels.suppress.levelup." + type) ||
+                    perm.getPermission().equalsIgnoreCase("CyberLevels.suppress.levelup.*") ||
+                    perm.getPermission().equalsIgnoreCase("CyberLevels.suppress.*"))) skip = true;
+        }
+        return skip;
     }
 
     private void playSound(Player player) {
