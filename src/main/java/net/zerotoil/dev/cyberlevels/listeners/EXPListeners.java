@@ -42,7 +42,7 @@ public class EXPListeners implements Listener {
         if (target instanceof Player) eventType = "damaging-players";
         else if (target instanceof Animals) eventType = "damaging-animals";
         else if ((target instanceof Monster) || (main.serverVersion() > 12 && (target instanceof Mob))
-                || (target instanceof WaterMob)) eventType = "killing-monsters";
+                || (target instanceof WaterMob)) eventType = "damaging-monsters";
         else return;
 
         sendExp(player, main.expCache().expEarnEvents().get(eventType), target.getType().toString());

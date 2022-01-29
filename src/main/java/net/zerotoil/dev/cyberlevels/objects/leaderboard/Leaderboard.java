@@ -53,7 +53,6 @@ public class Leaderboard {
         for (File f : file.listFiles()) {
             try {
                 String uuid = f.getName().replace(".clv", "");
-                System.out.println(uuid);
                 Scanner scanner = new Scanner(f);
                 long level = Long.parseLong(scanner.nextLine());
                 double exp = Double.parseDouble(scanner.nextLine());
