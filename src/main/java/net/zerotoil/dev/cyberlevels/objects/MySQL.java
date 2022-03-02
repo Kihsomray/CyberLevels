@@ -1,7 +1,6 @@
 package net.zerotoil.dev.cyberlevels.objects;
 
 import net.zerotoil.dev.cyberlevels.CyberLevels;
-import net.zerotoil.dev.cyberlevels.objects.leaderboard.Leaderboard;
 import net.zerotoil.dev.cyberlevels.objects.leaderboard.LeaderboardPlayer;
 import net.zerotoil.dev.cyberlevels.objects.levels.LevelObject;
 import org.bukkit.entity.Player;

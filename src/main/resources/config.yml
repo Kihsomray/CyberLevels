@@ -51,6 +51,10 @@ config:
   # Should adding levels give rewards?
   add-level-reward: false
 
+  # Should getting rewards multiple times per
+  # level be prevented?
+  prevent-duplicate-rewards: true
+
   multipliers:
     # Should multipliers apply to the following?
     commands: false

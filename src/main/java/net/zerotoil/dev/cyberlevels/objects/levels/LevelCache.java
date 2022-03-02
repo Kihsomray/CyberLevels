@@ -66,8 +66,7 @@ public class LevelCache {
                     config.getString("config.mysql.database"),
                     config.getString("config.mysql.username"),
                     config.getString("config.mysql.password"),
-                    config.getString("config.mysql.table")
-            },
+                    config.getString("config.mysql.table")},
                     config.getBoolean("config.mysql.ssl"));
         }
     }
@@ -154,8 +153,7 @@ public class LevelCache {
                     BufferedWriter writer = Files.newBufferedWriter(Paths.get(main.getDataFolder().getAbsolutePath() + File.separator + "player_data" + File.separator + uuid + ".clv"));
                     writer.write(content);
                     writer.close();
-                }
-                else {
+                } else {
                     Scanner scanner = new Scanner(playerFile);
                     levelObject.setLevel(Long.parseLong(scanner.nextLine()), false);
                     levelObject.setExp(Double.parseDouble(scanner.nextLine()), false, false);

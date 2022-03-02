@@ -2,12 +2,9 @@ package net.zerotoil.dev.cyberlevels.objects.levels;
 
 import net.zerotoil.dev.cyberlevels.CyberLevels;
 import net.zerotoil.dev.cyberlevels.objects.RewardObject;
-import net.zerotoil.dev.cyberlevels.objects.leaderboard.Leaderboard;
 import net.zerotoil.dev.cyberlevels.objects.leaderboard.LeaderboardPlayer;
 import net.zerotoil.dev.iridiumapi.IridiumAPI;
 import org.bukkit.entity.Player;
-import org.bukkit.permissions.Permission;
-import org.bukkit.permissions.PermissionAttachmentInfo;
 
 import java.util.List;
 

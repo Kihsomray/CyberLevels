@@ -1,6 +1,5 @@
 package net.zerotoil.dev.cyberlevels.objects.files;
 
-
 import com.google.common.base.Preconditions;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;

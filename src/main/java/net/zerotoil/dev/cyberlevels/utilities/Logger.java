@@ -2,7 +2,6 @@ package net.zerotoil.dev.cyberlevels.utilities;
 
 import net.zerotoil.dev.cyberlevels.CyberLevels;
 import net.zerotoil.dev.iridiumapi.IridiumAPI;
-import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 

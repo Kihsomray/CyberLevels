@@ -1,6 +1,5 @@
 package net.zerotoil.dev.cyberlevels.listeners;
 
-import javafx.scene.layout.Priority;
 import net.zerotoil.dev.cyberlevels.CyberLevels;
 import net.zerotoil.dev.cyberlevels.objects.exp.EXPEarnEvent;
 import org.bukkit.Bukkit;

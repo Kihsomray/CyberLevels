@@ -11,7 +11,6 @@ public class LeaderboardPlayer implements Comparable {
 
     private final CyberLevels main;
     private final String uuid;
-    private Player player;
     private long level;
     private double exp;
 

@@ -1,5 +1,6 @@
 package net.zerotoil.dev.cyberlevels.objects.exp;
 
+import net.objecthunter.exp4j.ExpressionBuilder;
 import net.zerotoil.dev.cyberlevels.CyberLevels;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
@@ -109,6 +110,10 @@ public class EXPEarnEvent {
             }
         }
 
+    }
+
+    private double doFormula(Player player, String val) {
+        return (new ExpressionBuilder(main.levelUtils().getPlaceholders(val, player, false, true))).build().evaluate();
     }
 
     public boolean isEnabled() {
