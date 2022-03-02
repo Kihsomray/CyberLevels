@@ -5,10 +5,7 @@ import net.zerotoil.dev.cyberlevels.objects.leaderboard.LeaderboardPlayer;
 import net.zerotoil.dev.cyberlevels.objects.levels.LevelObject;
 import org.bukkit.entity.Player;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,6 +51,7 @@ public class MySQL {
         try {
             connection = DriverManager.getConnection("jdbc:mysql://" + ip + ":" + port + "/" + database + "?autoReconnect=true&useSSL=" + ssl, username, password);
             makeTable();
+            addTable("MAX_LEVEL", "BIGINT(20)");
         } catch (Exception e) {
             main.logger("&cThere was an issue connecting to MySQL Database.");
             e.printStackTrace();
@@ -82,7 +80,8 @@ public class MySQL {
                     "CREATE TABLE IF NOT EXISTS `" + table + "` " +
                             "(`UUID` VARCHAR(36), " +
                             "`LEVEL` BIGINT(20), " +
-                            "`EXP` DOUBLE(20, 10))"
+                            "`EXP` DOUBLE(20, 10), " +
+                            "`MAX_LEVEL` BIGINT(20))"
             );
             statement.executeUpdate();
 
@@ -91,6 +90,35 @@ public class MySQL {
             e.printStackTrace();
         }
     }
+
+    public void addTable(String table) {
+        addTable(table, "VARCHAR(120)");
+    }
+
+    public void addTable(String table, String type) {
+        try {
+            Statement statement = connection.createStatement();
+
+            String sql = "SELECT * FROM " + table;
+            ResultSet result = statement.executeQuery(sql);
+            ResultSetMetaData metaData = result.getMetaData();
+            int rowCount = metaData.getColumnCount();
+
+            boolean isMyColumnPresent = false;
+            for (int i = 1; i <= rowCount; i++) {
+                if (table.equals(metaData.getColumnName(i))) {
+                    isMyColumnPresent = true;
+                }
+            }
+
+            if (!isMyColumnPresent) {
+                statement.executeUpdate("ALTER TABLE " + table + " ADD " + table + " " + type + " NULL");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
     // does a player exist in the database?
     public boolean playerInTable(Player player) {
@@ -126,6 +154,11 @@ public class MySQL {
             statement.setString(2, player.getUniqueId().toString());
             statement.executeUpdate();
 
+            statement = connection.prepareStatement("UPDATE " + table + " SET MAX_LEVEL=? WHERE UUID=?");
+            statement.setString(1, main.levelCache().playerLevels().get(player).getMaxLevel() + "");
+            statement.setString(2, player.getUniqueId().toString());
+            statement.executeUpdate();
+
         } catch (Exception e) {
             main.logger("&cFailed to update player " + player.getName() + ".");
             e.printStackTrace();
@@ -144,6 +177,8 @@ public class MySQL {
             results.next();
             levelObject.setLevel(results.getLong("LEVEL"), false);
             levelObject.setExp(results.getDouble("EXP"), false, false);
+            Long maxLevel = results.getLong("MAX_LEVEL");
+            if (!(maxLevel + "").equalsIgnoreCase("null")) levelObject.setMaxLevel(maxLevel);
             return levelObject;
 
         } catch (Exception e) {
@@ -183,10 +218,11 @@ public class MySQL {
         }
 
         try {
-            PreparedStatement statement = connection.prepareStatement("INSERT INTO " + table + "(UUID,LEVEL,EXP) VALUE (?,?,?)");
+            PreparedStatement statement = connection.prepareStatement("INSERT INTO " + table + "(UUID,LEVEL,EXP,MAX_LEVEL) VALUE (?,?,?,?)");
             statement.setString(1, player.getUniqueId().toString());
             statement.setString(2, level);
             statement.setString(3, exp);
+            statement.setString(4, level);
             statement.executeUpdate();
 
         } catch (Exception e) {

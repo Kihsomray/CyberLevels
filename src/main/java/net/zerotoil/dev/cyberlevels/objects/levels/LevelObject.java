@@ -13,12 +13,13 @@ public class LevelObject {
     private final CyberLevels main;
     private Player player;
     private Long level;
+    private Long maxLevel;
     private Double exp;
 
 
     public LevelObject(CyberLevels main, Player player) {
         this.main = main;
-        level = main.levelCache().startLevel();
+        maxLevel = level = main.levelCache().startLevel();
         exp = main.levelCache().startExp();
         this.player = player;
     }
@@ -153,11 +154,13 @@ public class LevelObject {
     }
 
     private void sendLevelReward(long level) {
+        if (main.levelCache().isPreventDuplicateRewards() && level <= maxLevel) return;
         for (RewardObject rewardObject : main.levelCache().levelData().get(level).getRewards()) rewardObject.giveReward(player);
+        maxLevel = level;
     }
 
     private void sendLevelReward() {
-        for (RewardObject rewardObject : main.levelCache().levelData().get(level).getRewards()) rewardObject.giveReward(player);
+        sendLevelReward(level);
     }
 
     public double nextExpRequirement() {
@@ -201,6 +204,10 @@ public class LevelObject {
 
     }
 
+    public void setMaxLevel(Long maxLevel) {
+        this.maxLevel = maxLevel;
+    }
+
     public Player getPlayer() {
         return player;
     }
@@ -209,6 +216,9 @@ public class LevelObject {
     }
     public Double getExp() {
         return exp;
+    }
+    public Long getMaxLevel() {
+        return maxLevel;
     }
 
 }

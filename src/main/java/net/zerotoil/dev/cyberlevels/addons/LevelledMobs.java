@@ -8,8 +8,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Objects;
-
 public class LevelledMobs implements Listener {
 
     private final CyberLevels main;

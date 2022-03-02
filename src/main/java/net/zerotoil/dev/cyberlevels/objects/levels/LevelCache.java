@@ -41,6 +41,8 @@ public class LevelCache {
     private boolean syncLeaderboardAutoSave;
     private boolean leaderboardInstantUpdate;
 
+    private boolean preventDuplicateRewards;
+
     private MySQL mySQL;
 
     public LevelCache(CyberLevels main) {
@@ -54,6 +56,7 @@ public class LevelCache {
         leaderboardEnabled = main.files().getConfig("config").getBoolean("config.leaderboard.enabled", false);
         syncLeaderboardAutoSave = main.files().getConfig("config").getBoolean("config.leaderboard.sync-on-auto-save", true) && leaderboardEnabled;
         leaderboardInstantUpdate = main.files().getConfig("config").getBoolean("config.leaderboard.instant-update", true) && leaderboardEnabled;
+        preventDuplicateRewards = main.files().getConfig("config").getBoolean("config.prevent-duplicate-rewards", true);
 
         playerLevels = new HashMap<>();
         clearLevelData();
@@ -149,7 +152,7 @@ public class LevelCache {
             try {
                 if (!playerFile.exists()) {
                     playerFile.createNewFile();
-                    String content = levelObject.getLevel() + "\n" + main.levelUtils().roundStringDecimal(levelObject.getExp());
+                    String content = levelObject.getLevel() + "\n" + main.levelUtils().roundStringDecimal(levelObject.getExp()) + "\n" + levelObject.getMaxLevel();
                     BufferedWriter writer = Files.newBufferedWriter(Paths.get(main.getDataFolder().getAbsolutePath() + File.separator + "player_data" + File.separator + uuid + ".clv"));
                     writer.write(content);
                     writer.close();
@@ -157,6 +160,7 @@ public class LevelCache {
                     Scanner scanner = new Scanner(playerFile);
                     levelObject.setLevel(Long.parseLong(scanner.nextLine()), false);
                     levelObject.setExp(Double.parseDouble(scanner.nextLine()), false, false);
+                    if (scanner.hasNext()) levelObject.setMaxLevel(Long.parseLong(scanner.nextLine()));
                 }
 
             } catch (Exception e) {
@@ -249,4 +253,7 @@ public class LevelCache {
         return leaderboardInstantUpdate;
     }
 
+    public boolean isPreventDuplicateRewards() {
+        return preventDuplicateRewards;
+    }
 }
