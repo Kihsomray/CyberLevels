@@ -91,11 +91,11 @@ public class MySQL {
         }
     }
 
-    public void addTable(String table) {
-        addTable(table, "VARCHAR(120)");
+    public void addTable(String column) {
+        addTable(column, "VARCHAR(120)");
     }
 
-    public void addTable(String table, String type) {
+    public void addTable(String column, String type) {
         try {
             Statement statement = connection.createStatement();
 
@@ -106,13 +106,13 @@ public class MySQL {
 
             boolean isMyColumnPresent = false;
             for (int i = 1; i <= rowCount; i++) {
-                if (table.equals(metaData.getColumnName(i))) {
+                if (column.equals(metaData.getColumnName(i))) {
                     isMyColumnPresent = true;
                 }
             }
 
             if (!isMyColumnPresent) {
-                statement.executeUpdate("ALTER TABLE " + table + " ADD " + table + " " + type + " NULL");
+                statement.executeUpdate("ALTER TABLE " + table + " ADD " + column + " " + type + " NULL");
             }
         } catch (Exception e) {
             e.printStackTrace();

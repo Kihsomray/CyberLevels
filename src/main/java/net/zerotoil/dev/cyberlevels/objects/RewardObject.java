@@ -68,6 +68,8 @@ public class RewardObject {
         if (commands == null) return;
         for (String command : commands) {
 
+            if (command.isEmpty()) continue;
+
             while (command.charAt(0) == ' ') command = command.substring(1);
 
             if (!command.startsWith("[") || command.toLowerCase().startsWith("[console]")) {

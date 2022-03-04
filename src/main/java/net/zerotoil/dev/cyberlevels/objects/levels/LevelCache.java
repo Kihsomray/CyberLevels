@@ -178,7 +178,7 @@ public class LevelCache {
         String uuid = player.getUniqueId().toString();
         if (mySQL == null) {
             try {
-                String content = levelObject.getLevel() + "\n" + main.levelUtils().roundStringDecimal(levelObject.getExp());
+                String content = levelObject.getLevel() + "\n" + main.levelUtils().roundStringDecimal(levelObject.getExp()) + "\n" + levelObject.getMaxLevel();
                 BufferedWriter writer = Files.newBufferedWriter(Paths.get(main.getDataFolder().getAbsolutePath() + File.separator + "player_data" + File.separator + uuid + ".clv"));
                 writer.write(content);
                 writer.close();
