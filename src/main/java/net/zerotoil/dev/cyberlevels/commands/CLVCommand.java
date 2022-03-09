@@ -13,7 +13,7 @@ import java.util.List;
 public class CLVCommand implements CommandExecutor {
 
     private final CyberLevels main;
-    private List<String> consoleCmds;
+    private final List<String> consoleCmds;
 
     public CLVCommand(CyberLevels main) {
         this.main = main;
@@ -64,7 +64,7 @@ public class CLVCommand implements CommandExecutor {
                     main.onDisable();
 
                     // load
-                    main.reloadClasses();
+                    main.reloadClasses(true);
 
                     main.langUtils().sendMessage(player, "reloaded", true, false);
                     return true;

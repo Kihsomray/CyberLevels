@@ -36,6 +36,28 @@ public final class CyberLevels extends JavaPlugin {
         long startTime = System.currentTimeMillis();
         logger = new Logger(this);
 
+        reloadClasses(false);
+        playerUtils = new PlayerUtils(this);
+        expListeners = new EXPListeners(this);
+
+        new CLVCommand(this);
+        new CLVTabComplete(this);
+        new JoinListener(this);
+
+        if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null)
+            new PlaceholderAPI(this).register();
+
+        new Metrics(this, 13782, this);
+        logger("&7Loaded &dCLV v" + getDescription().getVersion() + "&7 in &a" +
+                (System.currentTimeMillis() - startTime) + "ms&7.");
+
+        if (SystemUtils.OS_NAME.contains("Windows"))
+            logger("-----------------------------------------------");
+        else logger("&d―――――――――――――――――――――――――――――――――――――――――――――――");
+    }
+
+    public void reloadClasses(boolean footer) {
+
         if (!SystemUtils.OS_NAME.contains("Windows"))
             logger("&d―――――――――――――――――――――――――――――――――――――――――――――――",
                     "&d╭━━━╮&7╱╱╱&d╭╮&7╱╱╱╱╱╱&d╭╮&7╱╱╱╱╱╱╱╱╱╱╱&d╭╮",
@@ -61,27 +83,7 @@ public final class CyberLevels extends JavaPlugin {
                     "-----------------------------------------------", ""
             );
 
-        reloadClasses();
-        playerUtils = new PlayerUtils(this);
-        expListeners = new EXPListeners(this);
-
-        new CLVCommand(this);
-        new CLVTabComplete(this);
-        new JoinListener(this);
-
-        if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null)
-            new PlaceholderAPI(this).register();
-
-        new Metrics(this, 13782, this);
-        logger("&7Loaded &dCLV v" + getDescription().getVersion() + "&7 in &a" +
-                (System.currentTimeMillis() - startTime) + "ms&7.");
-
-        if (SystemUtils.OS_NAME.contains("Windows"))
-            logger("-----------------------------------------------");
-        else logger("&d―――――――――――――――――――――――――――――――――――――――――――――――");
-    }
-
-    public void reloadClasses() {
+        long startTime = System.currentTimeMillis();
         if (expCache != null) {
             expCache.cancelTimedEXP();
             expCache.cancelAntiAbuseTimers();
@@ -96,7 +98,14 @@ public final class CyberLevels extends JavaPlugin {
         levelCache.loadOnlinePlayers();
         levelCache.loadRewards();
 
-        //new LevelledMobs(this);
+        if (footer) {
+            logger("&7Reloaded &dCLV v" + getDescription().getVersion() + "&7 in &a" +
+                    (System.currentTimeMillis() - startTime) + "ms&7.");
+            if (SystemUtils.OS_NAME.contains("Windows"))
+                logger("-----------------------------------------------");
+            else logger("&d―――――――――――――――――――――――――――――――――――――――――――――――");
+        }
+
     }
 
     @Override
@@ -109,9 +118,13 @@ public final class CyberLevels extends JavaPlugin {
         if (levelCache.getMySQL() != null) levelCache.getMySQL().disconnect();
     }
 
-    public String getAuthors() { return String.join(", ", getDescription().getAuthors()); }
+    public String getAuthors() {
+        return String.join(", ", getDescription().getAuthors());
+    }
 
-    public String serverFork() { return Bukkit.getVersion().split("-")[1]; }
+    public String serverFork() {
+        return Bukkit.getVersion().split("-")[1];
+    }
 
     public int serverVersion() {
         return Integer.parseInt(Bukkit.getBukkitVersion().split("-")[0].split("\\.")[1]);
