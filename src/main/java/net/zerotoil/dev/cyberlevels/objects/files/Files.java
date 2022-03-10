@@ -30,13 +30,13 @@ public class Files {
         addFile("earn-exp");
         addFile("anti-abuse");
 
-        addFile("levelled-mobs", "addons");
+        //addFile("levelled-mobs", "addons");
 
         if (updateFile("config")) get("config").updateConfig();
         if (updateFile("lang")) get("lang").updateConfig();
         if (updateFile("earn-exp")) get("earn-exp").updateConfig();
 
-        if (updateFile("levelled-mobs")) get("levelled-mobs").updateConfig();
+        //if (updateFile("levelled-mobs")) get("levelled-mobs").updateConfig();
 
         // back end
         File playerData = new File(main.getDataFolder(),"player_data");

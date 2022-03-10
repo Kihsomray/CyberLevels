@@ -8,16 +8,16 @@ import org.bukkit.entity.Player;
 
 import java.util.List;
 
-public class LevelObject {
+public class PlayerData {
 
     private final CyberLevels main;
-    private Player player;
+    private final Player player;
     private Long level;
     private Long maxLevel;
     private Double exp;
 
 
-    public LevelObject(CyberLevels main, Player player) {
+    public PlayerData(CyberLevels main, Player player) {
         this.main = main;
         maxLevel = level = main.levelCache().startLevel();
         exp = main.levelCache().startExp();
@@ -135,7 +135,7 @@ public class LevelObject {
                 }
             }
         }
-        double expTemp = exp;
+        //double expTemp = exp;
         exp -= amount;
         if (levelsLost > 0) main.langUtils().sendMessage(player, player,"lost-levels", true, true, new String[]{"{lostLevels}"}, new String[]{levelsLost + ""});
         else if (amount > 0) main.langUtils().sendMessage(player, player,"lost-exp", true, true, new String[]{"{lostEXP}"}, new String[]{main.levelUtils().roundStringDecimal(amount)});

@@ -2,7 +2,7 @@ package net.zerotoil.dev.cyberlevels.objects;
 
 import net.zerotoil.dev.cyberlevels.CyberLevels;
 import net.zerotoil.dev.cyberlevels.objects.leaderboard.LeaderboardPlayer;
-import net.zerotoil.dev.cyberlevels.objects.levels.LevelObject;
+import net.zerotoil.dev.cyberlevels.objects.levels.PlayerData;
 import org.bukkit.entity.Player;
 
 import java.sql.*;
@@ -13,9 +13,9 @@ public class MySQL {
 
     private final CyberLevels main;
 
-    private String ip, database, username, password, table;
-    private int port;
-    private boolean ssl;
+    private final String ip, database, username, password, table;
+    private final int port;
+    private final boolean ssl;
     private Connection connection;
 
     /**
@@ -54,7 +54,7 @@ public class MySQL {
             addTable("MAX_LEVEL", "BIGINT(20)");
         } catch (Exception e) {
             main.logger("&cThere was an issue connecting to MySQL Database.");
-            e.printStackTrace();
+            //e.printStackTrace();
         }
     }
 
@@ -165,21 +165,21 @@ public class MySQL {
         }
     }
 
-    public LevelObject getPlayerData(Player player) {
+    public PlayerData getPlayerData(Player player) {
 
         if (!playerInTable(player)) addPlayer(player, true);
 
         try {
-            LevelObject levelObject = new LevelObject(main, player);
+            PlayerData playerData = new PlayerData(main, player);
             PreparedStatement statement = connection.prepareStatement("SELECT * FROM " + table + " WHERE UUID=?");
             statement.setString(1, player.getUniqueId().toString());
             ResultSet results = statement.executeQuery();
             results.next();
-            levelObject.setLevel(results.getLong("LEVEL"), false);
-            levelObject.setExp(results.getDouble("EXP"), false, false);
+            playerData.setLevel(results.getLong("LEVEL"), false);
+            playerData.setExp(results.getDouble("EXP"), false, false);
             Long maxLevel = results.getLong("MAX_LEVEL");
-            if (!(maxLevel + "").equalsIgnoreCase("null")) levelObject.setMaxLevel(maxLevel);
-            return levelObject;
+            if (!(maxLevel + "").equalsIgnoreCase("null")) playerData.setMaxLevel(maxLevel);
+            return playerData;
 
         } catch (Exception e) {
             main.logger("&cFailed to get player data for " + player.getName() + ".");

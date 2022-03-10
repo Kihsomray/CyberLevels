@@ -4,7 +4,6 @@ import net.zerotoil.dev.cyberlevels.CyberLevels;
 import net.zerotoil.dev.cyberlevels.objects.MySQL;
 import net.zerotoil.dev.cyberlevels.objects.RewardObject;
 import net.zerotoil.dev.cyberlevels.objects.leaderboard.Leaderboard;
-import net.zerotoil.dev.cyberlevels.objects.leaderboard.LeaderboardPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.ConfigurationSection;
@@ -22,26 +21,26 @@ public class LevelCache {
 
     private final CyberLevels main;
 
-    private Long startLevel;
-    private Double startExp;
-    private Long maxLevel;
+    private final Long startLevel;
+    private final Double startExp;
+    private final Long maxLevel;
 
     private BukkitTask autoSave;
 
-    private Map<Player, LevelObject> playerLevels;
+    private final Map<Player, PlayerData> playerLevels;
     private Map<Long, LevelData> levelData;
     private Leaderboard leaderboard;
 
-    private boolean doCommandMultiplier;
-    private boolean doEventMultiplier;
+    private final boolean doCommandMultiplier;
+    private final boolean doEventMultiplier;
 
-    private boolean addLevelReward;
+    private final boolean addLevelReward;
 
-    private boolean leaderboardEnabled;
-    private boolean syncLeaderboardAutoSave;
-    private boolean leaderboardInstantUpdate;
+    private final boolean leaderboardEnabled;
+    private final boolean syncLeaderboardAutoSave;
+    private final boolean leaderboardInstantUpdate;
 
-    private boolean preventDuplicateRewards;
+    private final boolean preventDuplicateRewards;
 
     private MySQL mySQL;
 
@@ -63,14 +62,19 @@ public class LevelCache {
         startAutoSave();
         Configuration config = main.files().getConfig("config");
         if (config.getBoolean("config.mysql.enabled")) {
-            mySQL = new MySQL(main, new String[]{
-                    config.getString("config.mysql.host"),
-                    config.getString("config.mysql.port"),
-                    config.getString("config.mysql.database"),
-                    config.getString("config.mysql.username"),
-                    config.getString("config.mysql.password"),
-                    config.getString("config.mysql.table")},
-                    config.getBoolean("config.mysql.ssl"));
+            try {
+                mySQL = new MySQL(main, new String[]{
+                        config.getString("config.mysql.host"),
+                        config.getString("config.mysql.port"),
+                        config.getString("config.mysql.database"),
+                        config.getString("config.mysql.username"),
+                        config.getString("config.mysql.password"),
+                        config.getString("config.mysql.table")},
+                        config.getBoolean("config.mysql.ssl"));
+            } catch (Exception e) {
+                mySQL = null;
+                main.logger("&7Switched to flat-file storage.");
+            }
         }
     }
 
@@ -143,24 +147,24 @@ public class LevelCache {
     }
 
     public void loadPlayer(Player player) {
-        LevelObject levelObject;
+        PlayerData playerData;
         String uuid = player.getUniqueId().toString();
 
         if (mySQL == null) {
-            levelObject = new LevelObject(main, player);
+            playerData = new PlayerData(main, player);
             File playerFile = new File(main.getDataFolder() + File.separator + "player_data", uuid + ".clv");
             try {
                 if (!playerFile.exists()) {
                     playerFile.createNewFile();
-                    String content = levelObject.getLevel() + "\n" + main.levelUtils().roundStringDecimal(levelObject.getExp()) + "\n" + levelObject.getMaxLevel();
+                    String content = playerData.getLevel() + "\n" + main.levelUtils().roundStringDecimal(playerData.getExp()) + "\n" + playerData.getMaxLevel();
                     BufferedWriter writer = Files.newBufferedWriter(Paths.get(main.getDataFolder().getAbsolutePath() + File.separator + "player_data" + File.separator + uuid + ".clv"));
                     writer.write(content);
                     writer.close();
                 } else {
                     Scanner scanner = new Scanner(playerFile);
-                    levelObject.setLevel(Long.parseLong(scanner.nextLine()), false);
-                    levelObject.setExp(Double.parseDouble(scanner.nextLine()), false, false);
-                    if (scanner.hasNext()) levelObject.setMaxLevel(Long.parseLong(scanner.nextLine()));
+                    playerData.setLevel(Long.parseLong(scanner.nextLine()), false);
+                    playerData.setExp(Double.parseDouble(scanner.nextLine()), false, false);
+                    if (scanner.hasNext()) playerData.setMaxLevel(Long.parseLong(scanner.nextLine()));
                 }
 
             } catch (Exception e) {
@@ -168,17 +172,17 @@ public class LevelCache {
                 main.logger("&cFailed to make file for " + player.getName() + ".");
             }
         }
-        else levelObject = mySQL.getPlayerData(player);
-        playerLevels.put(player, levelObject);
+        else playerData = mySQL.getPlayerData(player);
+        playerLevels.put(player, playerData);
     }
 
     public void savePlayer(Player player, boolean clearData) {
 
-        LevelObject levelObject = playerLevels.get(player);
+        PlayerData playerData = playerLevels.get(player);
         String uuid = player.getUniqueId().toString();
         if (mySQL == null) {
             try {
-                String content = levelObject.getLevel() + "\n" + main.levelUtils().roundStringDecimal(levelObject.getExp()) + "\n" + levelObject.getMaxLevel();
+                String content = playerData.getLevel() + "\n" + main.levelUtils().roundStringDecimal(playerData.getExp()) + "\n" + playerData.getMaxLevel();
                 BufferedWriter writer = Files.newBufferedWriter(Paths.get(main.getDataFolder().getAbsolutePath() + File.separator + "player_data" + File.separator + uuid + ".clv"));
                 writer.write(content);
                 writer.close();
@@ -217,7 +221,7 @@ public class LevelCache {
         return maxLevel;
     }
 
-    public Map<Player, LevelObject> playerLevels() {
+    public Map<Player, PlayerData> playerLevels() {
         return playerLevels;
     }
 

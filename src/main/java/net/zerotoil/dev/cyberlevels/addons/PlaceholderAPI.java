@@ -3,7 +3,7 @@ package net.zerotoil.dev.cyberlevels.addons;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import net.zerotoil.dev.cyberlevels.CyberLevels;
 import net.zerotoil.dev.cyberlevels.objects.leaderboard.LeaderboardPlayer;
-import net.zerotoil.dev.cyberlevels.objects.levels.LevelObject;
+import net.zerotoil.dev.cyberlevels.objects.levels.PlayerData;
 import net.zerotoil.dev.iridiumapi.IridiumAPI;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
@@ -64,7 +64,7 @@ public class PlaceholderAPI extends PlaceholderExpansion {
             return getLeaderboard(player, "exp", identifier.substring(16));
 
 
-        LevelObject playerLevel = main.levelCache().playerLevels().get((Player) player);
+        PlayerData playerLevel = main.levelCache().playerLevels().get((Player) player);
         if (playerLevel == null) return null;
 
         if (identifier.equalsIgnoreCase("player_level"))
