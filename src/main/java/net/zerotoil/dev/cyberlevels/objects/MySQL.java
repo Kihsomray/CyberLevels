@@ -54,7 +54,7 @@ public class MySQL {
             addTable("MAX_LEVEL", "BIGINT(20)");
         } catch (Exception e) {
             main.logger("&cThere was an issue connecting to MySQL Database.");
-            //e.printStackTrace();
+            throw new IllegalArgumentException();
         }
     }
 

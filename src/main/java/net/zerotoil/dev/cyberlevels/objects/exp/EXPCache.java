@@ -13,9 +13,9 @@ import java.util.Map;
 public class EXPCache {
 
     private final CyberLevels main;
-    private Map<String, EXPEarnEvent> expEarnEvents = new HashMap<>();
-    private Map<String, AntiAbuse> antiAbuse = new HashMap<>();
-    private boolean useDouble, roundExp;
+    private final Map<String, EXPEarnEvent> expEarnEvents = new HashMap<>();
+    private final Map<String, AntiAbuse> antiAbuse = new HashMap<>();
+    private final boolean useDouble, roundExp;
 
     private boolean preventSilkTouchAbuse;
     private boolean onlyNaturalBlocks;

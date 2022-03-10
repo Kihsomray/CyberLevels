@@ -14,13 +14,12 @@ public class RewardObject {
 
     private final CyberLevels main;
 
-    private String soundName;
-    private float volume;
-    private float pitch;
+    private final String soundName;
+    private final float volume;
+    private final float pitch;
 
-    private List<String> commands;
-    private List<String> messages;
-    private List<Long> levels;
+    private final List<String> commands, messages;
+    private final List<Long> levels;
 
     public RewardObject(CyberLevels main, String rewardName) {
         this.main = main;

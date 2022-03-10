@@ -73,7 +73,7 @@ public class LevelCache {
                         config.getBoolean("config.mysql.ssl"));
             } catch (Exception e) {
                 mySQL = null;
-                main.logger("&7Switched to flat-file storage.");
+                main.logger("&dSwitched to flat-file storage.", "");
             }
         }
     }

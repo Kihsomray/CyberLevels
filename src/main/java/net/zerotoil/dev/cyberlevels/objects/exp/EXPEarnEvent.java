@@ -9,7 +9,7 @@ import java.util.*;
 
 public class EXPEarnEvent {
 
-    private CyberLevels main;
+    private final CyberLevels main;
     private Boolean enabled = false;
     private String category, name;
     private double minEXP, maxEXP;
