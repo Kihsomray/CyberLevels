@@ -184,40 +184,28 @@ public class EXPEarnEvent {
         return false;
     }
 
-    public double getPartialMatchesExp(String string, boolean generalList) {
-
+    public double getPartialMatchesExp(String string) {
         double amount = 0.0;
-        string = string.toUpperCase();
+        string = string.toUpperCase(Locale.ROOT);
 
-        while (hasPartialMatches(string, generalList)) {
-            if (generalList) {
-                if (!includedEnabled) return getGeneralExp();
-                if (whitelist) {
-                    for (String s : list) {
-                        if (string.contains(s.toUpperCase())) {
-                            string = string.replace(s, "");
-                            amount += getGeneralExp();
-                            System.out.println(string + ", " + s);
-                        }
-                    }
-                } else {
-                    for (String s : list) {
-                        if (!string.contains(s.toUpperCase())) {
-                            string = string.replace(s, "");
-                            amount += getGeneralExp();
-                            System.out.println(string + ", " + s);
-                        }
+        if (specificEnabled)
+            for (String s : specificMin.keySet())
+                if (string.contains(s.toUpperCase(Locale.ROOT))) amount += getSpecificExp(s);
+
+        if (enabled) {
+            if (!includedEnabled) amount += getGeneralExp();
+            else {
+                boolean giveExp = true;
+                for (String s : list) {
+                    if (whitelist && string.contains(s.toUpperCase(Locale.ROOT))) {
+                        amount += getGeneralExp();
+                        break;
+                    } else if (string.contains(s.toUpperCase(Locale.ROOT))) {
+                        giveExp = false;
+                        break;
                     }
                 }
-            } else {
-                if (!specificEnabled) return 0.0;
-                for (String s : specificMin.keySet()) {
-                    if (string.contains(s.toUpperCase())) {
-                        string = string.replace(s, "");
-                        amount += getSpecificExp(s);
-                        System.out.println(string + ", " + s);
-                    }
-                }
+                if (!whitelist && giveExp) amount += getGeneralExp();
             }
         }
 

@@ -56,7 +56,7 @@ public class EXPCache {
 
         addEvent("timed-giving", "permissions");
 
-        //addEvent("chatting", "words");
+        addEvent("chatting", "words");
 
         long counter = 0;
         for (EXPEarnEvent event : expEarnEvents.values()) if (event.isEnabled() || event.isSpecificEnabled()) counter++;

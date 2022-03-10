@@ -15,6 +15,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerFishEvent;
 import org.bukkit.metadata.FixedMetadataValue;
 
@@ -129,7 +130,7 @@ public class EXPListeners implements Listener {
 
     }
 
-    /* @EventHandler (priority = EventPriority.HIGHEST)
+    @EventHandler (priority = EventPriority.HIGHEST)
     private void onChat(AsyncPlayerChatEvent event) {
         if (event.isCancelled()) return;
 
@@ -138,15 +139,15 @@ public class EXPListeners implements Listener {
         String item = event.getMessage().toUpperCase();
         double counter = 0;
 
-        if (expEarnEvent.isEnabled() && expEarnEvent.hasPartialMatches(item, true))
-            counter += expEarnEvent.getPartialMatchesExp(item, true);
+        if (expEarnEvent.isEnabled() || expEarnEvent.isSpecificEnabled())
+            counter += expEarnEvent.getPartialMatchesExp(item);
 
-        if (expEarnEvent.isSpecificEnabled() && expEarnEvent.hasPartialMatches(item, false))
-            counter += expEarnEvent.getPartialMatchesExp(item, false);
-
-        if (counter > 0) main.levelCache().playerLevels().get(player).addExp(counter);
-        else if (counter < 0) main.levelCache().playerLevels().get(player).removeExp(Math.abs(counter));
-    } */
+        final double finalCounter = counter;
+        Bukkit.getScheduler().runTask(main, () -> {
+            if (finalCounter > 0) main.levelCache().playerLevels().get(player).addExp(finalCounter, main.levelCache().doEventMultiplier());
+            else if (finalCounter < 0) main.levelCache().playerLevels().get(player).removeExp(Math.abs(finalCounter));
+        });
+    }
 
     // Works 1.16.1 - latest
     /* @EventHandler (priority = EventPriority.HIGHEST)
