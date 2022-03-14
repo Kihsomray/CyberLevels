@@ -33,9 +33,17 @@ public class EXPListeners implements Listener {
     @EventHandler (priority = EventPriority.HIGHEST)
     private void onDamage(EntityDamageByEntityEvent event) {
         if (event.isCancelled()) return;
-        if (!(event.getDamager() instanceof Player)) return;
 
-        Player player = ((Player) event.getDamager());
+        Entity attacker = event.getDamager();
+        if ((attacker instanceof Projectile) && (((Projectile) attacker).getShooter() instanceof Player))
+            attacker = (Entity) ((Projectile) attacker).getShooter();
+
+        else if ((attacker instanceof TNTPrimed) && (((TNTPrimed) attacker).getSource() instanceof Player))
+            attacker = ((TNTPrimed) attacker).getSource();
+
+        if (!(attacker instanceof Player)) return;
+
+        Player player = ((Player) attacker);
         Entity target = event.getEntity();
         String eventType;
 
@@ -55,8 +63,14 @@ public class EXPListeners implements Listener {
 
         EntityDamageEvent damageEvent = event.getEntity().getLastDamageCause();
         if (!(damageEvent instanceof EntityDamageByEntityEvent)) return;
-        
+
         Entity attacker = ((EntityDamageByEntityEvent) damageEvent).getDamager();
+        if ((attacker instanceof Projectile) && (((Projectile) attacker).getShooter() instanceof Player))
+            attacker = (Entity) ((Projectile) attacker).getShooter();
+
+        else if ((attacker instanceof TNTPrimed) && (((TNTPrimed) attacker).getSource() instanceof Player))
+            attacker = ((TNTPrimed) attacker).getSource();
+
         if (!(attacker instanceof Player)) return;
 
         Player player = (Player) attacker;
