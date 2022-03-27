@@ -52,11 +52,13 @@ public final class CyberLevels extends JavaPlugin {
                 (System.currentTimeMillis() - startTime) + "ms&7.");
 
         if (SystemUtils.OS_NAME.contains("Windows"))
-            logger("-----------------------------------------------");
+            logger("&8-----------------------------------------------");
         else logger("&d―――――――――――――――――――――――――――――――――――――――――――――――");
     }
 
     public void reloadClasses(boolean footer) {
+        String author = "&7Authors: &f" + getAuthors();
+        String version = "&7Version: &f" + getDescription().getVersion();
 
         if (!SystemUtils.OS_NAME.contains("Windows"))
             logger("&d―――――――――――――――――――――――――――――――――――――――――――――――",
@@ -66,21 +68,21 @@ public final class CyberLevels extends JavaPlugin {
                     "&d┃┃&7╱&d╭┫┃&7╱&d┃┃╭╮┃┃━┫╭┫┃&7╱&d╭┫┃━┫╰╯┃┃━┫┃┃━━┫",
                     "&d┃╰━╯┃╰━╯┃╰╯┃┃━┫┃┃╰━╯┃┃━╋╮╭┫┃━┫╰╋━━┃",
                     "&d╰━━━┻━╮╭┻━━┻━━┻╯╰━━━┻━━╯╰╯╰━━┻━┻━━╯",
-                    "&7╱╱╱╱&d╭━╯┃  &7Authors: &f" + getAuthors(),
-                    "&7╱╱╱╱&d╰━━╯  &7Version: &f" + getDescription().getVersion(),
+                    "&7╱╱╱╱&d╭━╯┃  " + author,
+                    "&7╱╱╱╱&d╰━━╯  " + version,
                     "&d―――――――――――――――――――――――――――――――――――――――――――――――", ""
             );
         else
-            logger("-----------------------------------------------",
-                    "_________ .____ ____   ____",
-                    "\\_   ___ \\|    |\\   \\ /   /",
-                    "/    \\  \\/|    | \\   Y   / ",
-                    "\\     \\___|    |__\\     /  ",
-                    " \\______  /_______ \\___/  ",
-                    "        \\/        \\/",
-                    "Authors: " + getAuthors(),
-                    "Version: " + getDescription().getVersion(),
-                    "-----------------------------------------------", ""
+            logger("&8-----------------------------------------------",
+                    "&d_________ .____ ____   ____",
+                    "&d\\_   ___ \\|    |\\   \\ /   /",
+                    "&d/    \\  \\/|    | \\   Y   / ",
+                    "&d\\     \\___|    |__\\     /  ",
+                    "&d \\______  /_______ \\___/  ",
+                    "&d        \\/        \\/",
+                    author,
+                    version,
+                    "&8-----------------------------------------------", ""
             );
 
         long startTime = System.currentTimeMillis();
@@ -102,7 +104,7 @@ public final class CyberLevels extends JavaPlugin {
             logger("&7Reloaded &dCLV v" + getDescription().getVersion() + "&7 in &a" +
                     (System.currentTimeMillis() - startTime) + "ms&7.");
             if (SystemUtils.OS_NAME.contains("Windows"))
-                logger("-----------------------------------------------");
+                logger("&8-----------------------------------------------");
             else logger("&d―――――――――――――――――――――――――――――――――――――――――――――――");
         }
 
