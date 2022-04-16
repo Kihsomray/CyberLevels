@@ -64,3 +64,6 @@ config:
     config: true
     lang: true
     earn-exp: true
+
+  debug:
+    auto-save: true

@@ -42,25 +42,29 @@ public class LevelCache {
 
     private final boolean preventDuplicateRewards;
 
+    private final boolean debugAutoSave;
+
     private MySQL mySQL;
 
     public LevelCache(CyberLevels main) {
         this.main = main;
-        startLevel = main.levelUtils().levelsYML().getLong("levels.starting.level");
-        startExp = main.levelUtils().levelsYML().getDouble("levels.starting.experience");
-        maxLevel = main.levelUtils().levelsYML().getLong("levels.maximum.level");
-        doCommandMultiplier = main.files().getConfig("config").getBoolean("config.multipliers.commands", false);
-        doEventMultiplier = main.files().getConfig("config").getBoolean("config.multipliers.events", true);
-        addLevelReward = main.files().getConfig("config").getBoolean("config.add-level-reward", false);
-        leaderboardEnabled = main.files().getConfig("config").getBoolean("config.leaderboard.enabled", false);
-        syncLeaderboardAutoSave = main.files().getConfig("config").getBoolean("config.leaderboard.sync-on-auto-save", true) && leaderboardEnabled;
-        leaderboardInstantUpdate = main.files().getConfig("config").getBoolean("config.leaderboard.instant-update", true) && leaderboardEnabled;
-        preventDuplicateRewards = main.files().getConfig("config").getBoolean("config.prevent-duplicate-rewards", true);
+        Configuration levelsYML = main.levelUtils().levelsYML();
+        startLevel = levelsYML.getLong("levels.starting.level");
+        startExp = levelsYML.getDouble("levels.starting.experience");
+        maxLevel = levelsYML.getLong("levels.maximum.level");
+        Configuration config = main.files().getConfig("config");
+        doCommandMultiplier = config.getBoolean("config.multipliers.commands", false);
+        doEventMultiplier = config.getBoolean("config.multipliers.events", true);
+        addLevelReward = config.getBoolean("config.add-level-reward", false);
+        leaderboardEnabled = config.getBoolean("config.leaderboard.enabled", false);
+        syncLeaderboardAutoSave = config.getBoolean("config.leaderboard.sync-on-auto-save", true) && leaderboardEnabled;
+        leaderboardInstantUpdate = config.getBoolean("config.leaderboard.instant-update", true) && leaderboardEnabled;
+        preventDuplicateRewards = config.getBoolean("config.prevent-duplicate-rewards", true);
+        debugAutoSave = config.getBoolean("config.debug.auto-save", true);
 
         playerLevels = new HashMap<>();
         clearLevelData();
         startAutoSave();
-        Configuration config = main.files().getConfig("config");
         if (config.getBoolean("config.mysql.enabled")) {
             try {
                 mySQL = new MySQL(main, new String[]{
@@ -135,7 +139,8 @@ public class LevelCache {
                 long startTime = System.currentTimeMillis();
                 saveOnlinePlayers(false);
                 if (syncLeaderboardAutoSave) leaderboard.updateLeaderboard();
-                main.langUtils().sendMixed(null, main.files().getConfig("lang").getString("messages.auto-save")
+                if (debugAutoSave) main.langUtils().sendMixed(null, main.files().getConfig("lang")
+                        .getString("messages.auto-save")
                         .replace("{ms}", (System.currentTimeMillis() - startTime) + ""));
                 startAutoSave();
             }
