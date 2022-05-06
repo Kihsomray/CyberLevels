@@ -48,6 +48,7 @@ public class EXPCache {
 
         addEvent("placing", "blocks");
         addEvent("breaking", "blocks");
+        addEvent("moving", "permissions");
         addEvent("crafting", "items");
         addEvent("fishing", "fish");
         addEvent("breeding", "animals");

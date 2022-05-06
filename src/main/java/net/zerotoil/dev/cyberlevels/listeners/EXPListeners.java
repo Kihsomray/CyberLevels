@@ -3,6 +3,7 @@ package net.zerotoil.dev.cyberlevels.listeners;
 import net.zerotoil.dev.cyberlevels.CyberLevels;
 import net.zerotoil.dev.cyberlevels.objects.exp.EXPEarnEvent;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
@@ -17,6 +18,7 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerFishEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.metadata.FixedMetadataValue;
 
 public class EXPListeners implements Listener {
@@ -125,6 +127,17 @@ public class EXPListeners implements Listener {
 
     // Works 1.7.10 - latest
     @EventHandler (priority = EventPriority.HIGHEST)
+    private void onMovement(PlayerMoveEvent event) {
+        if (event.isCancelled()) return;
+        Location from = event.getFrom();
+        Location to = event.getTo();
+        if (from.getBlockX() == to.getBlockX() && from.getBlockY() == to.getBlockY() && from.getBlockZ() == to.getBlockZ()) return;
+
+        sendPermissionExp(event.getPlayer(), main.expCache().expEarnEvents().get("moving"));
+    }
+
+    // Works 1.7.10 - latest
+    @EventHandler (priority = EventPriority.HIGHEST)
     private void onCrafting(CraftItemEvent event) {
         if (event.isCancelled()) return;
         if (!(event.getWhoClicked() instanceof Player)) return;
@@ -144,6 +157,7 @@ public class EXPListeners implements Listener {
 
     }
 
+    // Works 1.7.10 - latest
     @EventHandler (priority = EventPriority.HIGHEST)
     private void onChat(AsyncPlayerChatEvent event) {
         if (event.isCancelled()) return;
