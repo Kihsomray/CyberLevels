@@ -191,6 +191,21 @@ earn-exp:
       blocks:
         - 'DIAMOND_ORE: 4, 6'
 
+  moving:
+    general:
+      enabled: false
+      exp: 1, 2
+      includes:
+        enabled: false
+        whitelist: false
+        list:
+          - 'permission.no.exp'
+    specific-permissions:
+      enabled: false
+      permissions:
+        - 'permission.vip: 1, 2'
+        - 'permission.mvp: 2, 3'
+
   crafting:
     general:
       enabled: false

@@ -12,11 +12,20 @@ levels:
 
   # {level} {playerEXP} {maxLevel} {minLevel} {minEXP}
   experience:
+
+    # What general formula should each level's requirements follow?
+    # Can be a formula or just a number. Refer to internal placeholder
+    # mentioned above experience.
     general-formula: '25 * {level}'
+
+    # Specific level requirements. Overrides general formula for
+    # specific levels. All levels without specific formulas/values
+    # will follow the general formula.
     level:
       1: 250
       2: '{level} * 25'
-      3: 'sin({level}) + ({minEXP} / {level} + {playerEXP})'
 
-      # All levels without specific formulas/values will follow the
-      # general formula.
+      # This is an example to show you what you can do with CLV,
+      # please adjust it to your standards as it may produce a
+      # weird output.
+      3: 'sin(1) + ({minEXP} / {level}) + {maxLevel} * 2'
