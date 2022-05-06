@@ -15,11 +15,15 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.inventory.BrewEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerFishEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.potion.PotionEffect;
 
 public class EXPListeners implements Listener {
 
@@ -122,6 +126,7 @@ public class EXPListeners implements Listener {
 
         }
         if (main.expCache().isOnlyNaturalBlocks() && event.getBlock().hasMetadata("CLV_PLACED")) return;
+
         sendExp(event.getPlayer(), main.expCache().expEarnEvents().get("breaking"), event.getBlock().getType().toString());
     }
 
@@ -131,6 +136,7 @@ public class EXPListeners implements Listener {
         if (event.isCancelled()) return;
         Location from = event.getFrom();
         Location to = event.getTo();
+        if (to == null) return;
         if (from.getBlockX() == to.getBlockX() && from.getBlockY() == to.getBlockY() && from.getBlockZ() == to.getBlockZ()) return;
 
         sendPermissionExp(event.getPlayer(), main.expCache().expEarnEvents().get("moving"));
@@ -144,6 +150,39 @@ public class EXPListeners implements Listener {
         if (event.getCurrentItem() == null) return;
 
         sendExp((Player) event.getWhoClicked(), main.expCache().expEarnEvents().get("crafting"), event.getCurrentItem().getType().toString());
+    }
+
+    // Works 1.7.10 - latest
+    @EventHandler (priority = EventPriority.HIGHEST)
+    private void onBrewing(BrewEvent event) {
+        if (event.isCancelled()) return;
+        if (event.getContents().getViewers().isEmpty()) return;
+        HumanEntity humanEntity = event.getContents().getViewers().get(0);
+        if (!(humanEntity instanceof Player)) return;
+        Player player = (Player) humanEntity;
+
+        int amount = event.getContents().getContents().length;
+        ItemStack stack = event.getContents().getItem(0);
+        if (stack == null) return;
+        PotionMeta meta = (PotionMeta) stack.getItemMeta();
+        if (meta == null) return;
+        String data = "";
+        for (PotionEffect s : meta.getCustomEffects())
+            data += s.getType().getName() + " ";
+
+        EXPEarnEvent expEarnEvent = main.expCache().expEarnEvents().get("brewing");
+        double counter = 0;
+
+        if (expEarnEvent.isEnabled() || expEarnEvent.isSpecificEnabled())
+            counter += expEarnEvent.getPartialMatchesExp(data);
+
+        final double finalCounter = counter;
+        for (int i = 0; i < amount; i++)
+            Bukkit.getScheduler().runTask(main, () -> {
+                if (finalCounter > 0) main.levelCache().playerLevels().get(player).addExp(finalCounter, main.levelCache().doEventMultiplier());
+                else if (finalCounter < 0) main.levelCache().playerLevels().get(player).removeExp(Math.abs(finalCounter));
+            });
+
     }
 
     // Works 1.7.10 - latest

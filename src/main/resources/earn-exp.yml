@@ -222,6 +222,23 @@ earn-exp:
       items:
         - 'DIAMOND_BLOCK: 10, 15'
 
+  brewing:
+    general:
+      enabled: false
+      exp: 1, 4
+      includes:
+        enabled: false
+        whitelist: false
+        list:
+          - "BLINDNESS"
+          - "HUNGER"
+    specific-potions:
+      enabled: false
+      potions:
+        - 'SPEED: 1, 3'
+        - 'HEAL: 1, 2'
+        - 'FIRE_RESISTANCE: 3, 4'
+
   fishing:
     general:
       enabled: false
