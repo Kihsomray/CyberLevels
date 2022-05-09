@@ -8,9 +8,10 @@ import net.zerotoil.dev.cyberlevels.objects.Title;
 import net.zerotoil.dev.iridiumapi.IridiumAPI;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
-import org.bukkit.configuration.Configuration;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class LangUtils {
@@ -18,42 +19,34 @@ public class LangUtils {
     private final CyberLevels main;
     private final ActionBar actionBar;
     private final Title title;
-    private String prefix;
-
-    private final PAPI papi;
-
-    // Initializer for PAPI
-    public interface PAPI {
-        String parsePAPI(Player player, String message);
-    }
+    private final String prefix;
 
     public LangUtils(CyberLevels main) {
         this.main = main;
-        papi =  (p, line) ->
-                Bukkit.getPluginManager().getPlugin("PlaceholderAPI") == null ? line :
-                (p != null ? PlaceholderAPI.setPlaceholders(p, line) : line);
         actionBar = new ActionBar(main);
         title = new Title(main);
         prefix = main.files().getConfig("lang").getString("messages.prefix");
     }
 
+    public String parsePAPI(Player player, String message) {
+        return Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI") ?
+                PlaceholderAPI.setPlaceholders(player, message) : message;
+    }
+
     // converts message to list
-    public List<String> convertList(Configuration config, String path) {
+    public List<String> convertList(ConfigurationSection config, String path) {
+        if (config == null) return new ArrayList<>();
         return  !config.isList(path) ?
                 Lists.newArrayList(config.getString(path)) :
                 config.getStringList(path);
     }
 
-    public String parsePAPI(Player player, String message) {
-        return papi.parsePAPI(player, message);
-    }
-
-    public String parse(Player player, String message) {
+    public String colorize(Player player, String message) {
         return IridiumAPI.process(parsePAPI(player, message));
     }
 
     public void sendCentered(Player player, String message) {
-        message = parse(player, message);
+        message = colorize(player, message);
 
         int messagePxSize = 0;
         boolean previousCode = false;
@@ -92,7 +85,7 @@ public class LangUtils {
             else main.logger(message);
         }
         else {
-            if (!message.startsWith("[C]")) player.sendMessage(parse(player, message));
+            if (!message.startsWith("[C]")) player.sendMessage(colorize(player, message));
             else sendCentered(player, message.replace("[C]", ""));
         }
     }
@@ -146,12 +139,15 @@ public class LangUtils {
     public void sendMessage(Player player, Player target, String location, boolean addPrefix, boolean getPlaceholders, String[] placeholders, String[] replacements) {
         List<String> message = convertList(main.files().getConfig("lang"), "messages." + location);
         if (message == null || message.isEmpty()) return; // if message does not exist or is empty
-        if (getPlaceholders) for (int i = 0; i < message.size(); i++) message.set(i, main.levelUtils().getPlaceholders(message.get(i), target, true));
+
+        if (getPlaceholders) message.replaceAll(string -> main.levelUtils().getPlaceholders(string, target, true));
         if ((placeholders != null) && (placeholders.length == replacements.length))
-            for (int i = 0; i < message.size(); i++) message.set(i, StringUtils.replaceEach(message.get(i), placeholders, replacements));
+            message.replaceAll(text -> StringUtils.replaceEach(text, placeholders, replacements));
+
         if (addPrefix && (prefix != null) && (!prefix.equals("")) && !message.get(0).toLowerCase().startsWith("[actionbar]") &&
                 !message.get(0).toLowerCase().startsWith("[title]") && !message.get(0).toLowerCase().startsWith("[c]"))
             message.set(0, prefix + " " + message.get(0));
+
         if (message.size() == 1 && (message.get(0).equalsIgnoreCase(" ") || message.get(0).equalsIgnoreCase(""))) return;
         for (String s : message) typeMessage(player, s);
     }
@@ -168,9 +164,9 @@ public class LangUtils {
 
     public void typeMessage(Player player, String line) {
         if (line.toLowerCase().startsWith("[actionbar]"))
-            actionBar(player, parse(player, parseFormat("[actionbar]", line)));
+            actionBar(player, colorize(player, parseFormat("[actionbar]", line)));
         else if (line.toLowerCase().startsWith("[title]")) {
-            title(player, parse(player, parseFormat("[title]", line)).split("<n>"), null);
+            title(player, colorize(player, parseFormat("[title]", line)).split("<n>"), null);
         }
         else if (line.toLowerCase().startsWith("[json]") && line.contains("{\"text\":"))
             Bukkit.dispatchCommand(

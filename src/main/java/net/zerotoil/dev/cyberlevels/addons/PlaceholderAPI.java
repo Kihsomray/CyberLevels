@@ -122,7 +122,7 @@ public class PlaceholderAPI extends PlaceholderExpansion {
             else if (type.equalsIgnoreCase("exp")) value = main.levelUtils().roundStringDecimal(lPlayer.getExp());
         }
         if (!(player instanceof Player)) return ChatColor.translateAlternateColorCodes('&', value);
-        return main.langUtils().parse((Player) player, value);
+        return main.langUtils().colorize((Player) player, value);
     }
 
 }
