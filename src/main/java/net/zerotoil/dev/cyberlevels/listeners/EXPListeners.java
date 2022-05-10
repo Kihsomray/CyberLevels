@@ -11,6 +11,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.enchantment.EnchantItemEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
@@ -23,12 +24,8 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.metadata.FixedMetadataValue;
-import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionType;
 import org.bukkit.scheduler.BukkitRunnable;
-
-import java.util.Arrays;
-import java.util.Locale;
 
 public class EXPListeners implements Listener {
 
@@ -179,7 +176,6 @@ public class EXPListeners implements Listener {
 
         }
 
-
         (new BukkitRunnable() {
             @Override
             public void run() {
@@ -206,13 +202,30 @@ public class EXPListeners implements Listener {
 
                 }
 
-                final double finalCounter = counter;
-                Bukkit.getScheduler().runTask(main, () -> {
-                    if (finalCounter > 0) main.levelCache().playerLevels().get(player).addExp(finalCounter, main.levelCache().doEventMultiplier());
-                    else if (finalCounter < 0) main.levelCache().playerLevels().get(player).removeExp(Math.abs(finalCounter));
-                });
+                if (counter > 0) main.levelCache().playerLevels().get(player).addExp(counter, main.levelCache().doEventMultiplier());
+                else if (counter < 0) main.levelCache().playerLevels().get(player).removeExp(Math.abs(counter));
             }
         }).runTaskLater(main, 1L);
+
+    }
+
+    // Works 1.7.10 - latest
+    @EventHandler (priority = EventPriority.HIGHEST)
+    private void onEnchant(EnchantItemEvent event) {
+        if (event.isCancelled()) return;
+
+        String data = "";
+        for (Enchantment enchantment : event.getEnchantsToAdd().keySet())
+            data += enchantment.getKey().toString().replace(":", "-") + " ";
+
+        EXPEarnEvent expEarnEvent = main.expCache().expEarnEvents().get("enchanting");
+
+        double counter = 0;
+        if (expEarnEvent.isEnabled() || expEarnEvent.isSpecificEnabled())
+            counter += expEarnEvent.getPartialMatchesExp(data);
+
+        if (counter > 0) main.levelCache().playerLevels().get(event.getEnchanter()).addExp(counter, main.levelCache().doEventMultiplier());
+        else if (counter < 0) main.levelCache().playerLevels().get(event.getEnchanter()).removeExp(Math.abs(counter));
 
     }
 
