@@ -218,8 +218,6 @@ public class EXPListeners implements Listener {
         for (Enchantment enchantment : event.getEnchantsToAdd().keySet())
             data += enchantment.getKey().getKey() + "-" + event.getEnchantsToAdd().get(enchantment) + " ";
 
-        event.getEnchanter().sendMessage(data);
-
         EXPEarnEvent expEarnEvent = main.expCache().expEarnEvents().get("enchanting");
 
         double counter = 0;
