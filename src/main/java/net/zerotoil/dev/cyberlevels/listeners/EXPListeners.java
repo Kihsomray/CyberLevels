@@ -24,6 +24,11 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionType;
+import org.bukkit.scheduler.BukkitRunnable;
+
+import java.util.Arrays;
+import java.util.Locale;
 
 public class EXPListeners implements Listener {
 
@@ -159,29 +164,55 @@ public class EXPListeners implements Listener {
         if (event.getContents().getViewers().isEmpty()) return;
         HumanEntity humanEntity = event.getContents().getViewers().get(0);
         if (!(humanEntity instanceof Player)) return;
-        Player player = (Player) humanEntity;
+        final Player player = (Player) humanEntity;
 
-        int amount = event.getContents().getContents().length;
-        ItemStack stack = event.getContents().getItem(0);
-        if (stack == null) return;
-        PotionMeta meta = (PotionMeta) stack.getItemMeta();
-        if (meta == null) return;
-        String data = "";
-        for (PotionEffect s : meta.getCustomEffects())
-            data += s.getType().getName() + " ";
+        PotionType[] prePotion = new PotionType[3];
 
-        EXPEarnEvent expEarnEvent = main.expCache().expEarnEvents().get("brewing");
-        double counter = 0;
+        for (int i = 0; i <= 2 ; i++) {
 
-        if (expEarnEvent.isEnabled() || expEarnEvent.isSpecificEnabled())
-            counter += expEarnEvent.getPartialMatchesExp(data);
+            // checks stack item
+            ItemStack stack = event.getContents().getItem(i);
+            if (stack == null) continue;
+            PotionMeta meta = (PotionMeta) stack.getItemMeta();
+            if (meta == null) continue;
+            prePotion[i] = meta.getBasePotionData().getType();
 
-        final double finalCounter = counter;
-        for (int i = 0; i < amount; i++)
-            Bukkit.getScheduler().runTask(main, () -> {
-                if (finalCounter > 0) main.levelCache().playerLevels().get(player).addExp(finalCounter, main.levelCache().doEventMultiplier());
-                else if (finalCounter < 0) main.levelCache().playerLevels().get(player).removeExp(Math.abs(finalCounter));
-            });
+        }
+
+
+        (new BukkitRunnable() {
+            @Override
+            public void run() {
+                // count the total EXP
+                double counter = 0;
+
+                for (int i = 0; i <= 2 ; i++) {
+
+                    // checks stack item
+                    ItemStack stack = event.getContents().getItem(i);
+                    if (stack == null) continue;
+                    PotionMeta meta = (PotionMeta) stack.getItemMeta();
+                    if (meta == null) continue;
+
+                    String data = "";
+
+                    if (prePotion[i] == null || meta.getBasePotionData().getType() != prePotion[i])
+                        data = meta.getBasePotionData().getType().toString();
+
+                    EXPEarnEvent expEarnEvent = main.expCache().expEarnEvents().get("brewing");
+
+                    if (expEarnEvent.isEnabled() || expEarnEvent.isSpecificEnabled())
+                        counter += expEarnEvent.getPartialMatchesExp(data);
+
+                }
+
+                final double finalCounter = counter;
+                Bukkit.getScheduler().runTask(main, () -> {
+                    if (finalCounter > 0) main.levelCache().playerLevels().get(player).addExp(finalCounter, main.levelCache().doEventMultiplier());
+                    else if (finalCounter < 0) main.levelCache().playerLevels().get(player).removeExp(Math.abs(finalCounter));
+                });
+            }
+        }).runTaskLater(main, 1L);
 
     }
 
