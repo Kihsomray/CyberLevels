@@ -216,7 +216,9 @@ public class EXPListeners implements Listener {
 
         String data = "";
         for (Enchantment enchantment : event.getEnchantsToAdd().keySet())
-            data += enchantment.getKey().toString().replace(":", "-") + " ";
+            data += enchantment.getKey().getKey() + "-" + event.getEnchantsToAdd().get(enchantment) + " ";
+
+        event.getEnchanter().sendMessage(data);
 
         EXPEarnEvent expEarnEvent = main.expCache().expEarnEvents().get("enchanting");
 
