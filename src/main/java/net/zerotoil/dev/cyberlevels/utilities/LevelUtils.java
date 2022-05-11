@@ -103,7 +103,7 @@ public class LevelUtils {
         if (!expRequirement) {
             String[] keys1 = {"{requiredEXP}", "{percent}", "{progressBar}"};
             String[] values1 = {
-                    main.levelCache().playerLevels().get(player).nextExpRequirement() + "",
+                    roundStringDecimal(main.levelCache().playerLevels().get(player).nextExpRequirement()),
                     getPercent(
                             main.levelCache().playerLevels().get(player).getExp(),
                             main.levelCache().playerLevels().get(player).nextExpRequirement()
