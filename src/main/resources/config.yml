@@ -55,6 +55,10 @@ config:
   # level be prevented?
   prevent-duplicate-rewards: true
 
+  # Should messages stack exp if it is within 10 ticks
+  # of the last exp gain/loss?
+  stack-combo-exp: true
+
   multipliers:
     # Should multipliers apply to the following?
     commands: false

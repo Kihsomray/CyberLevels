@@ -41,6 +41,7 @@ public class LevelCache {
     private final boolean leaderboardInstantUpdate;
 
     private final boolean preventDuplicateRewards;
+    private final boolean stackComboExp;
 
     private final boolean debugAutoSave;
 
@@ -60,6 +61,7 @@ public class LevelCache {
         syncLeaderboardAutoSave = config.getBoolean("config.leaderboard.sync-on-auto-save", true) && leaderboardEnabled;
         leaderboardInstantUpdate = config.getBoolean("config.leaderboard.instant-update", true) && leaderboardEnabled;
         preventDuplicateRewards = config.getBoolean("config.prevent-duplicate-rewards", true);
+        stackComboExp = config.getBoolean("config.stack-combo-exp", true);
         debugAutoSave = config.getBoolean("config.debug.auto-save", true);
 
         playerLevels = new HashMap<>();
@@ -260,6 +262,10 @@ public class LevelCache {
 
     public boolean isLeaderboardInstantUpdate() {
         return leaderboardInstantUpdate;
+    }
+
+    public boolean isStackComboExp() {
+        return stackComboExp;
     }
 
     public boolean isPreventDuplicateRewards() {

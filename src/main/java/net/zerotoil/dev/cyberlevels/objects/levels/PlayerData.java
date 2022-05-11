@@ -16,6 +16,8 @@ public class PlayerData {
     private Long maxLevel;
     private Double exp;
 
+    private long lastTime = 0;
+    private double lastAmount = 0;
 
     public PlayerData(CyberLevels main, Player player) {
         this.main = main;
@@ -91,11 +93,24 @@ public class PlayerData {
             sendLevelReward();
         }
         exp += amount;
-        if (sendMessage && (amount - difference) > 0)
-            main.langUtils().sendMessage(player, player,"gained-exp", true, true, new String[]{"{gainedEXP}"}, new String[]{main.levelUtils().roundStringDecimal(amount - difference)});
-        else if (sendMessage && (amount - difference) < 0)
-            main.langUtils().sendMessage(player, player,"lost-exp", true, true, new String[]{"{lostEXP}"}, new String[]{main.levelUtils().roundStringDecimal(difference - amount)});
-        if (levelCounter > 0 && sendMessage) main.langUtils().sendMessage(player, player,"gained-levels", true, true, new String[]{"{gainedLevels}"}, new String[]{levelCounter + ""});
+
+        double displayTotal = amount;
+        if (main.levelCache().isStackComboExp() && System.currentTimeMillis() - lastTime <= 500) displayTotal += lastAmount;
+
+        if (sendMessage && levelCounter > 0)
+            main.langUtils().sendMessage(player, player,"gained-levels", true, true,
+                new String[]{"{gainedLevels}"}, new String[]{levelCounter + ""});
+
+        else if (sendMessage && (displayTotal - difference) > 0)
+            main.langUtils().sendMessage(player, player,"gained-exp", true, true, new String[]{"{gainedEXP}"},
+                    new String[]{main.levelUtils().roundStringDecimal(displayTotal - difference)});
+
+        else if (sendMessage && (displayTotal - difference) < 0)
+            main.langUtils().sendMessage(player, player,"lost-exp", true, true, new String[]{"{lostEXP}"},
+                    new String[]{main.levelUtils().roundStringDecimal(difference - displayTotal)});
+
+        lastAmount = displayTotal;
+        lastTime = System.currentTimeMillis();
         if (sendMessage) checkLeaderboard();
     }
 
@@ -137,8 +152,21 @@ public class PlayerData {
         }
         //double expTemp = exp;
         exp -= amount;
-        if (levelsLost > 0) main.langUtils().sendMessage(player, player,"lost-levels", true, true, new String[]{"{lostLevels}"}, new String[]{levelsLost + ""});
-        else if (amount > 0) main.langUtils().sendMessage(player, player,"lost-exp", true, true, new String[]{"{lostEXP}"}, new String[]{main.levelUtils().roundStringDecimal(amount)});
+
+        double displayTotal = 0 - amount;
+        if (main.levelCache().isStackComboExp() && System.currentTimeMillis() - lastTime <= 500) displayTotal += lastAmount;
+
+        if (levelsLost > 0) main.langUtils().sendMessage(player, player,"lost-levels", true, true,
+                new String[]{"{lostLevels}"}, new String[]{levelsLost + ""});
+
+        else if (displayTotal < 0) main.langUtils().sendMessage(player, player,"lost-exp", true, true,
+                new String[]{"{lostEXP}"}, new String[]{main.levelUtils().roundStringDecimal(Math.abs(displayTotal))});
+
+        else if (displayTotal > 0) main.langUtils().sendMessage(player, player,"gained-exp", true, true,
+                new String[]{"{gainedEXP}"}, new String[]{main.levelUtils().roundStringDecimal(displayTotal)});
+
+        lastAmount = displayTotal;
+        lastTime = System.currentTimeMillis();
 
         // makes sure the level doesn't go down below the start level
         level = Math.max(main.levelCache().startLevel(), level);
