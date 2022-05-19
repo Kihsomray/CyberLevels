@@ -99,17 +99,17 @@ public class PlayerData {
         double displayTotal = amount;
         if (main.levelCache().isStackComboExp() && System.currentTimeMillis() - lastTime <= 500) displayTotal += lastAmount;
 
-        if (sendMessage && levelCounter > 0)
-            main.langUtils().sendMessage(player, player,"gained-levels", true, true,
-                new String[]{"{gainedLevels}"}, new String[]{levelCounter + ""});
-
-        else if (sendMessage && (displayTotal - difference) > 0)
+        if (sendMessage && (displayTotal - difference) > 0)
             main.langUtils().sendMessage(player, player,"gained-exp", true, true, new String[]{"{gainedEXP}", "{totalGainedEXP}"},
-                    new String[]{main.levelUtils().roundStringDecimal(displayTotal - difference), totalAmount + ""});
+                    new String[]{main.levelUtils().roundStringDecimal(displayTotal - difference), main.levelUtils().roundStringDecimal(totalAmount)});
 
         else if (sendMessage && (displayTotal - difference) < 0)
             main.langUtils().sendMessage(player, player,"lost-exp", true, true, new String[]{"{lostEXP}", "{totalLostEXP}"},
-                    new String[]{main.levelUtils().roundStringDecimal(difference - displayTotal), totalAmount + ""});
+                    new String[]{main.levelUtils().roundStringDecimal(difference - displayTotal), main.levelUtils().roundStringDecimal(totalAmount)});
+
+        if (sendMessage && levelCounter > 0)
+            main.langUtils().sendMessage(player, player,"gained-levels", true, true,
+                    new String[]{"{gainedLevels}"}, new String[]{levelCounter + ""});
 
         lastAmount = displayTotal;
         lastTime = System.currentTimeMillis();
@@ -161,14 +161,14 @@ public class PlayerData {
         double displayTotal = 0 - amount;
         if (main.levelCache().isStackComboExp() && System.currentTimeMillis() - lastTime <= 500) displayTotal += lastAmount;
 
-        if (levelsLost > 0) main.langUtils().sendMessage(player, player,"lost-levels", true, true,
-                new String[]{"{lostLevels}"}, new String[]{levelsLost + ""});
-
-        else if (displayTotal < 0) main.langUtils().sendMessage(player, player,"lost-exp", true, true,
-                new String[]{"{lostEXP}", "{totalLostEXP}"}, new String[]{main.levelUtils().roundStringDecimal(Math.abs(displayTotal)), totalAmount + ""});
+        if (displayTotal < 0) main.langUtils().sendMessage(player, player,"lost-exp", true, true,
+                new String[]{"{lostEXP}", "{totalLostEXP}"}, new String[]{main.levelUtils().roundStringDecimal(Math.abs(displayTotal)), main.levelUtils().roundStringDecimal(totalAmount)});
 
         else if (displayTotal > 0) main.langUtils().sendMessage(player, player,"gained-exp", true, true,
-                new String[]{"{gainedEXP}", "{totalGainedEXP}"}, new String[]{main.levelUtils().roundStringDecimal(displayTotal), totalAmount + ""});
+                new String[]{"{gainedEXP}", "{totalGainedEXP}"}, new String[]{main.levelUtils().roundStringDecimal(displayTotal), main.levelUtils().roundStringDecimal(totalAmount)});
+
+        if (levelsLost > 0) main.langUtils().sendMessage(player, player,"lost-levels", true, true,
+                new String[]{"{lostLevels}"}, new String[]{levelsLost + ""});
 
         lastAmount = displayTotal;
         lastTime = System.currentTimeMillis();
