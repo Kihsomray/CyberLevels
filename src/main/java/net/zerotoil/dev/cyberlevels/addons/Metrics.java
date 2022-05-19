@@ -92,22 +92,6 @@ public class Metrics {
                         logErrors,
                         logSentData,
                         logResponseStatusText);
-
-        /*addCustomChart(new DrilldownPie("chunkLoadingType", () -> {
-            Map<String, Map<String, Integer>> map = new HashMap<>();
-            String loadingRadius = main.config().getLoadRadius() + " radius";
-            Map<String, Integer> entry = new HashMap<>();
-            entry.put(loadingRadius, 1);
-            map.put(WordUtils.capitalize(main.config().getLoadingType().replace("-", " ").toLowerCase()), entry);
-            return map;
-        }));
-
-        addCustomChart(new SimplePie("chunkRadius", () -> main.config().getLoadRadius() + ""));
-
-        addCustomChart(new SimplePie("edition", () -> {
-            if (main.isPremium()) return "Premium";
-            else return "Standard";
-        }));*/
     }
 
     /**
