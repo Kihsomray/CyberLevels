@@ -163,6 +163,7 @@ public class LangUtils {
     }
 
     public void typeMessage(Player player, String line) {
+        if (player == null && !main.levelCache().isMessageConsole()) return;
         if (line.toLowerCase().startsWith("[actionbar]"))
             actionBar(player, colorize(player, parseFormat("[actionbar]", line)));
         else if (line.toLowerCase().startsWith("[title]")) {

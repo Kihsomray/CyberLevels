@@ -69,5 +69,9 @@ config:
     lang: true
     earn-exp: true
 
-  debug:
+  messages:
+    # Should auto-save messages send to console?
     auto-save: true
+
+    # Should general messages send to console?
+    message-console: true

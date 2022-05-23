@@ -43,7 +43,8 @@ public class LevelCache {
     private final boolean preventDuplicateRewards;
     private final boolean stackComboExp;
 
-    private final boolean debugAutoSave;
+    private final boolean messageAutoSave;
+    private final boolean messageConsole;
 
     private MySQL mySQL;
 
@@ -62,7 +63,8 @@ public class LevelCache {
         leaderboardInstantUpdate = config.getBoolean("config.leaderboard.instant-update", true) && leaderboardEnabled;
         preventDuplicateRewards = config.getBoolean("config.prevent-duplicate-rewards", true);
         stackComboExp = config.getBoolean("config.stack-combo-exp", true);
-        debugAutoSave = config.getBoolean("config.debug.auto-save", true);
+        messageAutoSave = config.getBoolean("config.messages.auto-save", true);
+        messageConsole = config.getBoolean("config.messages.message-console", true);
 
         playerLevels = new HashMap<>();
         clearLevelData();
@@ -141,7 +143,7 @@ public class LevelCache {
                 long startTime = System.currentTimeMillis();
                 saveOnlinePlayers(false);
                 if (syncLeaderboardAutoSave) leaderboard.updateLeaderboard();
-                if (debugAutoSave) main.langUtils().sendMixed(null, main.files().getConfig("lang")
+                if (messageAutoSave) main.langUtils().sendMixed(null, main.files().getConfig("lang")
                         .getString("messages.auto-save")
                         .replace("{ms}", (System.currentTimeMillis() - startTime) + ""));
                 startAutoSave();
@@ -271,4 +273,9 @@ public class LevelCache {
     public boolean isPreventDuplicateRewards() {
         return preventDuplicateRewards;
     }
+
+    public boolean isMessageConsole() {
+        return messageConsole;
+    }
+
 }
