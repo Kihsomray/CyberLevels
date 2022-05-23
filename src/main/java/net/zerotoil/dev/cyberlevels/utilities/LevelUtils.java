@@ -76,6 +76,7 @@ public class LevelUtils {
 
     public String roundStringDecimal(double value) {
         if (decimalFormat == null) return value + "";
+        //if (decimalFormat.toPattern().equals("#")) return (int) value + "";
         return decimalFormat.format(value).replace(",", ".");
     }
 
@@ -96,7 +97,7 @@ public class LevelUtils {
                 "{maxLevel}", "{minLevel}", "{minEXP}"};
         String[] values = {
                 main.levelCache().playerLevels().get(player).getLevel() + "",
-                roundDecimal(main.levelCache().playerLevels().get(player).getExp()) + "",
+                roundStringDecimal(main.levelCache().playerLevels().get(player).getExp()),
                 (main.levelCache().playerLevels().get(player).getLevel() + 1) + "",
                 main.levelCache().maxLevel() + "", main.levelCache().startLevel() + "",
                 main.levelCache().startExp() + "",

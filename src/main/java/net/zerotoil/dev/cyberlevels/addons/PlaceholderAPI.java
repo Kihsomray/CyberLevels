@@ -74,14 +74,14 @@ public class PlaceholderAPI extends PlaceholderExpansion {
             return Math.min(playerLevel.getLevel() + 1, main.levelCache().maxLevel()) + "";
 
         if (identifier.equalsIgnoreCase("player_exp"))
-            return main.levelUtils().roundDecimal(playerLevel.getExp()) + "";
+            return main.levelUtils().roundStringDecimal(playerLevel.getExp());
 
         if (identifier.equalsIgnoreCase("player_exp_required"))
-            return main.levelUtils().roundDecimal(playerLevel.nextExpRequirement()) + "";
+            return main.levelUtils().roundStringDecimal(playerLevel.nextExpRequirement());
 
         if (identifier.equalsIgnoreCase("player_exp_remaining"))
-            return main.levelUtils().roundDecimal(playerLevel.nextExpRequirement() -
-                    playerLevel.getExp()) + "";
+            return main.levelUtils().roundStringDecimal(playerLevel.nextExpRequirement() -
+                    playerLevel.getExp());
 
         if (identifier.equalsIgnoreCase("player_exp_progress_bar"))
             return IridiumAPI.process(main.levelUtils().progressBar(playerLevel.getExp(),
