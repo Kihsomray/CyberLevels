@@ -30,14 +30,17 @@ public class LevelUtils {
     private void loadUtility() {
         if (main.files().getConfig("config").isConfigurationSection("config.round-evaluation") &&
                 main.files().getConfig("config").getBoolean("config.round-evaluation.enabled")) {
-            StringBuilder decimalFormat = new StringBuilder("#.");
-            for (int i = 0; i < main.files().getConfig("config").getInt("config.round-evaluation.digits", 2); i++)
+
+            StringBuilder decimalFormat = new StringBuilder("#");
+            int roundDigits = main.files().getConfig("config").getInt("config.round-evaluation.digits", 2);
+            if (roundDigits > 0) decimalFormat.append(".");
+            for (int i = 0; i < roundDigits; i++)
                 decimalFormat.append("#");
 
             this.decimals = main.files().getConfig("config").getInt("config.round-evaluation.digits");
             this.decimalFormat = new DecimalFormat(decimalFormat.toString());
             this.decimalFormat.setRoundingMode(RoundingMode.CEILING);
-            this.decimalFormat.setMinimumFractionDigits(main.files().getConfig("config").getInt("config.round-evaluation.digits", 2));
+            this.decimalFormat.setMinimumFractionDigits(roundDigits);
 
         }
         else decimalFormat = null;
