@@ -197,6 +197,8 @@ public class EXPListeners implements Listener {
 
                     EXPEarnEvent expEarnEvent = main.expCache().expEarnEvents().get("brewing");
 
+                    if (checkAbuse(player, expEarnEvent)) return;
+
                     if (expEarnEvent.isEnabled() || expEarnEvent.isSpecificEnabled())
                         counter += expEarnEvent.getPartialMatchesExp(data);
 
@@ -219,6 +221,8 @@ public class EXPListeners implements Listener {
             data += enchantment.getKey().getKey() + "-" + event.getEnchantsToAdd().get(enchantment) + " ";
 
         EXPEarnEvent expEarnEvent = main.expCache().expEarnEvents().get("enchanting");
+
+        if (checkAbuse(event.getEnchanter(), expEarnEvent)) return;
 
         double counter = 0;
         if (expEarnEvent.isEnabled() || expEarnEvent.isSpecificEnabled())
@@ -250,6 +254,8 @@ public class EXPListeners implements Listener {
         String item = event.getMessage().toUpperCase();
         double counter = 0;
 
+        if (checkAbuse(player, expEarnEvent)) return;
+
         if (expEarnEvent.isEnabled() || expEarnEvent.isSpecificEnabled())
             counter += expEarnEvent.getPartialMatchesExp(item);
 
@@ -268,7 +274,7 @@ public class EXPListeners implements Listener {
 
     public void sendExp(Player player, EXPEarnEvent expEarnEvent, String item) {
 
-        if (main.expCache().isAntiAbuse(player, expEarnEvent.getCategory())) return;
+        if (checkAbuse(player, expEarnEvent)) return;
 
         double counter = 0;
 
@@ -283,6 +289,9 @@ public class EXPListeners implements Listener {
     }
 
     public void sendPermissionExp(Player player, EXPEarnEvent expEarnEvent) {
+
+        if (checkAbuse(player, expEarnEvent)) return;
+
         double counter = 0;
 
         if (expEarnEvent.isEnabled() && expEarnEvent.hasGeneralPermission(player))
@@ -296,6 +305,8 @@ public class EXPListeners implements Listener {
         else if (counter < 0) main.levelCache().playerLevels().get(player).removeExp(Math.abs(counter));
     }
 
-
+    public boolean checkAbuse(Player player, EXPEarnEvent event) {
+        return (main.expCache().isAntiAbuse(player, event.getCategory()));
+    }
 
 }
