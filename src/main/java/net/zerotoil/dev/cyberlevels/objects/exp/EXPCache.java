@@ -19,6 +19,7 @@ public class EXPCache {
 
     private boolean preventSilkTouchAbuse;
     private boolean onlyNaturalBlocks;
+    private boolean includeNaturalCrops;
 
     private BukkitTask timedEXP;
 
@@ -72,6 +73,7 @@ public class EXPCache {
         main.logger("&dLoading anti-abuse...");
         preventSilkTouchAbuse = !main.files().getConfig("anti-abuse").getBoolean("anti-abuse.general.silk-touch-reward", true);
         onlyNaturalBlocks = main.files().getConfig("anti-abuse").getBoolean("anti-abuse.general.only-natural-blocks", false);
+        includeNaturalCrops = main.files().getConfig("anti-abuse").getBoolean("anti-abuse.general.include-natural-crops", false);
         if (!antiAbuse.isEmpty()) antiAbuse.clear();
         long startTime = System.currentTimeMillis();
         long counter = 0;
@@ -138,6 +140,9 @@ public class EXPCache {
     }
     public boolean isOnlyNaturalBlocks() {
         return onlyNaturalBlocks;
+    }
+    public boolean isIncludeNaturalCrops() {
+        return includeNaturalCrops;
     }
 
 }

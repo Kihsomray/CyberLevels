@@ -4,6 +4,7 @@ import net.zerotoil.dev.cyberlevels.CyberLevels;
 import net.zerotoil.dev.cyberlevels.objects.exp.EXPEarnEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.block.data.Ageable;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
@@ -127,7 +128,15 @@ public class EXPListeners implements Listener {
                     .containsEnchantment(Enchantment.SILK_TOUCH)) return;
 
         }
-        if (main.expCache().isOnlyNaturalBlocks() && event.getBlock().hasMetadata("CLV_PLACED")) return;
+        if (main.expCache().isOnlyNaturalBlocks() &&
+                event.getBlock().hasMetadata("CLV_PLACED")) {
+            if (!(event.getBlock().getBlockData() instanceof Ageable) ||
+                    main.expCache().isIncludeNaturalCrops()) return;
+            else {
+                Ageable ageable = (Ageable) event.getBlock().getBlockData();
+                if (ageable.getAge() != ageable.getMaximumAge()) return;
+            }
+        }
 
         sendExp(event.getPlayer(), main.expCache().expEarnEvents().get("breaking"), event.getBlock().getType().toString());
     }

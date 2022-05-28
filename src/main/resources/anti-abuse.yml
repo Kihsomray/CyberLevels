@@ -9,6 +9,11 @@ anti-abuse:
     # generated to gain EXP?
     only-natural-blocks: false
 
+    # Should crops be included in the only-natural-
+    # blocks list? If false, the crop must be fully
+    # grown to gain EXP.
+    include-natural-crops: false
+
     # If you would like more general anti-abuse option
     # to be added, make sure to mention them on our
     # Discord: https://discord.gg/DC4Gqj3y5V
