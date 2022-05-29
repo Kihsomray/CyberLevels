@@ -4,6 +4,7 @@ import net.zerotoil.dev.cyberlevels.addons.Metrics;
 import net.zerotoil.dev.cyberlevels.addons.PlaceholderAPI;
 import net.zerotoil.dev.cyberlevels.commands.CLVCommand;
 import net.zerotoil.dev.cyberlevels.commands.CLVTabComplete;
+import net.zerotoil.dev.cyberlevels.listeners.AntiAbuseListeners;
 import net.zerotoil.dev.cyberlevels.listeners.EXPListeners;
 import net.zerotoil.dev.cyberlevels.listeners.JoinListener;
 import net.zerotoil.dev.cyberlevels.objects.exp.EXPCache;
@@ -39,6 +40,7 @@ public final class CyberLevels extends JavaPlugin {
         reloadClasses(false);
         playerUtils = new PlayerUtils(this);
         expListeners = new EXPListeners(this);
+        new AntiAbuseListeners(this);
 
         new CLVCommand(this);
         new CLVTabComplete(this);
