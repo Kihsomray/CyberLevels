@@ -118,8 +118,6 @@ public class EXPListeners implements Listener {
     private void onBreaking(BlockBreakEvent event) {
         if (event.isCancelled()) return;
 
-        main.logger("BREAK: " + event.getBlock().hasMetadata("CLV_PLACED"));
-
         // silk touch abuse
         if (main.expCache().isPreventSilkTouchAbuse()) {
 
