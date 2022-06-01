@@ -6,7 +6,7 @@
 
     <groupId>net.zerotoil.dev</groupId>
     <artifactId>CyberLevels</artifactId>
-    <version>0.5.3-SNAPSHOT</version>
+    <version>0.5.3</version>
     <packaging>jar</packaging>
 
     <name>CyberLevels</name>
