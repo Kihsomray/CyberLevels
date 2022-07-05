@@ -110,6 +110,7 @@ public class EXPCache {
         if (!main.files().getConfig("earn-exp").getBoolean("earn-exp.timed-giving.general.enabled", false) &&
                 !main.files().getConfig("earn-exp").getBoolean("earn-exp.timed-giving.specific-permissions.enabled", false)) return;
         //if (timedEXP != null && !timedEXP.isCancelled()) return;
+        long interval = Math.max(20L * Math.max(1, main.files().getConfig("earn-exp").getLong("earn-exp.timed-giving.general.interval")), 1);
         timedEXP = (new BukkitRunnable() {
             @Override
             public void run() {
@@ -117,7 +118,7 @@ public class EXPCache {
                 for (Player p : Bukkit.getOnlinePlayers()) main.expListeners().sendPermissionExp(p, expEarnEvents.get("timed-giving"));
 
             }
-        }).runTaskTimer(main, 0L, Math.max(20L * Math.max(1, main.files().getConfig("earn-exp").getLong("earn-exp.timed-giving.general.interval")), 1));
+        }).runTaskTimer(main, interval, interval);
     }
 
     private void addEvent(String category, String name) {
