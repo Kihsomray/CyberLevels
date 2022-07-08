@@ -176,7 +176,7 @@ public class MySQL {
             ResultSet results = statement.executeQuery();
             results.next();
             playerData.setLevel(results.getLong("LEVEL"), false);
-            playerData.setExp(results.getDouble("EXP"), false, false);
+            playerData.setExp(results.getDouble("EXP"), false, false, false);
             Long maxLevel = results.getLong("MAX_LEVEL");
             if (!(maxLevel + "").equalsIgnoreCase("null")) playerData.setMaxLevel(maxLevel);
             return playerData;
@@ -222,7 +222,6 @@ public class MySQL {
             statement.setString(1, player.getUniqueId().toString());
             statement.setString(2, level);
             statement.setString(3, exp);
-            statement.setString(4, level);
             statement.executeUpdate();
 
         } catch (Exception e) {

@@ -117,13 +117,17 @@ public class PlayerData {
     }
 
     public void setExp(double amount, boolean checkLevel, boolean sendMessage) {
+        setExp(amount, checkLevel, sendMessage, true);
+    }
+
+    public void setExp(double amount, boolean checkLevel, boolean sendMessage, boolean checkLeaderboard) {
         amount = Math.abs(amount);
         if (checkLevel) {
             double exp = this.exp;
             this.exp = 0.0;
             addExp(amount, exp, sendMessage, false);
         } else exp = amount;
-        checkLeaderboard();
+        if (checkLeaderboard) checkLeaderboard();
     }
 
     public void removeExp(double amount) {

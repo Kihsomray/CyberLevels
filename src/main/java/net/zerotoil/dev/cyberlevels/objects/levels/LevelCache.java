@@ -114,7 +114,7 @@ public class LevelCache {
 
         leaderboard = new Leaderboard(main);
 
-        main.logger("&7Loaded &d10 &7players in &a" + (System.currentTimeMillis() - startTime) + "ms&7.", "");
+        main.logger("&7Loaded &d" + leaderboard.getTopTenPlayers().size() + " &7players in &a" + (System.currentTimeMillis() - startTime) + "ms&7.", "");
     }
 
     public void loadRewards() {
