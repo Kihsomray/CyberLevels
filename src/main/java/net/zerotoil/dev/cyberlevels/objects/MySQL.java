@@ -222,6 +222,7 @@ public class MySQL {
             statement.setString(1, player.getUniqueId().toString());
             statement.setString(2, level);
             statement.setString(3, exp);
+            statement.setString(4, level);
             statement.executeUpdate();
 
         } catch (Exception e) {
