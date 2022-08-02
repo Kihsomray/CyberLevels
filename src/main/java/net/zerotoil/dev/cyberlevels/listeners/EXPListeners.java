@@ -19,10 +19,7 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.BrewEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
-import org.bukkit.event.player.PlayerExpChangeEvent;
-import org.bukkit.event.player.PlayerFishEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.metadata.FixedMetadataValue;
@@ -140,6 +137,14 @@ public class EXPListeners implements Listener {
         }
 
         sendExp(event.getPlayer(), main.expCache().expEarnEvents().get("breaking"), event.getBlock().getType().toString());
+    }
+
+    // Works 1.7.10 - latest
+    @EventHandler (priority = EventPriority.HIGHEST)
+    private void onConsumption(PlayerItemConsumeEvent event) {
+        if (event.isCancelled()) return;
+
+        sendExp(event.getPlayer(), main.expCache().expEarnEvents().get("consuming"), event.getItem().getType().toString());
     }
 
     // Works 1.7.10 - latest
@@ -276,6 +281,7 @@ public class EXPListeners implements Listener {
         });
     }
 
+    // Works 1.7.10 - latest
     @EventHandler (priority = EventPriority.HIGHEST)
     private void onExperience(PlayerExpChangeEvent event) {
         if (event.getAmount() <= 0) return;

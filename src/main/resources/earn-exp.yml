@@ -191,6 +191,23 @@ earn-exp:
       blocks:
         - 'DIAMOND_ORE: 4, 6'
 
+  # Also known as 'eating'
+  consuming:
+    general:
+      enabled: false
+      exp: 1, 1.25
+      includes:
+        enabled: false
+        whitelist: false
+        list:
+          - "CARROT"
+          - "BAKED_POTATO"
+          - "MUTTON"
+    specific-items:
+      enabled: false
+      items:
+        - 'GOLDEN_APPLE: 4, 6'
+
   moving:
     general:
       enabled: false
