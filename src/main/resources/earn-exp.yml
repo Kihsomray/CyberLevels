@@ -342,10 +342,10 @@ earn-exp:
           - 2
     specific-amounts:
       enabled: false
-      # If a player earns 3 via vanilla system, they
+      # If a player earns 5 via vanilla system, they
       # will earn between 2 and 3 EXP in CLV for the
       # first example below.
       amounts:
-        - '3: 2, 3'
-        - '4: 2.25, 3.25'
-        - '5: 2.5, 3.5'
+        - '5: 2, 3'
+        - '6: 2.25, 3.25'
+        - '7: 2.5, 3.5'
