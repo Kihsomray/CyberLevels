@@ -62,6 +62,8 @@ public class EXPCache {
 
         addEvent("chatting", "words");
 
+        addEvent("vanilla-exp-gain", "amounts");
+
         long counter = 0;
         for (EXPEarnEvent event : expEarnEvents.values()) if (event.isEnabled() || event.isSpecificEnabled()) counter++;
 

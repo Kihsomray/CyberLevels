@@ -308,3 +308,27 @@ earn-exp:
         - 'HELLO: 1, 2'
         - 'AWESOME: 1, 2'
         - 'OBAMA: 5'
+
+  # When a player gains EXP in the vanilla leveling
+  # system, this event will trigger. You can set how
+  # much EXP players will earn within CyberLevels
+  # based on how much they earned in the vanilla system.
+  vanilla-exp-gain:
+    general:
+      enabled: false
+      exp: 0.75, 1.25
+      includes:
+        enabled: false
+        whitelist: false
+        list:
+          - 1
+          - 2
+    specific-amounts:
+      enabled: false
+      # If a player earns 3 via vanilla system, they
+      # will earn between 2 and 3 EXP in CLV for the
+      # first example below.
+      amounts:
+        - '3: 2, 3'
+        - '4: 2.25, 3.25'
+        - '5: 2.5, 3.5'

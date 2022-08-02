@@ -20,6 +20,7 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.BrewEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.PlayerExpChangeEvent;
 import org.bukkit.event.player.PlayerFishEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
@@ -273,6 +274,14 @@ public class EXPListeners implements Listener {
             if (finalCounter > 0) main.levelCache().playerLevels().get(player).addExp(finalCounter, main.levelCache().doEventMultiplier());
             else if (finalCounter < 0) main.levelCache().playerLevels().get(player).removeExp(Math.abs(finalCounter));
         });
+    }
+
+    @EventHandler (priority = EventPriority.HIGHEST)
+    private void onExperience(PlayerExpChangeEvent event) {
+        if (event.getAmount() <= 0) return;
+
+        sendExp(event.getPlayer(), main.expCache().expEarnEvents().get("vanilla-exp-gain"), event.getAmount() + "");
+
     }
 
     // Works 1.16.1 - latest
