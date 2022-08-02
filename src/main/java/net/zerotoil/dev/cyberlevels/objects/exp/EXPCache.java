@@ -93,7 +93,8 @@ public class EXPCache {
 
     public boolean isAntiAbuse(Player player, String event) {
         for (AntiAbuse a : antiAbuse.values()) {
-            if (a.isCoolingDown(player, event)) return true;
+            if (a.isWorldLimited(player, event)) return true;
+            else if (a.isCoolingDown(player, event)) return true;
             else if (a.isLimited(player, event)) return true;
         }
         return false;

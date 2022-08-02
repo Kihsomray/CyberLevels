@@ -1,6 +1,7 @@
 package net.zerotoil.dev.cyberlevels.objects.antiabuse;
 
 import net.zerotoil.dev.cyberlevels.CyberLevels;
+import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
@@ -22,6 +23,10 @@ public class AntiAbuse {
     private long limiterAmount;
     private String limiterTimer;
     private TimedAbuseReset abuseReset;
+
+    private boolean worldsEnabled;
+    private boolean worldsWhitelist;
+    private List<String> worlds;
 
     private Map<Player, Long> playerCooldowns = new HashMap<>();
     private Map<Player, Long> playerLimiters = new HashMap<>();
@@ -46,6 +51,10 @@ public class AntiAbuse {
         limiterEnabled = section.getBoolean("limiter.enabled", false);
         limiterAmount = section.getLong("limiter.amount", 250L);
         limiterTimer = section.getString("limiter.timer", "");
+
+        worldsEnabled = section.getBoolean("worlds.enabled", false);
+        worldsWhitelist = section.getBoolean("worlds.whitelist", false);
+        worlds = section.getStringList("worlds.list");
 
         if (limiterEnabled) abuseReset = new TimedAbuseReset(main, this, limiterTimer);
 
@@ -98,6 +107,15 @@ public class AntiAbuse {
     public long getPlayerLimiter(Player player) {
         if (!playerLimiters.containsKey(player)) return limiterAmount;
         return playerLimiters.get(player);
+    }
+
+    public boolean isWorldLimited(Player player, String event) {
+        if (!expEvents.contains(event)) return false;
+        if (!worldsEnabled) return false;
+
+        String world = player.getWorld().getName();
+        if (!worldsWhitelist && worlds.contains(world)) return true;
+        return (worldsWhitelist && !worlds.contains(world));
     }
 
 

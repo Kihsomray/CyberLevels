@@ -54,6 +54,20 @@ anti-abuse:
       # more details visit dev.zerotoil.net
       timer: '2022-01-15 00:00 6h'
 
+    worlds:
+      enabled: false
+
+      # Should the list below be a whitelist (true)
+      # or a blacklist (false)?
+      whitelist: true
+
+      # A list of worlds that these events will work
+      # in (whitelist) or not work in (blacklist).
+      list:
+        - 'world'
+        - 'world_nether'
+        - 'world_the_end'
+
 
   any-name-you-want:
     # What events should be included in this module?
@@ -70,3 +84,5 @@ anti-abuse:
       enabled: false
       amount: 250
       timer: '2022-01-15 00:00 12h'
+
+    worlds: {}
