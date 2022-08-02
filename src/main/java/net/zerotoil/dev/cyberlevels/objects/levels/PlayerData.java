@@ -97,7 +97,7 @@ public class PlayerData {
         exp += amount;
 
         double displayTotal = amount;
-        if (main.levelCache().isStackComboExp() && System.currentTimeMillis() - lastTime <= 500) displayTotal += lastAmount;
+        if (main.levelCache().isStackComboExp() && System.currentTimeMillis() - lastTime <= 650) displayTotal += lastAmount;
 
         if (sendMessage && (displayTotal - difference) > 0)
             main.langUtils().sendMessage(player, player,"gained-exp", true, true, new String[]{"{gainedEXP}", "{totalGainedEXP}"},
@@ -163,7 +163,7 @@ public class PlayerData {
         exp -= amount;
 
         double displayTotal = 0 - amount;
-        if (main.levelCache().isStackComboExp() && System.currentTimeMillis() - lastTime <= 500) displayTotal += lastAmount;
+        if (main.levelCache().isStackComboExp() && System.currentTimeMillis() - lastTime <= 650) displayTotal += lastAmount;
 
         if (displayTotal < 0) main.langUtils().sendMessage(player, player,"lost-exp", true, true,
                 new String[]{"{lostEXP}", "{totalLostEXP}"}, new String[]{main.levelUtils().roundStringDecimal(Math.abs(displayTotal)), main.levelUtils().roundStringDecimal(totalAmount)});

@@ -55,7 +55,7 @@ config:
   # level be prevented?
   prevent-duplicate-rewards: true
 
-  # Should messages stack exp if it is within 10 ticks
+  # Should messages stack exp if it is within 650ms
   # of the last exp gain/loss?
   stack-combo-exp: true
 
