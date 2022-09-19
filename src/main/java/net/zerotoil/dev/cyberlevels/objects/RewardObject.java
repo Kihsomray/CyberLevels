@@ -1,5 +1,6 @@
 package net.zerotoil.dev.cyberlevels.objects;
 
+import me.clip.placeholderapi.PlaceholderAPI;
 import net.zerotoil.dev.cyberlevels.CyberLevels;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
@@ -73,13 +74,13 @@ public class RewardObject {
 
             if (!command.startsWith("[") || command.toLowerCase().startsWith("[console]")) {
                 command = main.langUtils().parseFormat("[console]", command);
-                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), main.levelUtils().getPlaceholders(command, player, true));
+                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), PlaceholderAPI.setPlaceholders(player, main.levelUtils().getPlaceholders(command, player, true)));
                 continue;
             }
 
             if (command.toLowerCase().startsWith("[player]")) {
                 command = main.langUtils().parseFormat("[player]", command);
-                Bukkit.dispatchCommand(player, main.levelUtils().getPlaceholders(command, player, true));
+                Bukkit.dispatchCommand(player, PlaceholderAPI.setPlaceholders(player, main.levelUtils().getPlaceholders(command, player, true)));
             }
 
         }
