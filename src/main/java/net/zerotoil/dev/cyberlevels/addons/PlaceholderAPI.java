@@ -96,7 +96,7 @@ public class PlaceholderAPI extends PlaceholderExpansion {
 
 
     private String getLeaderboard(OfflinePlayer player, String type, String position) {
-        if (!main.levelCache().isLeaderboardEnabled()) return null;
+        if (!main.levelCache().isLeaderboardEnabled()) return "enable in config.yml";
         int place;
         try {
             place = Integer.parseInt(position);

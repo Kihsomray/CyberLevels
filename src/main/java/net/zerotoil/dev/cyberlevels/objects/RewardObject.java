@@ -68,7 +68,7 @@ public class RewardObject {
         if (commands == null) return;
         for (String command : commands) {
 
-            if (command.isEmpty()) continue;
+            if (command == null || command.isEmpty()) continue;
 
             while (command.charAt(0) == ' ') command = command.substring(1);
 

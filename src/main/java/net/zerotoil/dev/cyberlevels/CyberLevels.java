@@ -128,7 +128,8 @@ public final class CyberLevels extends JavaPlugin {
     }
 
     public String serverFork() {
-        return Bukkit.getVersion().split("-")[1];
+        String[] fork = Bukkit.getVersion().split("-");
+        return fork[fork.length > 1 ? 1 : 0];
     }
 
     public int serverVersion() {
