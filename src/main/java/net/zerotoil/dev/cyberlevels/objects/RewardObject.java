@@ -38,49 +38,47 @@ public class RewardObject {
             //parse compact level syntax ex: "1-100"
             if (s.contains("-")) {
                 final String[] split = s.split("-");
-                for (long i = Long.parseLong(split[0]); i <= Long.parseLong(split[1]); i++) {
-
-                    if (this.levels.contains(i)) {
-                        continue;
-                    }
-
-                    this.levels.add(i);
-
-                    if (main.levelCache().levelData().get(i) != null) {
-                        main.levelCache().levelData().get(i).addReward(this);
-                    }
-
-                }
+                this.addLevel(Long.parseLong(split[0]), Long.parseLong(split[1]));
                 continue;
             }
 
-            //parse comma separated level syntax ex: "1,2,3,4"
+            //parse comma separated level syntax ex: "1,2,3,4" and "1,100"
             if (s.contains(",")) {
                 final String[] split = s.replace(" ", "").split(",");
-                for (String levelString : split) {
 
-                    final Long level = Long.parseLong(levelString);
-
-                    if (this.levels.contains(level)) {
-                        continue;
-                    }
-
-                    this.levels.add(level);
-
-                    if (main.levelCache().levelData().get(level) != null) {
-                        main.levelCache().levelData().get(level).addReward(this);
-                    }
+                if (split.length == 2) {
+                    this.addLevel(Long.parseLong(split[0]), Long.parseLong(split[1]));
+                    continue;
                 }
+
+                for (String levelString : split) {
+                    this.addLevel(Long.parseLong(levelString));
+                }
+
                 continue;
             }
 
             //defaults to adding singular level ex: "1"
-            this.levels.add(Long.parseLong(s));
+            this.addLevel(Long.parseLong(s));
 
-            if (main.levelCache().levelData().get(Long.parseLong(s)) != null) {
-                main.levelCache().levelData().get(Long.parseLong(s)).addReward(this);
-            }
+        }
+    }
 
+    private void addLevel(long start, long end) {
+        for (long i = start; i <= end; i++) {
+            this.addLevel(i);
+        }
+    }
+
+    private void addLevel(long level) {
+        if (this.levels.contains(level)) {
+            return;
+        }
+
+        this.levels.add(level);
+
+        if (main.levelCache().levelData().get(level) != null) {
+            main.levelCache().levelData().get(level).addReward(this);
         }
     }
 
