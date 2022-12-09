@@ -33,24 +33,52 @@ public class RewardObject {
         messages = main.langUtils().convertList(rewardsYML(), "rewards." + rewardName + ".messages");
         levels = new ArrayList<>();
 
-        List<String> tempList = main.langUtils().convertList(rewardsYML(), "rewards." + rewardName + ".levels");
+        for (String s : main.langUtils().convertList(rewardsYML(), "rewards." + rewardName + ".levels")) {
 
-        if (tempList.size() == 1 && tempList.get(0).contains(",")) {
-            String start = tempList.get(0).split(",")[0].replace(" ", "");
-            String end = tempList.get(0).split(",")[1].replace(" ", "");
-
-            for (long i = Long.parseLong(start); i <= Long.parseLong(end); i++) {
-                levels.add(i);
-                if (main.levelCache().levelData().get(i) != null)
-                    main.levelCache().levelData().get(i).addReward(this);
+            //parse compact level syntax ex: "1-100"
+            if (s.contains("-")) {
+                final String[] split = s.split("-");
+                this.addLevel(Long.parseLong(split[0]), Long.parseLong(split[1]));
+                continue;
             }
 
-        } else {
-            for (String s : main.langUtils().convertList(rewardsYML(), "rewards." + rewardName + ".levels")) {
-                levels.add(Long.parseLong(s));
-                if (main.levelCache().levelData().get(Long.parseLong(s)) != null)
-                    main.levelCache().levelData().get(Long.parseLong(s)).addReward(this);
+            //parse comma separated level syntax ex: "1,2,3,4" and "1,100"
+            if (s.contains(",")) {
+                final String[] split = s.replace(" ", "").split(",");
+
+                if (split.length == 2) {
+                    this.addLevel(Long.parseLong(split[0]), Long.parseLong(split[1]));
+                    continue;
+                }
+
+                for (String levelString : split) {
+                    this.addLevel(Long.parseLong(levelString));
+                }
+
+                continue;
             }
+
+            //defaults to adding singular level ex: "1"
+            this.addLevel(Long.parseLong(s));
+
+        }
+    }
+
+    private void addLevel(long start, long end) {
+        for (long i = start; i <= end; i++) {
+            this.addLevel(i);
+        }
+    }
+
+    private void addLevel(long level) {
+        if (this.levels.contains(level)) {
+            return;
+        }
+
+        this.levels.add(level);
+
+        if (main.levelCache().levelData().get(level) != null) {
+            main.levelCache().levelData().get(level).addReward(this);
         }
     }
 
