@@ -58,12 +58,10 @@ public class EXPCache {
         addEvent("breeding", "animals");
 
         addEvent("dying", "permissions");
-
         addEvent("timed-giving", "permissions");
-
         addEvent("chatting", "words");
-
         addEvent("vanilla-exp-gain", "amounts");
+        addEvent("rival-breaking", "blocks");
 
         long counter = 0;
         for (EXPEarnEvent event : expEarnEvents.values()) if (event.isEnabled() || event.isSpecificEnabled()) counter++;
