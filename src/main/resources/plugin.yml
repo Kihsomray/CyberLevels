@@ -9,10 +9,9 @@ description: A leveling system plugin
 website: dev.zerotoil.net
 
 commands:
-  clv:
+  levels:
     aliases:
-      - cyberlevels
-      - cyberlevel
-      - cyberlvl
       - levels
       - level
+      - lvl
+      - lvls
