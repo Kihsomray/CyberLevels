@@ -349,3 +349,19 @@ earn-exp:
         - '5: 2, 3'
         - '6: 2.25, 3.25'
         - '7: 2.5, 3.5'
+
+  # Used for RivalHarvesterHoes
+  rivalhh-breaking:
+    general:
+      enabled: false
+      exp: 1
+      includes:
+        enabled: false
+        whitelist: false
+        list:
+          - "POTATO"
+          - "BEET_ROOT"
+    specific-blocks:
+      enabled: false
+      blocks:
+        - 'CARROT: 4, 6'

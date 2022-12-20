@@ -15,7 +15,7 @@ public class RivalHarvesterHoesHook implements Listener {
 
     public RivalHarvesterHoesHook(final CyberLevels plugin) {
         this.plugin = plugin;
-        this.plugin.getServer().getPluginManager().registerEvents(this, this.plugin);
+        plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
     @EventHandler
@@ -46,7 +46,7 @@ public class RivalHarvesterHoesHook implements Listener {
             }
         }
 
-        sendExp(event.getPlayer(), this.plugin.expCache().expEarnEvents().get("rival-breaking"), event.getCrop().getType().toString());
+        sendExp(event.getPlayer(), this.plugin.expCache().expEarnEvents().get("rivalhh-breaking"), event.getCrop().getType().toString());
 
     }
 

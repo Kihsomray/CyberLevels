@@ -6,7 +6,7 @@
 
     <groupId>net.zerotoil.dev</groupId>
     <artifactId>CyberLevels</artifactId>
-    <version>0.5.6</version>
+    <version>0.5.7-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>CyberLevels</name>
@@ -112,7 +112,7 @@
             <artifactId>RivalHarvesterHoesAPI</artifactId>
             <version>1.0</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/libs/RivalHarvesterHoesAPI.jar</systemPath>
+            <systemPath>${project.basedir}/lib/RivalHarvesterHoesAPI.jar</systemPath>
         </dependency>
     </dependencies>
 </project>

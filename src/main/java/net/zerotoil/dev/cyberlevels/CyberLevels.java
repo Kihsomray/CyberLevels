@@ -50,8 +50,8 @@ public final class CyberLevels extends JavaPlugin {
         if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null)
             new PlaceholderAPI(this).register();
 
-        if (Bukkit.getPluginManager().getPlugin("RivalHarvesterHoes") != null && Bukkit.getPluginManager().isPluginEnabled("RivalHarvesterHoes")) {
-            logger("&7Hooked into RivalHarvesterHoes");
+        if (Bukkit.getPluginManager().getPlugin("RivalHarvesterHoes") != null) {
+            logger("&7Hooked into &bRivalHarvesterHoes&7.");
             new RivalHarvesterHoesHook(this);
         }
 

@@ -38,7 +38,7 @@ public class RewardObject {
             //parse compact level syntax ex: "1-100"
             if (s.contains("-")) {
                 final String[] split = s.split("-");
-                this.addLevel(Long.parseLong(split[0]), Long.parseLong(split[1]));
+                addLevel(Long.parseLong(split[0]), Long.parseLong(split[1]));
                 continue;
             }
 
@@ -47,26 +47,26 @@ public class RewardObject {
                 final String[] split = s.replace(" ", "").split(",");
 
                 if (split.length == 2) {
-                    this.addLevel(Long.parseLong(split[0]), Long.parseLong(split[1]));
+                    addLevel(Long.parseLong(split[0]), Long.parseLong(split[1]));
                     continue;
                 }
 
                 for (String levelString : split) {
-                    this.addLevel(Long.parseLong(levelString));
+                    addLevel(Long.parseLong(levelString));
                 }
 
                 continue;
             }
 
             //defaults to adding singular level ex: "1"
-            this.addLevel(Long.parseLong(s));
+            addLevel(Long.parseLong(s));
 
         }
     }
 
     private void addLevel(long start, long end) {
         for (long i = start; i <= end; i++) {
-            this.addLevel(i);
+            addLevel(i);
         }
     }
 
