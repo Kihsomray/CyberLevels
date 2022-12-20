@@ -3,7 +3,7 @@ version: '${project.version}'
 main: net.zerotoil.dev.cyberlevels.CyberLevels
 api-version: 1.16
 prefix: CLV
-softdepend: [ PlaceholderAPI, Vault, CyberWorldReset ]
+softdepend: [ PlaceholderAPI, Vault, CyberWorldReset, RivalHarvesterHoes ]
 authors: [ Kihsomray, CroaBeast ]
 description: A leveling system plugin
 website: dev.zerotoil.net
@@ -11,6 +11,9 @@ website: dev.zerotoil.net
 commands:
   levels:
     aliases:
+      - cyberlevels
+      - cyberlevel
+      - cyberlvl
       - levels
       - level
       - lvl
