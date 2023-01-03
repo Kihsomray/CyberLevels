@@ -1,6 +1,7 @@
 package net.zerotoil.dev.cyberlevels.commands;
 
 import net.zerotoil.dev.cyberlevels.CyberLevels;
+import net.zerotoil.dev.cyberlevels.objects.leaderboard.LeaderboardPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -72,6 +73,19 @@ public class CLVCommand implements CommandExecutor {
                 case "info":
                     if (noPlayerPerm(player, "player.info")) return true;
                     main.langUtils().sendMessage(player, "level-info", false);
+                    return true;
+
+                case "top":
+                    if (noPlayerPerm(player, "player.top")) return true;
+                    main.langUtils().sendMessage(player, "top-header", false);
+                    int i = 1;
+                    for (LeaderboardPlayer lPlayer : main.levelCache().getLeaderboard().getTopTenPlayers()) {
+                        main.langUtils().sendMessage(player, player, "top-content", false, false,
+                                new String[]{"position", "player", "level", "exp"},
+                                new String[]{i + "", lPlayer.getPlayer().getName(), lPlayer.getLevel() + "", main.levelUtils().roundStringDecimal(lPlayer.getExp())});
+                        i++;
+                    }
+                    main.langUtils().sendMessage(player, "top-footer", false);
                     return true;
 
             }

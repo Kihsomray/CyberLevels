@@ -14,7 +14,7 @@ import java.util.List;
 
 public class CLVTabComplete implements TabCompleter {
 
-    private CyberLevels main;
+    private final CyberLevels main;
 
     public CLVTabComplete(CyberLevels main) {
         this.main = main;
@@ -34,6 +34,7 @@ public class CLVTabComplete implements TabCompleter {
         if (player.hasPermission(pPrefix + "about")) args0.add("about");
         if (player.hasPermission(pPrefix + "info")) args0.add("info");
         if (player.hasPermission(pPrefix + "help")) args0.add("help");
+        if (player.hasPermission(pPrefix + "top")) args0.add("top");
 
         if (player.hasPermission(aPrefix + "reload")) args0.add("reload");
         if (player.hasPermission(aPrefix + "list")) args0.add("list");
