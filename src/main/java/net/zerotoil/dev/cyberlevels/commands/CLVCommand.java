@@ -81,7 +81,7 @@ public class CLVCommand implements CommandExecutor {
                     int i = 1;
                     for (LeaderboardPlayer lPlayer : main.levelCache().getLeaderboard().getTopTenPlayers()) {
                         main.langUtils().sendMessage(player, player, "top-content", false, false,
-                                new String[]{"position", "player", "level", "exp"},
+                                new String[]{"{position}", "{player}", "{level}", "{exp}"},
                                 new String[]{i + "", lPlayer.getPlayer().getName(), lPlayer.getLevel() + "", main.levelUtils().roundStringDecimal(lPlayer.getExp())});
                         i++;
                     }
