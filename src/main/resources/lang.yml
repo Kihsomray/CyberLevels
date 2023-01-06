@@ -50,7 +50,7 @@ messages:
   gained-levels: '[actionbar] &d+{gainedLevels} Level(s)'
   lost-levels: '[actionbar] &c-{lostLevels} Level(s)'
   top-header: '[C] &8&m―――――――&8<&d&l Top &f&lPlayers &8>&8&m―――――――'
-  top-content: '&f[{position}] &d{player}&7: &flevel {level}&7, &fexp: {exp}'
+  top-content: '&f[{position}] &d{player}&7: &7level: &f{level}&7, exp: &f{exp}'
   top-footer: '[C] &8&m――――――――――――――――――――――――――――――――'
 
 leaderboard-placeholders:

@@ -4,6 +4,7 @@ import net.zerotoil.dev.cyberlevels.CyberLevels;
 import net.zerotoil.dev.cyberlevels.objects.RewardObject;
 import net.zerotoil.dev.cyberlevels.objects.leaderboard.LeaderboardPlayer;
 import net.zerotoil.dev.iridiumapi.IridiumAPI;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.util.List;
@@ -208,37 +209,38 @@ public class PlayerData {
     private void checkLeaderboard() {
         if (!main.levelCache().isLeaderboardInstantUpdate()) return;
 
-        // checks if player is promoted
-        int startFrom = main.levelCache().getLeaderboard().checkFrom(player);
-        List<LeaderboardPlayer> topPlayers = main.levelCache().getLeaderboard().getTopTenPlayers();
-        boolean movedUp = false;
-        for (int i = startFrom; i >= 1; i--) {
-            LeaderboardPlayer lbp = main.levelCache().getLeaderboard().getTopPlayer(i);
-            if (lbp.getUUID() == null || lbp.getUUID().equals(player.getUniqueId().toString())) continue;
-            if (this.level < lbp.getLevel()) break;
-            if (this.level == lbp.getLevel() && this.exp < lbp.getExp()) break;
-            LeaderboardPlayer cp = new LeaderboardPlayer(main, player.getUniqueId().toString(), level, exp);
-            if (topPlayers.size() > i)
-                topPlayers.set(i, topPlayers.get(i - 1)); // puts the above player down
-            topPlayers.set(i - 1, cp);
-            movedUp = true;
-        }
-        if (movedUp) return;
-
-        // checks if player is demoted
-        for (int i = startFrom; i <= 10; i++) {
-            LeaderboardPlayer lbp = main.levelCache().getLeaderboard().getTopPlayer(i);
-            if (lbp.getUUID() == null) break;
-            if (lbp.getUUID().equals(player.getUniqueId().toString())) continue;
-            if (this.level > lbp.getLevel()) break;
-            if (this.level == lbp.getLevel() && this.exp > lbp.getExp()) break;
-            LeaderboardPlayer cp = new LeaderboardPlayer(main, player.getUniqueId().toString(), level, exp);
-            topPlayers.set(i - 2, topPlayers.get(i - 1));
-            if (topPlayers.size() > i)
+        Bukkit.getScheduler().runTaskAsynchronously(main, () -> {
+            // checks if player is promoted
+            int startFrom = main.levelCache().getLeaderboard().checkFrom(player);
+            List<LeaderboardPlayer> topPlayers = main.levelCache().getLeaderboard().getTopTenPlayers();
+            boolean movedUp = false;
+            for (int i = startFrom; i >= 1; i--) {
+                LeaderboardPlayer lbp = main.levelCache().getLeaderboard().getTopPlayer(i);
+                if (lbp.getUUID() == null || lbp.getUUID().equals(player.getUniqueId().toString())) continue;
+                if (level < lbp.getLevel()) break;
+                if (level == lbp.getLevel() && exp < lbp.getExp()) break;
+                LeaderboardPlayer cp = new LeaderboardPlayer(main, player.getUniqueId().toString(), level, exp);
+                if (topPlayers.size() > i)
+                    topPlayers.set(i, topPlayers.get(i - 1)); // puts the above player down
                 topPlayers.set(i - 1, cp);
-            if (topPlayers.size() == i) main.levelCache().getLeaderboard().updateLeaderboard();
-        }
+                movedUp = true;
+            }
+            if (movedUp) return;
 
+            // checks if player is demoted
+            for (int i = startFrom; i <= 10; i++) {
+                LeaderboardPlayer lbp = main.levelCache().getLeaderboard().getTopPlayer(i);
+                if (lbp.getUUID() == null) break;
+                if (lbp.getUUID().equals(player.getUniqueId().toString())) continue;
+                if (level > lbp.getLevel()) break;
+                if (level == lbp.getLevel() && exp > lbp.getExp()) break;
+                LeaderboardPlayer cp = new LeaderboardPlayer(main, player.getUniqueId().toString(), level, exp);
+                topPlayers.set(i - 2, topPlayers.get(i - 1));
+                if (topPlayers.size() > i)
+                    topPlayers.set(i - 1, cp);
+                if (topPlayers.size() == i) main.levelCache().getLeaderboard().updateLeaderboard();
+            }
+        });
     }
 
     public void setMaxLevel(Long maxLevel) {

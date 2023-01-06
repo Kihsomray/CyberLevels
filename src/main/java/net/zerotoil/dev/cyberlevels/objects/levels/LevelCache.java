@@ -142,11 +142,13 @@ public class LevelCache {
             public void run() {
                 long startTime = System.currentTimeMillis();
                 saveOnlinePlayers(false);
-                if (syncLeaderboardAutoSave) leaderboard.updateLeaderboard();
-                if (messageAutoSave) main.langUtils().sendMixed(null, main.files().getConfig("lang")
-                        .getString("messages.auto-save")
-                        .replace("{ms}", (System.currentTimeMillis() - startTime) + ""));
-                startAutoSave();
+                Bukkit.getScheduler().runTaskAsynchronously(main, () -> {
+                    if (syncLeaderboardAutoSave) leaderboard.updateLeaderboard();
+                    if (messageAutoSave) main.langUtils().sendMixed(null, main.files().getConfig("lang")
+                            .getString("messages.auto-save")
+                            .replace("{ms}", (System.currentTimeMillis() - startTime) + ""));
+                    startAutoSave();
+                });
             }
         }).runTaskLater(main, 20L * Math.max(1, main.files().getConfig("config").getLong("config.auto-save.interval")));
     }
