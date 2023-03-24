@@ -86,7 +86,7 @@ public class EXPListeners implements Listener {
 
         if (target instanceof Player) eventType = "killing-players";
         else if (target instanceof Animals) eventType = "killing-animals";
-        else if ((target instanceof Monster) || (main.serverVersion() > 12 && (target instanceof Mob))
+        else if ((target instanceof Monster) || (main.serverVersion() > 12 && (target instanceof Creature))
                 || (target instanceof WaterMob)) eventType = "killing-monsters";
         else return;
 
