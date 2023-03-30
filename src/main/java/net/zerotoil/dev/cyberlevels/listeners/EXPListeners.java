@@ -116,22 +116,26 @@ public class EXPListeners implements Listener {
     private void onBreaking(BlockBreakEvent event) {
         if (event.isCancelled()) return;
 
+        final int version = main.serverVersion();
+
         // silk touch abuse
         if (main.expCache().isPreventSilkTouchAbuse()) {
 
-            if (main.serverVersion() > 8 && event.getPlayer().getInventory()
+            if (version > 8 && event.getPlayer().getInventory()
                     .getItemInMainHand().containsEnchantment(Enchantment.SILK_TOUCH)) return;
 
-            else if (main.serverVersion() <= 8 && event.getPlayer().getItemInHand()
+            else if (version <= 8 && event.getPlayer().getItemInHand()
                     .containsEnchantment(Enchantment.SILK_TOUCH)) return;
 
         }
         if (main.expCache().isOnlyNaturalBlocks() &&
                 event.getBlock().hasMetadata("CLV_PLACED")) {
-            if (!(event.getBlock().getBlockData() instanceof Ageable) ||
+            if (version > 12 ? !(event.getBlock().getBlockData() instanceof Ageable)
+                    : !(event.getBlock().getState().getData() instanceof Ageable) ||
                     main.expCache().isIncludeNaturalCrops()) return;
             else {
-                Ageable ageable = (Ageable) event.getBlock().getBlockData();
+                final Ageable ageable = (Ageable) (version > 12 ? event.getBlock().getBlockData()
+                        : event.getBlock().getState().getData());
                 if (ageable.getAge() != ageable.getMaximumAge()) return;
             }
         }
