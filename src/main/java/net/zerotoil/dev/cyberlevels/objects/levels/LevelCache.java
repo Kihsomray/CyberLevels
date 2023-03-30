@@ -103,7 +103,7 @@ public class LevelCache {
             l++;
         }
 
-        main.logger("&7Loaded &d" + (l - startLevel) + " &7level(s) in &a" + (System.currentTimeMillis() - startTime) + "ms&7.", "");
+        main.logger("&7Loaded &e" + (l - startLevel) + " &7level(s) in &a" + (System.currentTimeMillis() - startTime) + "ms&7.", "");
         if (leaderboardEnabled) loadLeaderboard();
 
     }
@@ -114,7 +114,7 @@ public class LevelCache {
 
         leaderboard = new Leaderboard(main);
 
-        main.logger("&7Loaded &d" + leaderboard.getTopTenPlayers().size() + " &7players in &a" + (System.currentTimeMillis() - startTime) + "ms&7.", "");
+        main.logger("&7Loaded &e" + leaderboard.getTopTenPlayers().size() + " &7players in &a" + (System.currentTimeMillis() - startTime) + "ms&7.", "");
     }
 
     public void loadRewards() {
@@ -125,7 +125,7 @@ public class LevelCache {
             new RewardObject(main, s);
             counter++;
         }
-        main.logger("&7Loaded &d" + counter + " &7reward(s) in &a" + (System.currentTimeMillis() - startTime) + "ms&7.", "");
+        main.logger("&7Loaded &e" + counter + " &7reward(s) in &a" + (System.currentTimeMillis() - startTime) + "ms&7.", "");
 
     }
 
