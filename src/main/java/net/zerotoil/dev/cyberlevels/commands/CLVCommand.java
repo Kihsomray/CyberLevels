@@ -3,6 +3,7 @@ package net.zerotoil.dev.cyberlevels.commands;
 import net.zerotoil.dev.cyberlevels.CyberLevels;
 import net.zerotoil.dev.cyberlevels.objects.leaderboard.LeaderboardPlayer;
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -79,11 +80,15 @@ public class CLVCommand implements CommandExecutor {
                     if (noPlayerPerm(player, "player.top")) return true;
                     main.langUtils().sendMessage(player, "top-header", false);
                     int i = 1;
-                    for (LeaderboardPlayer lPlayer : main.levelCache().getLeaderboard().getTopTenPlayers()) {
-                        main.langUtils().sendMessage(player, player, "top-content", false, false,
-                                new String[]{"{position}", "{player}", "{level}", "{exp}"},
-                                new String[]{i + "", lPlayer.getPlayer().getName(), lPlayer.getLevel() + "", main.levelUtils().roundStringDecimal(lPlayer.getExp())});
-                        i++;
+                    for (final LeaderboardPlayer lPlayer : main.levelCache().getLeaderboard().getTopTenPlayers()) {
+                        final OfflinePlayer p = lPlayer.getPlayer();
+                        if (p != null) {
+                            main.langUtils().sendMessage(player, player, "top-content", false, false,
+                                    new String[]{"{position}", "{player}", "{level}", "{exp}"},
+                                    new String[]{i + "", p.getName(), lPlayer.getLevel() + "", main.levelUtils().roundStringDecimal(lPlayer.getExp())}
+                            );
+                            i++;
+                        }
                     }
                     main.langUtils().sendMessage(player, "top-footer", false);
                     return true;
