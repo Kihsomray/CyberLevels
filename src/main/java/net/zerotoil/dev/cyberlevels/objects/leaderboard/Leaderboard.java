@@ -100,4 +100,8 @@ public class Leaderboard {
         return 10;
     }
 
+    public boolean isUpdating() {
+        return updating;
+    }
+
 }

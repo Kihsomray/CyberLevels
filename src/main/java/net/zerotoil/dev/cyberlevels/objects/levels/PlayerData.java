@@ -207,7 +207,9 @@ public class PlayerData {
     }
 
     private void checkLeaderboard() {
-        if (!main.levelCache().isLeaderboardInstantUpdate()) return;
+        final LevelCache levelCache = main.levelCache();
+        if (!levelCache.isLeaderboardInstantUpdate()) return;
+        if (levelCache.getLeaderboard().isUpdating()) return;
 
         Bukkit.getScheduler().runTaskAsynchronously(main, () -> {
             // checks if player is promoted
