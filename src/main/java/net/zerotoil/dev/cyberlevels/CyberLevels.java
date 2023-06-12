@@ -35,7 +35,7 @@ public final class CyberLevels extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        long startTime = System.currentTimeMillis();
+        final long startTime = System.currentTimeMillis();
         logger = new Logger(this);
 
         reloadClasses(false);
