@@ -107,6 +107,7 @@ public final class CyberLevels extends JavaPlugin {
         levelCache.loadLevelData();
         levelCache.loadOnlinePlayers();
         levelCache.loadRewards();
+        levelCache.loadLeaderboard();
 
         if (footer) {
             logger("&7Reloaded &dCLV v" + getDescription().getVersion() + "&7 in &a" +

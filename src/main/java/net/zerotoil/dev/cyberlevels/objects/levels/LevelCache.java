@@ -104,11 +104,12 @@ public class LevelCache {
         }
 
         main.logger("&7Loaded &e" + (l - startLevel) + " &7level(s) in &a" + (System.currentTimeMillis() - startTime) + "ms&7.", "");
-        if (leaderboardEnabled) loadLeaderboard();
 
     }
 
     public void loadLeaderboard() {
+
+        if (!leaderboardEnabled) return;
         main.logger("&dLoading leaderboard data...");
         long startTime = System.currentTimeMillis();
 
