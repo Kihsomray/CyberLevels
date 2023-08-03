@@ -37,10 +37,6 @@ config:
     # system when the auto-save is called?
     sync-on-auto-save: true
 
-    # Instantly update on exp loss or gain? NOTE: not
-    # recommended for servers with lots of players.
-    instant-update: false
-
   # Should player data be auto-saved?
   auto-save:
     enabled: true
@@ -53,7 +49,7 @@ config:
 
   # Should getting rewards multiple times per
   # level be prevented?
-  prevent-duplicate-rewards: true
+  prevent-duplicate-rewards: false
 
   # Should messages stack exp if it is within 650ms
   # of the last exp gain/loss?

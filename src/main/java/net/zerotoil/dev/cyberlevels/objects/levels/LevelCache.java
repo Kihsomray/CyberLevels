@@ -60,8 +60,8 @@ public class LevelCache {
         addLevelReward = config.getBoolean("config.add-level-reward", false);
         leaderboardEnabled = config.getBoolean("config.leaderboard.enabled", false);
         syncLeaderboardAutoSave = config.getBoolean("config.leaderboard.sync-on-auto-save", true) && leaderboardEnabled;
-        leaderboardInstantUpdate = config.getBoolean("config.leaderboard.instant-update", true) && leaderboardEnabled;
-        preventDuplicateRewards = config.getBoolean("config.prevent-duplicate-rewards", true);
+        leaderboardInstantUpdate = config.getBoolean("config.leaderboard.instant-update", false) && leaderboardEnabled;
+        preventDuplicateRewards = config.getBoolean("config.prevent-duplicate-rewards", false);
         stackComboExp = config.getBoolean("config.stack-combo-exp", true);
         messageAutoSave = config.getBoolean("config.messages.auto-save", true);
         messageConsole = config.getBoolean("config.messages.message-console", true);

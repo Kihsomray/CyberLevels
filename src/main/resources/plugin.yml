@@ -1,7 +1,7 @@
 name: CyberLevels
 version: '${project.version}'
 main: net.zerotoil.dev.cyberlevels.CyberLevels
-api-version: 1.16
+api-version: 1.13
 prefix: CLV
 softdepend: [ PlaceholderAPI, Vault, CyberWorldReset, RivalHarvesterHoes ]
 authors: [ Kihsomray, CroaBeast ]
