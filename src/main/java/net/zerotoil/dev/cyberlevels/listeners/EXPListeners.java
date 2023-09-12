@@ -60,7 +60,7 @@ public class EXPListeners implements Listener {
                 || (target instanceof WaterMob)) eventType = "damaging-monsters";
         else return;
 
-        sendExp(player, main.expCache().expEarnEvents().get(eventType), target.getType().toString());
+        sendExp(player, main.expCache().expEarnEvents().get(eventType), (target instanceof Player) ? target.getName() : target.getType().toString());
     }
 
     // Works 1.7.10 - latest
@@ -90,7 +90,7 @@ public class EXPListeners implements Listener {
                 || (target instanceof WaterMob)) eventType = "killing-monsters";
         else return;
 
-        sendExp(player, main.expCache().expEarnEvents().get(eventType), target.getType().toString());
+        sendExp(player, main.expCache().expEarnEvents().get(eventType), (target instanceof Player) ? target.getName() : target.getType().toString());
     }
 
     @EventHandler (priority = EventPriority.HIGH)
