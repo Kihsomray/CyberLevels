@@ -1,7 +1,7 @@
 package net.zerotoil.dev.cyberlevels.utilities;
 
 import net.zerotoil.dev.cyberlevels.CyberLevels;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;

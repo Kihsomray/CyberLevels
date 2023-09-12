@@ -65,7 +65,7 @@ public class PlaceholderAPI extends PlaceholderExpansion {
 
 
         PlayerData playerLevel = main.levelCache().playerLevels().get((Player) player);
-        if (playerLevel == null) return null;
+        if (playerLevel == null) return "0";
 
         if (identifier.equalsIgnoreCase("player_level"))
             return playerLevel.getLevel() + "";

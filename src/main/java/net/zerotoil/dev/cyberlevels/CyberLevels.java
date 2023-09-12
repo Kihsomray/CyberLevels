@@ -15,7 +15,7 @@ import net.zerotoil.dev.cyberlevels.utilities.LangUtils;
 import net.zerotoil.dev.cyberlevels.utilities.LevelUtils;
 import net.zerotoil.dev.cyberlevels.utilities.Logger;
 import net.zerotoil.dev.cyberlevels.utilities.PlayerUtils;
-import org.apache.commons.lang.SystemUtils;
+import org.apache.commons.lang3.SystemUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
