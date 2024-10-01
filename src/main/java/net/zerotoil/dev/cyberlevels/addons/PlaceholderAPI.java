@@ -40,16 +40,6 @@ public class PlaceholderAPI extends PlaceholderExpansion {
 
     @Override
     public String onRequest(OfflinePlayer player, @NotNull String identifier) {
-        if (!player.isOnline()) return null;
-
-        if (identifier.equalsIgnoreCase("level_maximum"))
-            return main.levelCache().maxLevel() + "";
-
-        if (identifier.equalsIgnoreCase("level_minimum"))
-            return main.levelCache().startLevel() + "";
-
-        if (identifier.equalsIgnoreCase("exp_minimum"))
-            return main.levelCache().startLevel() + "";
 
         if (identifier.startsWith("leaderboard_displayname_"))
             return getLeaderboard(player, "displayname", identifier.substring(24));
@@ -62,6 +52,18 @@ public class PlaceholderAPI extends PlaceholderExpansion {
 
         if (identifier.startsWith("leaderboard_exp_"))
             return getLeaderboard(player, "exp", identifier.substring(16));
+
+
+        if (player == null || !player.isOnline()) return null;
+
+        if (identifier.equalsIgnoreCase("level_maximum"))
+            return main.levelCache().maxLevel() + "";
+
+        if (identifier.equalsIgnoreCase("level_minimum"))
+            return main.levelCache().startLevel() + "";
+
+        if (identifier.equalsIgnoreCase("exp_minimum"))
+            return main.levelCache().startLevel() + "";
 
 
         PlayerData playerLevel = main.levelCache().playerLevels().get((Player) player);
@@ -121,8 +123,11 @@ public class PlaceholderAPI extends PlaceholderExpansion {
             else if (type.equalsIgnoreCase("level")) value = lPlayer.getLevel() + "";
             else if (type.equalsIgnoreCase("exp")) value = main.levelUtils().roundStringDecimal(lPlayer.getExp());
         }
-        if (!(player instanceof Player)) return ChatColor.translateAlternateColorCodes('&', value);
-        return main.langUtils().colorize((Player) player, value);
+        if (player instanceof Player) {
+            return main.langUtils().colorize((Player) player, value);
+        } else {
+            return ChatColor.translateAlternateColorCodes('&', value);
+        }
     }
 
 }
