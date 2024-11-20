@@ -97,6 +97,13 @@ public class EXPListeners implements Listener {
     private void onPlayerDeath(PlayerDeathEvent event) {
         if (event.getEntity().getLastDamageCause() == null) return;
         Player player = event.getEntity();
+
+        // check if is NPC
+        boolean isCitizensNPC = player.hasMetadata("NPC"); 
+        if (isCitizensNPC) {
+            return;
+        }
+
         sendPermissionExp(player, main.expCache().expEarnEvents().get("dying"));
     }
 
