@@ -6,7 +6,7 @@
 
     <groupId>net.zerotoil.dev</groupId>
     <artifactId>CyberLevels</artifactId>
-    <version>0.5.9</version>
+    <version>0.5.10</version>
     <packaging>jar</packaging>
 
     <name>CyberLevels</name>
@@ -119,6 +119,13 @@
             <version>1.0</version>
             <scope>system</scope>
             <systemPath>${project.basedir}/lib/RivalHarvesterHoesAPI.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>me.rivaldev.pickaxes</groupId>
+            <artifactId>RivalPickaxesAPI</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/RivalPickaxesAPI.jar</systemPath>
         </dependency>
     </dependencies>
 </project>

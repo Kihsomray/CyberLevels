@@ -55,6 +55,12 @@ public final class CyberLevels extends JavaPlugin {
             new RivalHarvesterHoesHook(this);
         }
 
+        // Rival Pickaxes
+        if (Bukkit.getPluginManager().getPlugin("RivalPickaxes") != null) {
+            logger("&7Hooked into &bRivalPickaxes&7.");
+            //new RivalPickaxesHook(this);
+        }
+
         new Metrics(this, 13782, this);
         logger("&7Loaded &dCLV v" + getDescription().getVersion() + "&7 in &a" +
                 (System.currentTimeMillis() - startTime) + "ms&7.");
